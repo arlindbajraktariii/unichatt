@@ -137,7 +137,7 @@ const LandingPage = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-gradient-to-r from-amber-400 to-amber-500">
+      <section className="py-20 bg-gradient-to-r from-amber-400 to-amber-500 bg-gray-400">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4 text-black">Ready to streamline your communication?</h2>
           <p className="text-xl text-gray-800 max-w-3xl mx-auto mb-8">
@@ -152,7 +152,7 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="text-white py-12 bg-[EEBA0B] bg-nexus-amber">
+      <footer className="text-white py-12 bg-[EEBA0B] bg-black">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
