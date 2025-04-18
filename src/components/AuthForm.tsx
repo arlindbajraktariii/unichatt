@@ -69,7 +69,7 @@ const AuthForm = () => {
       setRegisterError("Registration failed. Please try again.");
     }
   };
-  return <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-amber-50 to-yellow-100 bg-white">
+  return <div className="flex items-center justify-center min-h-screen bg-white">
       <div className="mx-auto max-w-md w-full px-4">
         <div className="mb-8 text-center">
           <div className="flex justify-center mb-4">
