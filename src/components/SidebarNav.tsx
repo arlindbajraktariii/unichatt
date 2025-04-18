@@ -63,7 +63,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
         </Button>
       </div>
 
-      <ScrollArea className="flex-1 px-3 py-4 bg-zinc-950">
+      <ScrollArea className="flex-1 bg-zinc-950">
         <div className="space-y-1">
           <NavLink to="/dashboard" className={({
           isActive
