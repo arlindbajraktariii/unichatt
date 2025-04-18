@@ -1,13 +1,10 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { MessageSquare, Share2, Users, Zap, ArrowRight, Check } from 'lucide-react';
-
 const LandingPage = () => {
-  return (
-    <div className="min-h-screen bg-white text-black font-colvetica">
+  return <div className="min-h-screen bg-white text-black font-colvetica">
       {/* Header */}
       <header className="container mx-auto px-4 py-6">
         <nav className="flex justify-between items-center">
@@ -63,11 +60,7 @@ const LandingPage = () => {
           
           <div className="mt-12 relative max-w-6xl mx-auto">
             <div className="bg-white rounded-xl shadow-xl overflow-hidden border border-gray-100">
-              <img 
-                src="https://source.unsplash.com/random/1200x600/?dashboard" 
-                alt="Nexus Dashboard" 
-                className="w-full h-auto object-cover"
-              />
+              <img alt="Nexus Dashboard" className="w-full h-auto object-cover" src="/lovable-uploads/1ac5d5c2-3955-4f76-9fc2-2d3a94a0aefa.png" />
             </div>
             <div className="absolute -bottom-6 -right-6 -z-10 bg-amber-400 w-full h-full rounded-xl"></div>
           </div>
@@ -85,29 +78,13 @@ const LandingPage = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <FeatureCard 
-              icon={<MessageSquare className="h-10 w-10 text-amber-400" />}
-              title="Unified Inbox"
-              description="See all your messages from Slack, Discord, Teams, Gmail and more in one unified inbox."
-            />
+            <FeatureCard icon={<MessageSquare className="h-10 w-10 text-amber-400" />} title="Unified Inbox" description="See all your messages from Slack, Discord, Teams, Gmail and more in one unified inbox." />
             
-            <FeatureCard 
-              icon={<Share2 className="h-10 w-10 text-amber-400" />}
-              title="Cross-Platform Replies"
-              description="Reply to messages from any platform without switching between different apps."
-            />
+            <FeatureCard icon={<Share2 className="h-10 w-10 text-amber-400" />} title="Cross-Platform Replies" description="Reply to messages from any platform without switching between different apps." />
             
-            <FeatureCard 
-              icon={<Zap className="h-10 w-10 text-amber-400" />}
-              title="Smart Notifications"
-              description="Customize notifications and never miss important messages while reducing the noise."
-            />
+            <FeatureCard icon={<Zap className="h-10 w-10 text-amber-400" />} title="Smart Notifications" description="Customize notifications and never miss important messages while reducing the noise." />
             
-            <FeatureCard 
-              icon={<Users className="h-10 w-10 text-amber-400" />}
-              title="Team Collaboration"
-              description="Share important messages and collaborate with your team across all platforms."
-            />
+            <FeatureCard icon={<Users className="h-10 w-10 text-amber-400" />} title="Team Collaboration" description="Share important messages and collaborate with your team across all platforms." />
           </div>
         </div>
       </section>
@@ -123,16 +100,10 @@ const LandingPage = () => {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 max-w-6xl mx-auto">
-            {['slack', 'discord', 'teams', 'gmail', 'twitter', 'linkedin'].map((platform) => (
-              <div key={platform} className="flex flex-col items-center bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
-                <img 
-                  src={`/logos/${platform}.svg`} 
-                  alt={`${platform} logo`} 
-                  className="h-12 w-12 mb-4" 
-                />
+            {['slack', 'discord', 'teams', 'gmail', 'twitter', 'linkedin'].map(platform => <div key={platform} className="flex flex-col items-center bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                <img src={`/logos/${platform}.svg`} alt={`${platform} logo`} className="h-12 w-12 mb-4" />
                 <span className="text-center capitalize font-medium">{platform}</span>
-              </div>
-            ))}
+              </div>)}
           </div>
         </div>
       </section>
@@ -148,52 +119,11 @@ const LandingPage = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <PricingCard 
-              title="Basic"
-              price="$9.99"
-              period="/month"
-              features={[
-                "Connect up to 3 channels",
-                "Basic notification filtering",
-                "7-day message history",
-                "Standard support"
-              ]}
-              ctaText="Choose Basic"
-              popular={false}
-            />
+            <PricingCard title="Basic" price="$9.99" period="/month" features={["Connect up to 3 channels", "Basic notification filtering", "7-day message history", "Standard support"]} ctaText="Choose Basic" popular={false} />
             
-            <PricingCard 
-              title="Pro"
-              price="$24.99"
-              period="/month"
-              features={[
-                "Connect up to 10 channels",
-                "Advanced notification rules",
-                "30-day message history",
-                "Message analytics",
-                "Priority support",
-                "Team sharing (up to 3 members)"
-              ]}
-              ctaText="Choose Pro"
-              popular={true}
-            />
+            <PricingCard title="Pro" price="$24.99" period="/month" features={["Connect up to 10 channels", "Advanced notification rules", "30-day message history", "Message analytics", "Priority support", "Team sharing (up to 3 members)"]} ctaText="Choose Pro" popular={true} />
             
-            <PricingCard 
-              title="Enterprise"
-              price="$49.99"
-              period="/month"
-              features={[
-                "Unlimited channel connections",
-                "Custom notification workflows",
-                "Unlimited message history",
-                "Advanced analytics dashboard",
-                "24/7 premium support",
-                "Unlimited team members",
-                "Custom integrations"
-              ]}
-              ctaText="Choose Enterprise"
-              popular={false}
-            />
+            <PricingCard title="Enterprise" price="$49.99" period="/month" features={["Unlimited channel connections", "Custom notification workflows", "Unlimited message history", "Advanced analytics dashboard", "24/7 premium support", "Unlimited team members", "Custom integrations"]} ctaText="Choose Enterprise" popular={false} />
           </div>
           
           <div className="text-center mt-12">
@@ -289,19 +219,19 @@ const LandingPage = () => {
           </div>
         </div>
       </footer>
-    </div>
-  );
+    </div>;
 };
-
 interface FeatureCardProps {
   icon: React.ReactNode;
   title: string;
   description: string;
 }
-
-const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description }) => {
-  return (
-    <Card className="border-0 shadow-md hover:shadow-lg transition-shadow h-full">
+const FeatureCard: React.FC<FeatureCardProps> = ({
+  icon,
+  title,
+  description
+}) => {
+  return <Card className="border-0 shadow-md hover:shadow-lg transition-shadow h-full">
       <CardContent className="p-6">
         <div className="rounded-full bg-amber-50 w-16 h-16 flex items-center justify-center mb-6">
           {icon}
@@ -309,10 +239,8 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description }) =
         <h3 className="text-xl font-bold mb-3">{title}</h3>
         <p className="text-gray-600">{description}</p>
       </CardContent>
-    </Card>
-  );
+    </Card>;
 };
-
 interface PricingCardProps {
   title: string;
   price: string;
@@ -321,24 +249,18 @@ interface PricingCardProps {
   ctaText: string;
   popular?: boolean;
 }
-
-const PricingCard: React.FC<PricingCardProps> = ({ 
-  title, 
-  price, 
-  period, 
-  features, 
-  ctaText, 
-  popular = false 
+const PricingCard: React.FC<PricingCardProps> = ({
+  title,
+  price,
+  period,
+  features,
+  ctaText,
+  popular = false
 }) => {
-  return (
-    <div className={`rounded-xl overflow-hidden bg-white transition-all ${
-      popular ? 'border-2 border-amber-400 shadow-xl scale-105' : 'border border-gray-200 shadow-lg'
-    }`}>
-      {popular && (
-        <div className="bg-amber-400 text-center py-2 text-black font-medium">
+  return <div className={`rounded-xl overflow-hidden bg-white transition-all ${popular ? 'border-2 border-amber-400 shadow-xl scale-105' : 'border border-gray-200 shadow-lg'}`}>
+      {popular && <div className="bg-amber-400 text-center py-2 text-black font-medium">
           Most Popular
-        </div>
-      )}
+        </div>}
       <div className="p-6">
         <h3 className="text-2xl font-bold mb-2">{title}</h3>
         <div className="mb-6">
@@ -347,26 +269,18 @@ const PricingCard: React.FC<PricingCardProps> = ({
         </div>
         
         <ul className="space-y-3 mb-8">
-          {features.map((feature, index) => (
-            <li key={index} className="flex items-start">
+          {features.map((feature, index) => <li key={index} className="flex items-start">
               <Check className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
               <span>{feature}</span>
-            </li>
-          ))}
+            </li>)}
         </ul>
         
         <Link to="/pricing">
-          <Button className={`w-full ${
-            popular 
-              ? 'bg-amber-400 hover:bg-amber-500 text-black' 
-              : 'bg-gray-100 hover:bg-gray-200 text-gray-800'
-          }`}>
+          <Button className={`w-full ${popular ? 'bg-amber-400 hover:bg-amber-500 text-black' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'}`}>
             {ctaText}
           </Button>
         </Link>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default LandingPage;
