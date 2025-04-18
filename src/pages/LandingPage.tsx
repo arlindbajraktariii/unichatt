@@ -14,12 +14,12 @@ const LandingPage = () => {
           </div>
           <div className="mt-4 md:mt-0 flex gap-4">
             <Link to="/auth">
-              <Button variant="outline" className="border-gray-600 text-white hover:bg-gray-800">
+              <Button variant="outline" className="border-gray-600 text-white bg-black">
                 Login
               </Button>
             </Link>
             <Link to="/auth?signup=true">
-              <Button className="bg-amber-400 hover:bg-amber-500 text-black">
+              <Button className="text-black bg-amber-200 hover:bg-amber-100">
                 Get Started
               </Button>
             </Link>
@@ -43,7 +43,7 @@ const LandingPage = () => {
             </Button>
           </Link>
           <Link to="/help">
-            <Button size="lg" variant="outline" className="border-amber-400 text-amber-500 hover:bg-amber-50 text-lg">
+            <Button size="lg" variant="outline" className="border-amber-400 bg-black text-slate-50 text-sm font-normal">
               See How It Works
             </Button>
           </Link>
