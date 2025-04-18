@@ -10,7 +10,7 @@ const DashboardLayout = () => {
   
   return (
     <div className="flex h-screen overflow-hidden bg-gray-50">
-      <SidebarNav isCollapsed={sidebarCollapsed} />
+      <SidebarNav expanded={!sidebarCollapsed} />
       
       <div className="relative flex-1 overflow-auto">
         <Button

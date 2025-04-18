@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -20,7 +19,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ChannelConnection } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 
-const SidebarNav = () => {
+interface SidebarNavProps {
+  expanded?: boolean;
+}
+
+const SidebarNav: React.FC<SidebarNavProps> = ({ expanded = true }) => {
   const { 
     user, 
     channels, 
