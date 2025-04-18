@@ -1,12 +1,7 @@
-
 import { Outlet } from "react-router-dom";
-
 const AuthLayout = () => {
-  return (
-    <div className="min-h-screen bg-gray-50">
+  return <div className="min-h-screen bg-white">
       <Outlet />
-    </div>
-  );
+    </div>;
 };
-
 export default AuthLayout;
