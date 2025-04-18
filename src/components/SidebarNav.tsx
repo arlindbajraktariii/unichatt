@@ -289,7 +289,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
         </div>
       </ScrollArea>
 
-      <div className="p-3 border-t border-sidebar-border mt-auto bg-zinc-950">
+      <div className="p-3  mt-auto bg-zinc-950">
         {sidebarExpanded ? <div className="flex items-center justify-between">
             <div className="flex items-center">
               <Avatar className="h-8 w-8 mr-2">
