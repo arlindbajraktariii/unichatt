@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
-import { SidebarNav } from "@/components/SidebarNav";
+import SidebarNav from "@/components/SidebarNav";
 import { Button } from "@/components/ui/button";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 

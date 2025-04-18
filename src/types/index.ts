@@ -66,3 +66,17 @@ export type NotificationSettings = {
   enableSound: boolean;
   mutedChannels: string[];
 };
+
+export type TicketStatus = 'open' | 'in_progress' | 'resolved';
+export type TicketPriority = 'low' | 'medium' | 'high';
+
+export type Ticket = {
+  id: string;
+  user_id: string;
+  title: string;
+  description: string;
+  status: TicketStatus;
+  priority: TicketPriority;
+  created_at: string;
+  updated_at: string;
+};

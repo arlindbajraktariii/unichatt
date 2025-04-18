@@ -8,21 +8,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useApp } from '@/context/AppContext';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 import { Loader2, Plus, MessageSquare, Clock, CheckCircle2 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { format } from 'date-fns';
-
-interface Ticket {
-  id: string;
-  user_id: string;
-  title: string;
-  description: string;
-  status: 'open' | 'in_progress' | 'resolved';
-  priority: 'low' | 'medium' | 'high';
-  created_at: string;
-  updated_at: string;
-}
+import { Ticket, TicketPriority, TicketStatus } from '@/types';
 
 const TicketsPage = () => {
   const { user, isAuthenticated } = useApp();
@@ -33,7 +22,7 @@ const TicketsPage = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    priority: 'medium' as 'low' | 'medium' | 'high'
+    priority: 'medium' as TicketPriority
   });
 
   useEffect(() => {
@@ -42,17 +31,45 @@ const TicketsPage = () => {
     }
   }, [isAuthenticated, user]);
 
+  // For now, let's mock the ticket data since we may not have the actual table yet
   const fetchTickets = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('tickets')
-        .select('*')
-        .eq('user_id', user?.id)
-        .order('created_at', { ascending: false });
+      // Mocked ticket data - this would normally come from Supabase
+      const mockTickets: Ticket[] = [
+        {
+          id: "1",
+          user_id: user?.id || '',
+          title: "Can't connect to Slack",
+          description: "I'm having trouble connecting my Slack account to Nexus.",
+          status: 'open',
+          priority: 'high',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+        {
+          id: "2",
+          user_id: user?.id || '',
+          title: "Messages not syncing",
+          description: "My messages from Discord aren't showing up in the dashboard.",
+          status: 'in_progress',
+          priority: 'medium',
+          created_at: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
+          updated_at: new Date(Date.now() - 43200000).toISOString(), // 12 hours ago
+        },
+        {
+          id: "3",
+          user_id: user?.id || '',
+          title: "Feature request: Dark mode",
+          description: "Would love to have a dark mode option for the app.",
+          status: 'resolved',
+          priority: 'low',
+          created_at: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
+          updated_at: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
+        }
+      ];
       
-      if (error) throw error;
-      setTickets(data || []);
+      setTickets(mockTickets);
     } catch (error) {
       console.error('Error fetching tickets:', error);
       toast({
@@ -73,7 +90,7 @@ const TicketsPage = () => {
   const handlePriorityChange = (value: string) => {
     setFormData(prev => ({ 
       ...prev, 
-      priority: value as 'low' | 'medium' | 'high' 
+      priority: value as TicketPriority 
     }));
   };
 
@@ -93,21 +110,19 @@ const TicketsPage = () => {
     setLoading(true);
     
     try {
-      const { data, error } = await supabase
-        .from('tickets')
-        .insert({
-          user_id: user.id,
-          title: formData.title,
-          description: formData.description,
-          priority: formData.priority,
-          status: 'open'
-        })
-        .select()
-        .single();
+      // Create a new ticket (mocked for now)
+      const newTicket: Ticket = {
+        id: `mock-${Date.now()}`,
+        user_id: user.id,
+        title: formData.title,
+        description: formData.description,
+        priority: formData.priority,
+        status: 'open',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
       
-      if (error) throw error;
-      
-      setTickets(prev => [data as Ticket, ...prev]);
+      setTickets(prev => [newTicket, ...prev]);
       setFormData({ title: '', description: '', priority: 'medium' });
       setShowNewTicketForm(false);
       
@@ -127,7 +142,7 @@ const TicketsPage = () => {
     }
   };
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status: TicketStatus) => {
     switch (status) {
       case 'open':
         return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Open</span>;
@@ -140,7 +155,7 @@ const TicketsPage = () => {
     }
   };
 
-  const getPriorityBadge = (priority: string) => {
+  const getPriorityBadge = (priority: TicketPriority) => {
     switch (priority) {
       case 'low':
         return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">Low</span>;
