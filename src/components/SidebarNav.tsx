@@ -110,7 +110,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
           }} />)}
             </div> : <div className={sidebarExpanded ? "p-2 text-sm text-sidebar-foreground/60 text-center" : ""}>
               {sidebarExpanded && <p>No channels connected yet</p>}
-              <Button variant="outline" size={sidebarExpanded ? "default" : "icon"} onClick={handleAddChannel} className={`mt-2 ${sidebarExpanded ? 'w-full' : 'mx-auto'} border-sidebar-border text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground`}>
+              <Button variant="outline" size={sidebarExpanded ? "default" : "icon"} onClick={handleAddChannel} className="px-[49px] py-[2px] my-[18px] mx-0 bg-nexus-amber text-black">
                 {sidebarExpanded ? <>
                     <PlusCircle className="h-4 w-4 mr-2" />
                     Connect Channel
@@ -289,7 +289,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
         </div>
       </ScrollArea>
 
-      <div className="p-3  mt-auto bg-zinc-950">
+      <div className="p-3 mt-auto bg-zinc-900">
         {sidebarExpanded ? <div className="flex items-center justify-between">
             <div className="flex items-center">
               <Avatar className="h-8 w-8 mr-2">
