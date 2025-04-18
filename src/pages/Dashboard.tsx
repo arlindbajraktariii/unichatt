@@ -10,7 +10,7 @@ import DashboardStats from "@/components/DashboardStats";
 const Dashboard = () => {
   const { channels, messages, unreadCount } = useApp();
   
-  const connectedChannels = channels.filter(channel => channel.isConnected);
+  const connectedChannels = channels.filter(channel => channel.is_connected);
   const unreadMessages = messages.filter(message => message.status === "unread");
 
   return (

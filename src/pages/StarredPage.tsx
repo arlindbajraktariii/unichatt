@@ -6,7 +6,7 @@ const StarredPage = () => {
   const { messages } = useApp();
   
   // Filter for starred messages
-  const starredMessages = messages.filter(message => message.isStarred);
+  const starredMessages = messages.filter(message => message.is_starred);
 
   return (
     <div className="container mx-auto py-6 max-w-7xl">

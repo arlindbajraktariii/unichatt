@@ -25,7 +25,7 @@ const NotificationsPage = () => {
   const [mutedChannels, setMutedChannels] = useState<string[]>(notificationSettings?.mutedChannels || []);
   
   // Connected channels
-  const connectedChannels = channels.filter(channel => channel.isConnected);
+  const connectedChannels = channels.filter(channel => channel.is_connected);
   
   // Handle toggling channel mute
   const toggleChannelMute = (channelId: string) => {

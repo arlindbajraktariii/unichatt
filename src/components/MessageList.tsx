@@ -1,3 +1,4 @@
+
 import { useApp } from "@/context/AppContext";
 import { Message } from "@/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";

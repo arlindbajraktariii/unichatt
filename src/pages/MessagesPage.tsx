@@ -45,14 +45,14 @@ const MessagesPage = () => {
   if (filter === "unread") {
     filteredMessages = filteredMessages.filter(message => message.status === "unread");
   } else if (filter === "starred") {
-    filteredMessages = filteredMessages.filter(message => message.isStarred);
+    filteredMessages = filteredMessages.filter(message => message.is_starred);
   } else if (filter === "archived") {
     filteredMessages = filteredMessages.filter(message => message.status === "archived");
   }
   
   // Then apply channel filter
   if (channelFilter !== "all") {
-    filteredMessages = filteredMessages.filter(message => message.channelId === channelFilter);
+    filteredMessages = filteredMessages.filter(message => message.channel_id === channelFilter);
   }
   
   // Finally apply search term
@@ -61,12 +61,12 @@ const MessagesPage = () => {
     filteredMessages = filteredMessages.filter(
       message => 
         message.content.toLowerCase().includes(term) || 
-        message.senderName.toLowerCase().includes(term)
+        message.sender_name.toLowerCase().includes(term)
     );
   }
   
   // Get active channels for filter
-  const activeChannels = channels.filter(channel => channel.isConnected);
+  const activeChannels = channels.filter(channel => channel.is_connected);
 
   return (
     <div className="container mx-auto py-6 max-w-7xl">

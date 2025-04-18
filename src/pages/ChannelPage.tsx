@@ -26,7 +26,7 @@ const ChannelPage = () => {
   const channel = channels.find(c => c.id === channelId);
   
   // Filter messages for this channel
-  const channelMessages = messages.filter(m => m.channelId === channelId);
+  const channelMessages = messages.filter(m => m.channel_id === channelId);
   
   if (!channel) {
     return (
@@ -50,7 +50,7 @@ const ChannelPage = () => {
     );
   }
 
-  if (!channel.isConnected) {
+  if (!channel.is_connected) {
     return (
       <div className="container mx-auto py-6 max-w-7xl">
         <div className="flex items-center mb-6">
@@ -100,7 +100,7 @@ const ChannelPage = () => {
             <div>
               <h1 className="text-3xl font-bold tracking-tight">{channel.name}</h1>
               <p className="text-muted-foreground">
-                {channel.type} · Last synced: {new Date(channel.lastSync || "").toLocaleString()}
+                {channel.type} · Last synced: {new Date(channel.last_sync || "").toLocaleString()}
               </p>
             </div>
           </div>
