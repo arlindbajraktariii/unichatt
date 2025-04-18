@@ -1,11 +1,28 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useApp } from "@/context/AppContext";
 
 const Index = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useApp();
+  
+  useEffect(() => {
+    // Redirect based on authentication status
+    if (isAuthenticated) {
+      navigate("/");
+    } else {
+      navigate("/auth");
+    }
+  }, [isAuthenticated, navigate]);
+  
+  // This is just a loading screen while redirecting
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+        <img src="/logo.svg" alt="Channel Nexus Logo" className="h-16 w-16 mx-auto mb-4" />
+        <h1 className="text-2xl font-bold mb-2">Channel Nexus</h1>
+        <p className="text-gray-600">Redirecting...</p>
       </div>
     </div>
   );
