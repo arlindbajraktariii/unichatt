@@ -152,7 +152,7 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="text-white py-12 bg-nexus-amber bg-[EEBA0B]">
+      <footer className="text-white py-12 bg-[EEBA0B] bg-nexus-amber">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
