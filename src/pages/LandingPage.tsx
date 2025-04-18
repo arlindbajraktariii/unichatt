@@ -6,7 +6,7 @@ import { MessageSquare, Share2, Users, Zap, ArrowRight, Check } from 'lucide-rea
 const LandingPage = () => {
   return <div className="min-h-screen bg-white text-black font-colvetica">
       {/* Header */}
-      <header className="container mx-auto px-4 py-6 rounded-full bg-slate-300 my-[26px]">
+      <header className="container mx-auto bg-slate-300 my-[26px] rounded-none px-[31px] py-[14px]">
         <nav className="flex justify-between items-center">
           <div className="flex items-center">
             <img src="/logo.svg" alt="Nexus Logo" className="h-10 w-10 mr-3" />
