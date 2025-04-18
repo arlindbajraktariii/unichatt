@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/select";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ChannelType } from "@/types";
 
 const channelOptions = [
   { value: "slack", label: "Slack" },
@@ -38,7 +39,7 @@ interface ChannelConnectProps {
 const ChannelConnect = ({ onBack }: ChannelConnectProps) => {
   const { connectChannel } = useApp();
   
-  const [channelType, setChannelType] = useState("");
+  const [channelType, setChannelType] = useState<ChannelType | "">("");
   const [channelName, setChannelName] = useState("");
   const [isConnecting, setIsConnecting] = useState(false);
   const [error, setError] = useState("");
@@ -60,7 +61,7 @@ const ChannelConnect = ({ onBack }: ChannelConnectProps) => {
     
     // Simulate API connection delay
     setTimeout(() => {
-      connectChannel(channelType, channelName);
+      connectChannel(channelType as ChannelType, channelName);
       
       // Reset form
       setChannelType("");

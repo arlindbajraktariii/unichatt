@@ -26,7 +26,7 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLDivElement> {
 export function SidebarNav({ className, isCollapsed = false, ...props }: SidebarNavProps) {
   const { user, channels, unreadCount, logout } = useApp();
   
-  const connectedChannels = channels.filter(channel => channel.isConnected);
+  const connectedChannels = channels.filter(channel => channel.is_connected);
 
   return (
     <div
@@ -174,7 +174,11 @@ export function SidebarNav({ className, isCollapsed = false, ...props }: Sidebar
                 </Tooltip>
               )}
               
-              {connectedChannels.map((channel) => (
+              {connectedChannels.map((channel) => {
+                // Generate avatar placeholder for channel
+                const avatarPlaceholder = `/public/logos/${channel.type}.svg`;
+                
+                return (
                 <Tooltip key={channel.id}>
                   <TooltipTrigger asChild>
                     <Link
@@ -185,7 +189,7 @@ export function SidebarNav({ className, isCollapsed = false, ...props }: Sidebar
                       )}
                     >
                       <Avatar className="h-5 w-5">
-                        <AvatarImage src={channel.avatar} alt={channel.name} />
+                        <AvatarImage src={avatarPlaceholder} alt={channel.name} />
                         <AvatarFallback>{channel.name[0]}</AvatarFallback>
                       </Avatar>
                       {!isCollapsed && <span>{channel.name}</span>}
@@ -193,7 +197,7 @@ export function SidebarNav({ className, isCollapsed = false, ...props }: Sidebar
                   </TooltipTrigger>
                   {isCollapsed && <TooltipContent side="right">{channel.name}</TooltipContent>}
                 </Tooltip>
-              ))}
+              )})}
             </TooltipProvider>
           </div>
         </div>
@@ -258,7 +262,7 @@ export function SidebarNav({ className, isCollapsed = false, ...props }: Sidebar
           {!isCollapsed && user && (
             <div className="mt-2 flex items-center gap-3 rounded-lg px-3 py-2">
               <Avatar>
-                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarImage src={user.avatar_url} alt={user.name} />
                 <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
               </Avatar>
               <div className="grid gap-0.5 text-xs">

@@ -1,4 +1,3 @@
-
 import { useApp } from "@/context/AppContext";
 import { Message } from "@/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -38,7 +37,8 @@ const MessageList = ({ messages, channelId, filter }: MessageListProps) => {
     markMessageAsRead, 
     replyToMessage, 
     starMessage, 
-    archiveMessage 
+    archiveMessage,
+    channels
   } = useApp();
   
   const [replyText, setReplyText] = useState<string>("");
@@ -50,12 +50,12 @@ const MessageList = ({ messages, channelId, filter }: MessageListProps) => {
   
   // Filter by channel if specified
   if (channelId) {
-    filteredMessages = filteredMessages.filter(message => message.channelId === channelId);
+    filteredMessages = filteredMessages.filter(message => message.channel_id === channelId);
   }
   
   // Filter by filter type if specified
   if (filter === "starred") {
-    filteredMessages = filteredMessages.filter(message => message.isStarred);
+    filteredMessages = filteredMessages.filter(message => message.is_starred);
   } else if (filter === "archived") {
     filteredMessages = filteredMessages.filter(message => message.status === "archived");
   } else if (filter === "unread") {
@@ -67,13 +67,13 @@ const MessageList = ({ messages, channelId, filter }: MessageListProps) => {
   const rootMessages: Message[] = [];
   
   filteredMessages.forEach(message => {
-    if (message.threadId && message.parentId) {
+    if (message.thread_id && message.parent_id) {
       // This is a reply in a thread
-      if (!messageThreads[message.threadId]) {
-        messageThreads[message.threadId] = [];
+      if (!messageThreads[message.thread_id]) {
+        messageThreads[message.thread_id] = [];
       }
-      messageThreads[message.threadId].push(message);
-    } else if (message.threadId) {
+      messageThreads[message.thread_id].push(message);
+    } else if (message.thread_id) {
       // This is the first message in a thread
       rootMessages.push(message);
     } else {
@@ -84,7 +84,7 @@ const MessageList = ({ messages, channelId, filter }: MessageListProps) => {
   
   // Sort messages by timestamp, newest first for top level messages
   rootMessages.sort((a, b) => 
-    new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   );
   
   // Handler for clicking on a message
@@ -128,7 +128,7 @@ const MessageList = ({ messages, channelId, filter }: MessageListProps) => {
   // For each thread, sort replies by timestamp, oldest first
   Object.keys(messageThreads).forEach(threadId => {
     messageThreads[threadId].sort((a, b) => 
-      new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
     );
   });
 
@@ -154,186 +154,192 @@ const MessageList = ({ messages, channelId, filter }: MessageListProps) => {
 
   return (
     <div className="flex flex-col space-y-3 p-4">
-      {rootMessages.map((message) => (
-        <div 
-          key={message.id} 
-          className={`rounded-lg border p-4 transition-colors ${
-            message.status === "unread" ? "bg-blue-50 border-blue-100" : "bg-white"
-          }`}
-          onClick={() => handleMessageClick(message.id)}
-        >
-          <div className="flex justify-between items-start mb-2">
-            <div className="flex items-center gap-2">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src={message.senderAvatar} alt={message.senderName} />
-                <AvatarFallback>{message.senderName.charAt(0)}</AvatarFallback>
-              </Avatar>
-              <div>
-                <div className="font-medium">{message.senderName}</div>
-                <div className="text-xs text-gray-500">
-                  {formatDistanceToNow(parseISO(message.timestamp), { addSuffix: true })}
+      {rootMessages.map((message) => {
+        // Find channel type for this message
+        const channel = channels.find(c => c.id === message.channel_id);
+        const channelType = channel?.type || 'unknown';
+        
+        return (
+          <div 
+            key={message.id} 
+            className={`rounded-lg border p-4 transition-colors ${
+              message.status === "unread" ? "bg-blue-50 border-blue-100" : "bg-white"
+            }`}
+            onClick={() => handleMessageClick(message.id)}
+          >
+            <div className="flex justify-between items-start mb-2">
+              <div className="flex items-center gap-2">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={message.sender_avatar} alt={message.sender_name} />
+                  <AvatarFallback>{message.sender_name.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <div className="font-medium">{message.sender_name}</div>
+                  <div className="text-xs text-gray-500">
+                    {formatDistanceToNow(parseISO(message.created_at), { addSuffix: true })}
+                  </div>
                 </div>
+                
+                <Badge variant="outline" className="ml-2">
+                  {channelType}
+                </Badge>
+                
+                {message.status === "unread" && (
+                  <Badge className="ml-1 bg-blue-500">New</Badge>
+                )}
               </div>
               
-              <Badge variant="outline" className="ml-2">
-                {message.channelType}
-              </Badge>
-              
-              {message.status === "unread" && (
-                <Badge className="ml-1 bg-blue-500">New</Badge>
-              )}
+              <div className="flex items-center gap-1">
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleToggleStar(message.id, message.is_starred);
+                  }}
+                  size="icon"
+                  variant="ghost"
+                  className="h-8 w-8"
+                >
+                  <Star 
+                    className={`h-4 w-4 ${message.is_starred ? "fill-yellow-400 text-yellow-400" : ""}`} 
+                  />
+                </Button>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button 
+                      size="icon" 
+                      variant="ghost" 
+                      className="h-8 w-8"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleReply(message.id);
+                      }}
+                    >
+                      <CornerDownRight className="mr-2 h-4 w-4" />
+                      Reply
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleToggleStar(message.id, message.is_starred);
+                      }}
+                    >
+                      <Star className="mr-2 h-4 w-4" />
+                      {message.is_starred ? "Unstar" : "Star"}
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleArchive(message.id);
+                      }}
+                    >
+                      <Archive className="mr-2 h-4 w-4" />
+                      Archive
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </div>
             
-            <div className="flex items-center gap-1">
-              <Button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleToggleStar(message.id, message.isStarred);
-                }}
-                size="icon"
-                variant="ghost"
-                className="h-8 w-8"
-              >
-                <Star 
-                  className={`h-4 w-4 ${message.isStarred ? "fill-yellow-400 text-yellow-400" : ""}`} 
+            <div className="mt-2 text-sm">{message.content}</div>
+            
+            {/* Reply UI */}
+            {replyingTo === message.id && (
+              <div className="mt-4 bg-gray-50 p-3 rounded-md">
+                <Textarea
+                  placeholder="Type your reply..."
+                  value={replyText}
+                  onChange={(e) => setReplyText(e.target.value)}
+                  className="min-h-[80px] text-sm"
                 />
-              </Button>
-
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+                <div className="flex justify-end mt-2 gap-2">
                   <Button 
-                    size="icon" 
+                    variant="outline" 
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setReplyingTo(null);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button 
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSendReply(message.id);
+                    }}
+                  >
+                    Send Reply
+                  </Button>
+                </div>
+              </div>
+            )}
+            
+            {/* Thread UI */}
+            {message.thread_id && messageThreads[message.thread_id] && messageThreads[message.thread_id].length > 0 && (
+              <Collapsible 
+                open={openThreads[message.thread_id] || false}
+                onOpenChange={() => toggleThread(message.thread_id!)}
+                className="mt-3"
+              >
+                <CollapsibleTrigger asChild>
+                  <Button 
                     variant="ghost" 
-                    className="h-8 w-8"
+                    size="sm" 
+                    className="text-xs flex items-center gap-1 text-gray-500"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <MoreHorizontal className="h-4 w-4" />
+                    {openThreads[message.thread_id!] ? "Hide" : "Show"} {messageThreads[message.thread_id!].length} {messageThreads[message.thread_id!].length === 1 ? "reply" : "replies"}
                   </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleReply(message.id);
-                    }}
-                  >
-                    <CornerDownRight className="mr-2 h-4 w-4" />
-                    Reply
-                  </DropdownMenuItem>
-                  <DropdownMenuItem 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleToggleStar(message.id, message.isStarred);
-                    }}
-                  >
-                    <Star className="mr-2 h-4 w-4" />
-                    {message.isStarred ? "Unstar" : "Star"}
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleArchive(message.id);
-                    }}
-                  >
-                    <Archive className="mr-2 h-4 w-4" />
-                    Archive
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-          
-          <div className="mt-2 text-sm">{message.content}</div>
-          
-          {/* Reply UI */}
-          {replyingTo === message.id && (
-            <div className="mt-4 bg-gray-50 p-3 rounded-md">
-              <Textarea
-                placeholder="Type your reply..."
-                value={replyText}
-                onChange={(e) => setReplyText(e.target.value)}
-                className="min-h-[80px] text-sm"
-              />
-              <div className="flex justify-end mt-2 gap-2">
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setReplyingTo(null);
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button 
-                  size="sm"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleSendReply(message.id);
-                  }}
-                >
-                  Send Reply
-                </Button>
-              </div>
-            </div>
-          )}
-          
-          {/* Thread UI */}
-          {message.threadId && messageThreads[message.threadId] && messageThreads[message.threadId].length > 0 && (
-            <Collapsible 
-              open={openThreads[message.threadId] || false}
-              onOpenChange={() => toggleThread(message.threadId!)}
-              className="mt-3"
-            >
-              <CollapsibleTrigger asChild>
+                </CollapsibleTrigger>
+                <CollapsibleContent className="mt-2 border-l-2 border-gray-200 pl-4 space-y-3">
+                  {messageThreads[message.thread_id!].map((reply) => (
+                    <div key={reply.id} className="text-sm bg-gray-50 p-3 rounded-md">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Avatar className="h-6 w-6">
+                          <AvatarImage src={reply.sender_avatar} alt={reply.sender_name} />
+                          <AvatarFallback>{reply.sender_name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                        <div className="font-medium text-xs">{reply.sender_name}</div>
+                        <div className="text-xs text-gray-500">
+                          {formatDistanceToNow(parseISO(reply.created_at), { addSuffix: true })}
+                        </div>
+                      </div>
+                      <div>{reply.content}</div>
+                    </div>
+                  ))}
+                </CollapsibleContent>
+              </Collapsible>
+            )}
+            
+            {(!message.thread_id || !messageThreads[message.thread_id]) && (
+              <div className="mt-3">
                 <Button 
                   variant="ghost" 
                   size="sm" 
                   className="text-xs flex items-center gap-1 text-gray-500"
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleReply(message.id);
+                  }}
                 >
-                  {openThreads[message.threadId!] ? "Hide" : "Show"} {messageThreads[message.threadId!].length} {messageThreads[message.threadId!].length === 1 ? "reply" : "replies"}
+                  <CornerDownRight className="h-3 w-3 mr-1" />
+                  Reply
                 </Button>
-              </CollapsibleTrigger>
-              <CollapsibleContent className="mt-2 border-l-2 border-gray-200 pl-4 space-y-3">
-                {messageThreads[message.threadId!].map((reply) => (
-                  <div key={reply.id} className="text-sm bg-gray-50 p-3 rounded-md">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Avatar className="h-6 w-6">
-                        <AvatarImage src={reply.senderAvatar} alt={reply.senderName} />
-                        <AvatarFallback>{reply.senderName.charAt(0)}</AvatarFallback>
-                      </Avatar>
-                      <div className="font-medium text-xs">{reply.senderName}</div>
-                      <div className="text-xs text-gray-500">
-                        {formatDistanceToNow(parseISO(reply.timestamp), { addSuffix: true })}
-                      </div>
-                    </div>
-                    <div>{reply.content}</div>
-                  </div>
-                ))}
-              </CollapsibleContent>
-            </Collapsible>
-          )}
-          
-          {(!message.threadId || !messageThreads[message.threadId]) && (
-            <div className="mt-3">
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="text-xs flex items-center gap-1 text-gray-500"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleReply(message.id);
-                }}
-              >
-                <CornerDownRight className="h-3 w-3 mr-1" />
-                Reply
-              </Button>
-            </div>
-          )}
-        </div>
-      ))}
+              </div>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 };

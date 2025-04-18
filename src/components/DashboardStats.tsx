@@ -1,4 +1,3 @@
-
 import { useApp } from "@/context/AppContext";
 import { 
   Card, 
@@ -28,17 +27,20 @@ const DashboardStats = () => {
   // Calculate stats
   const totalMessages = messages.length;
   const unreadMessages = messages.filter(msg => msg.status === "unread").length;
-  const starredMessages = messages.filter(msg => msg.isStarred).length;
+  const starredMessages = messages.filter(msg => msg.is_starred).length;
   const archivedMessages = messages.filter(msg => msg.status === "archived").length;
   
   // Count messages by channel type
   const messagesByChannelType: Record<string, number> = {};
   
   messages.forEach(message => {
-    if (!messagesByChannelType[message.channelType]) {
-      messagesByChannelType[message.channelType] = 0;
+    const channel = channels.find(c => c.id === message.channel_id);
+    if (channel) {
+      if (!messagesByChannelType[channel.type]) {
+        messagesByChannelType[channel.type] = 0;
+      }
+      messagesByChannelType[channel.type]++;
     }
-    messagesByChannelType[message.channelType]++;
   });
   
   // Prepare data for the channel distribution chart
@@ -67,7 +69,7 @@ const DashboardStats = () => {
         <CardContent>
           <div className="text-2xl font-bold">{totalMessages}</div>
           <p className="text-xs text-muted-foreground mt-1">
-            From {channels.filter(c => c.isConnected).length} connected channels
+            From {channels.filter(c => c.is_connected).length} connected channels
           </p>
         </CardContent>
       </Card>

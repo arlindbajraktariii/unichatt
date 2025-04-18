@@ -28,6 +28,8 @@ export type ChannelConnection = {
   is_connected: boolean;
   last_sync?: string;
   created_at: string;
+  // For UI display only, not in database
+  avatar?: string;
 };
 
 export type MessageStatus = "unread" | "read" | "archived" | "replied";
@@ -45,6 +47,8 @@ export type Message = {
   thread_id?: string;
   parent_id?: string;
   created_at: string;
+  // For UI display only, not in database
+  channelType?: ChannelType;
 };
 
 export type Attachment = {

@@ -70,9 +70,50 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             return;
           }
 
-          setUser(userProfile);
-          setChannels(userChannels || []);
-          setMessages(recentMessages || []);
+          // Convert database models to application models
+          if (userProfile) {
+            setUser(userProfile as unknown as UserProfile);
+          }
+          
+          if (userChannels) {
+            const appChannels: ChannelConnection[] = userChannels.map(channel => ({
+              id: channel.id,
+              user_id: channel.user_id,
+              type: channel.type,
+              name: channel.name,
+              access_token: channel.access_token || undefined,
+              refresh_token: channel.refresh_token || undefined,
+              metadata: channel.metadata ? JSON.parse(JSON.stringify(channel.metadata)) : undefined,
+              is_connected: channel.is_connected || false,
+              last_sync: channel.last_sync || undefined,
+              created_at: channel.created_at,
+              // Add channel logo based on type
+              avatar: `/public/logos/${channel.type}.svg`
+            }));
+            
+            setChannels(appChannels);
+          }
+          
+          if (recentMessages) {
+            const appMessages: Message[] = recentMessages.map(msg => ({
+              id: msg.id,
+              channel_id: msg.channel_id,
+              sender_id: msg.sender_id || undefined,
+              sender_name: msg.sender_name,
+              sender_avatar: msg.sender_avatar || undefined,
+              content: msg.content,
+              status: msg.status as MessageStatus,
+              is_starred: msg.is_starred,
+              thread_id: msg.thread_id || undefined,
+              parent_id: msg.parent_id || undefined,
+              created_at: msg.created_at,
+              // Attachments will be added if needed
+              attachments: []
+            }));
+            
+            setMessages(appMessages);
+          }
+          
           setIsAuthenticated(true);
         } catch (err) {
           console.error('Error setting up initial data', err);
@@ -92,12 +133,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Connect a new channel
   const connectChannel = async (channelType: ChannelType, name: string) => {
+    if (!user) return;
+    
     const { data, error } = await supabase
       .from('channel_connections')
       .insert({
-        user_id: user?.id,
+        user_id: user.id,
         type: channelType,
         name,
+        is_connected: true
       })
       .select()
       .single();
@@ -111,7 +155,24 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       return;
     }
 
-    setChannels([...channels, data]);
+    // Convert to app model
+    const newChannel: ChannelConnection = {
+      id: data.id,
+      user_id: data.user_id,
+      type: data.type,
+      name: data.name,
+      access_token: data.access_token || undefined,
+      refresh_token: data.refresh_token || undefined,
+      metadata: data.metadata ? JSON.parse(JSON.stringify(data.metadata)) : undefined,
+      is_connected: data.is_connected || false,
+      last_sync: data.last_sync || undefined,
+      created_at: data.created_at,
+      // Add channel logo based on type
+      avatar: `/public/logos/${data.type}.svg`
+    };
+
+    setChannels([...channels, newChannel]);
+    
     toast({
       title: "Channel Connected",
       description: `Successfully connected to ${name}`,
@@ -161,7 +222,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
 
     const updatedMessages = messages.map(message => 
-      message.id === messageId ? { ...message, status: 'read' } : message
+      message.id === messageId ? { ...message, status: 'read' as MessageStatus } : message
     );
     setMessages(updatedMessages);
   };
@@ -170,15 +231,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const replyToMessage = async (messageId: string, content: string) => {
     // Find original message
     const originalMessage = messages.find(m => m.id === messageId);
-    if (!originalMessage) return;
+    if (!originalMessage || !user) return;
 
     const { data, error } = await supabase
       .from('messages')
       .insert({
         channel_id: originalMessage.channel_id,
-        sender_id: user?.id,
-        sender_name: user?.name,
-        sender_avatar: user?.avatar_url,
+        sender_id: user.id,
+        sender_name: user.name,
+        sender_avatar: user.avatar_url,
         content,
         status: 'read',
         parent_id: messageId,
@@ -202,13 +263,30 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       .update({ status: 'replied' })
       .eq('id', messageId);
 
+    // Convert to app model
+    const newMessage: Message = {
+      id: data.id,
+      channel_id: data.channel_id,
+      sender_id: data.sender_id || undefined,
+      sender_name: data.sender_name,
+      sender_avatar: data.sender_avatar || undefined,
+      content: data.content,
+      status: data.status as MessageStatus,
+      is_starred: data.is_starred,
+      thread_id: data.thread_id || undefined,
+      parent_id: data.parent_id || undefined,
+      created_at: data.created_at,
+      attachments: []
+    };
+
     // Update local state
     const updatedMessages = [
       ...messages.map(message => 
-        message.id === messageId ? { ...message, status: 'replied' } : message
+        message.id === messageId ? { ...message, status: 'replied' as MessageStatus } : message
       ),
-      data
+      newMessage
     ];
+    
     setMessages(updatedMessages);
 
     toast({
@@ -256,7 +334,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
 
     const updatedMessages = messages.map(message => 
-      message.id === messageId ? { ...message, status: 'archived' } : message
+      message.id === messageId ? { ...message, status: 'archived' as MessageStatus } : message
     );
     setMessages(updatedMessages);
     

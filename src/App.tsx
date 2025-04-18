@@ -18,12 +18,17 @@ import StarredPage from "./pages/StarredPage";
 import ArchivedPage from "./pages/ArchivedPage";
 import Settings from "./pages/Settings";
 import HelpPage from "./pages/HelpPage";
+import LandingPage from "./pages/LandingPage";
 
 const queryClient = new QueryClient();
 
 // Protected route component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated } = useApp();
+  const { isAuthenticated, isLoading } = useApp();
+  
+  if (isLoading) {
+    return <div className="flex h-screen w-screen items-center justify-center">Loading...</div>;
+  }
   
   if (!isAuthenticated) {
     return <Navigate to="/auth" replace />;
@@ -35,12 +40,14 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 const AuthenticatedApp = () => {
   return (
     <Routes>
+      <Route path="/" element={<LandingPage />} />
+      
       <Route path="/auth" element={<AuthLayout />}>
         <Route index element={<AuthForm />} />
       </Route>
       
       <Route
-        path="/"
+        path="/dashboard"
         element={
           <ProtectedRoute>
             <DashboardLayout />
