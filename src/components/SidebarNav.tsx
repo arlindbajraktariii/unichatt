@@ -53,7 +53,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
     return name.split(' ').map(part => part[0]).join('').toUpperCase();
   };
   return <div className={`flex flex-col h-full bg-sidebar text-sidebar-foreground border-r border-sidebar-border font-colvetica ${sidebarExpanded ? 'w-64' : 'w-16'}`}>
-      <div className="p-3 flex items-center justify-between border-b border-sidebar-border bg-zinc-950">
+      <div className="p-3 flex items-center justify-between  bg-zinc-900">
         {sidebarExpanded ? <div className="flex items-center gap-2">
             <img src="/logo.svg" alt="Nexus Logo" className="w-8 h-8" />
             <span className="font-bold text-lg">Nexus</span>
