@@ -73,7 +73,7 @@ const AuthForm = () => {
       <div className="mx-auto max-w-md w-full px-4">
         <div className="mb-8 text-center">
           <div className="flex justify-center mb-4">
-            <img src="/logo.svg" alt="Channel Nexus Logo" className="h-16 w-16" />
+            
           </div>
           <h1 className="text-3xl font-bold text-amber-500">Channel Nexus</h1>
           <p className="text-slate-700 mt-2">Unite your communication channels</p>
