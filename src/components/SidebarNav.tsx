@@ -53,7 +53,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
     return name.split(' ').map(part => part[0]).join('').toUpperCase();
   };
   return <div className={`flex flex-col h-full bg-sidebar text-sidebar-foreground border-r border-sidebar-border font-colvetica ${sidebarExpanded ? 'w-64' : 'w-16'}`}>
-      <div className="p-3 flex items-center justify-between border-b border-sidebar-border bg-white">
+      <div className="p-3 flex items-center justify-between border-b border-sidebar-border bg-zinc-950">
         {sidebarExpanded ? <div className="flex items-center gap-2">
             <img src="/logo.svg" alt="Nexus Logo" className="w-8 h-8" />
             <span className="font-bold text-lg">Nexus</span>
@@ -63,7 +63,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
         </Button>
       </div>
 
-      <ScrollArea className="flex-1 px-3 py-4 bg-white">
+      <ScrollArea className="flex-1 px-3 py-4 bg-zinc-950">
         <div className="space-y-1">
           <NavLink to="/dashboard" className={({
           isActive
@@ -138,7 +138,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
                         {unreadCount > 9 ? '9+' : unreadCount}
                       </span>}
                   </div>
-                  <span className="text-gray-950">Notifications</span>
+                  <span className="text-slate-50">Notifications</span>
                 </> : <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -289,7 +289,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
         </div>
       </ScrollArea>
 
-      <div className="p-3 border-t border-sidebar-border mt-auto bg-white">
+      <div className="p-3 border-t border-sidebar-border mt-auto bg-zinc-950">
         {sidebarExpanded ? <div className="flex items-center justify-between">
             <div className="flex items-center">
               <Avatar className="h-8 w-8 mr-2">
