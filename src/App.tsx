@@ -19,6 +19,9 @@ import ArchivedPage from "./pages/ArchivedPage";
 import Settings from "./pages/Settings";
 import HelpPage from "./pages/HelpPage";
 import LandingPage from "./pages/LandingPage";
+import PricingPage from "./pages/PricingPage";
+import ProfilePage from "./pages/ProfilePage";
+import TicketsPage from "./pages/TicketsPage";
 
 const queryClient = new QueryClient();
 
@@ -27,7 +30,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, isLoading } = useApp();
   
   if (isLoading) {
-    return <div className="flex h-screen w-screen items-center justify-center">
+    return <div className="flex h-screen w-screen items-center justify-center font-colvetica">
       <div className="text-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto mb-4"></div>
         <p className="text-amber-600">Loading...</p>
@@ -50,6 +53,8 @@ const AuthenticatedApp = () => {
       <Route path="/" element={
         isAuthenticated ? <Navigate to="/dashboard" replace /> : <LandingPage />
       } />
+      
+      <Route path="/pricing" element={<PricingPage />} />
       
       <Route path="/auth" element={
         isAuthenticated ? <Navigate to="/dashboard" replace /> : <AuthLayout />
@@ -74,6 +79,8 @@ const AuthenticatedApp = () => {
         <Route path="archived" element={<ArchivedPage />} />
         <Route path="settings" element={<Settings />} />
         <Route path="help" element={<HelpPage />} />
+        <Route path="profile" element={<ProfilePage />} />
+        <Route path="tickets" element={<TicketsPage />} />
       </Route>
       
       <Route path="*" element={<NotFound />} />

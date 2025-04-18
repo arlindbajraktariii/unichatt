@@ -19,6 +19,10 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				sans: ['Inter', 'sans-serif'],
+				colvetica: ['Inter', 'sans-serif'], // We're using Inter as a substitute for Colvetica
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -70,6 +74,7 @@ export default {
 					emerald: '#10B981',
 					slate: '#64748B',
 					background: '#F9FAFB',
+					amber: '#eeba0b',
 				},
 			},
 			borderRadius: {
