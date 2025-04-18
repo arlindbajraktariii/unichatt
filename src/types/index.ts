@@ -5,8 +5,8 @@ export type UserProfile = {
   id: string;
   name: string;
   email: string;
-  avatar: string;
-  createdAt: string;
+  avatar_url?: string;
+  created_at: string;
 };
 
 export type ChannelType = 
@@ -19,31 +19,32 @@ export type ChannelType =
 
 export type ChannelConnection = {
   id: string;
-  userId: string;
+  user_id: string;
   type: ChannelType;
   name: string;
-  isConnected: boolean;
-  avatar?: string;
-  createdAt: string;
-  lastSync?: string;
+  access_token?: string;
+  refresh_token?: string;
+  metadata?: Record<string, any>;
+  is_connected: boolean;
+  last_sync?: string;
+  created_at: string;
 };
 
-export type MessageStatus = "unread" | "read" | "replied" | "archived";
+export type MessageStatus = "unread" | "read" | "archived" | "replied";
 
 export type Message = {
   id: string;
-  channelId: string;
-  channelType: ChannelType;
-  senderId: string;
-  senderName: string;
-  senderAvatar?: string;
+  channel_id: string;
+  sender_id?: string;
+  sender_name: string;
+  sender_avatar?: string;
   content: string;
   attachments?: Attachment[];
-  timestamp: string;
   status: MessageStatus;
-  isStarred: boolean;
-  threadId?: string;
-  parentId?: string;
+  is_starred: boolean;
+  thread_id?: string;
+  parent_id?: string;
+  created_at: string;
 };
 
 export type Attachment = {

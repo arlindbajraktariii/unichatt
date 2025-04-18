@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { ChannelConnection, Message, NotificationSettings, UserProfile } from "../types";
-import { mockChannelConnections, mockMessages, mockNotificationSettings, mockUser } from "../data/mockData";
+import { ChannelConnection, Message, NotificationSettings, UserProfile, MessageStatus, ChannelType } from "../types";
+import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 interface AppContextProps {
@@ -12,7 +12,7 @@ interface AppContextProps {
   notificationSettings: NotificationSettings | null;
   currentChannel: string | null;
   setCurrentChannel: (channelId: string | null) => void;
-  connectChannel: (channelType: string, name: string) => void;
+  connectChannel: (channelType: ChannelType, name: string) => void;
   disconnectChannel: (channelId: string) => void;
   markMessageAsRead: (messageId: string) => void;
   replyToMessage: (messageId: string, content: string) => void;
@@ -38,38 +38,80 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const { toast } = useToast();
 
-  // Initialize with mock data for demo
   useEffect(() => {
-    // Simulate API loading
-    setTimeout(() => {
-      setUser(mockUser);
-      setChannels(mockChannelConnections);
-      setMessages(mockMessages);
-      setNotificationSettings(mockNotificationSettings);
-      setIsLoading(false);
+    const fetchInitialData = async () => {
+      // Fetch initial data from Supabase
+      const { data: { user: authUser } } = await supabase.auth.getUser();
       
-      // For demo purposes, let's auto-authenticate
-      setIsAuthenticated(true);
-    }, 1500);
+      if (authUser) {
+        try {
+          // Fetch user profile
+          const { data: userProfile, error: profileError } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', authUser.id)
+            .single();
+
+          // Fetch user channels
+          const { data: userChannels, error: channelsError } = await supabase
+            .from('channel_connections')
+            .select('*')
+            .eq('user_id', authUser.id);
+
+          // Fetch recent messages
+          const { data: recentMessages, error: messagesError } = await supabase
+            .from('messages')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(50);
+
+          if (profileError || channelsError || messagesError) {
+            console.error('Error fetching initial data', { profileError, channelsError, messagesError });
+            return;
+          }
+
+          setUser(userProfile);
+          setChannels(userChannels || []);
+          setMessages(recentMessages || []);
+          setIsAuthenticated(true);
+        } catch (err) {
+          console.error('Error setting up initial data', err);
+        } finally {
+          setIsLoading(false);
+        }
+      } else {
+        setIsLoading(false);
+      }
+    };
+
+    fetchInitialData();
   }, []);
 
   // Calculate unread count
   const unreadCount = messages.filter(message => message.status === "unread").length;
 
   // Connect a new channel
-  const connectChannel = (channelType: string, name: string) => {
-    const newChannel: ChannelConnection = {
-      id: `conn-${Date.now()}`,
-      userId: user?.id || "user-1",
-      type: channelType as any,
-      name,
-      isConnected: true,
-      avatar: `/logos/${channelType}.svg`,
-      createdAt: new Date().toISOString(),
-      lastSync: new Date().toISOString()
-    };
+  const connectChannel = async (channelType: ChannelType, name: string) => {
+    const { data, error } = await supabase
+      .from('channel_connections')
+      .insert({
+        user_id: user?.id,
+        type: channelType,
+        name,
+      })
+      .select()
+      .single();
 
-    setChannels([...channels, newChannel]);
+    if (error) {
+      toast({
+        title: "Channel Connection Failed",
+        description: error.message,
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setChannels([...channels, data]);
     toast({
       title: "Channel Connected",
       description: `Successfully connected to ${name}`,
@@ -77,11 +119,24 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   // Disconnect a channel
-  const disconnectChannel = (channelId: string) => {
-    const updatedChannels = channels.map(channel => 
-      channel.id === channelId ? { ...channel, isConnected: false } : channel
-    );
+  const disconnectChannel = async (channelId: string) => {
+    const { error } = await supabase
+      .from('channel_connections')
+      .delete()
+      .eq('id', channelId);
+
+    if (error) {
+      toast({
+        title: "Channel Disconnection Failed",
+        description: error.message,
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const updatedChannels = channels.filter(channel => channel.id !== channelId);
     setChannels(updatedChannels);
+    
     toast({
       title: "Channel Disconnected",
       description: "Channel has been disconnected",
@@ -90,42 +145,71 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   // Mark message as read
-  const markMessageAsRead = (messageId: string) => {
+  const markMessageAsRead = async (messageId: string) => {
+    const { error } = await supabase
+      .from('messages')
+      .update({ status: 'read' })
+      .eq('id', messageId);
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Could not mark message as read",
+        variant: "destructive"
+      });
+      return;
+    }
+
     const updatedMessages = messages.map(message => 
-      message.id === messageId ? { ...message, status: "read" } : message
+      message.id === messageId ? { ...message, status: 'read' } : message
     );
     setMessages(updatedMessages);
   };
 
   // Reply to a message
-  const replyToMessage = (messageId: string, content: string) => {
+  const replyToMessage = async (messageId: string, content: string) => {
     // Find original message
     const originalMessage = messages.find(m => m.id === messageId);
     if (!originalMessage) return;
 
-    // Create a new message as a reply
-    const newMessage: Message = {
-      id: `msg-${Date.now()}`,
-      channelId: originalMessage.channelId,
-      channelType: originalMessage.channelType,
-      senderId: user?.id || "user-1",
-      senderName: user?.name || "Alex Johnson",
-      senderAvatar: user?.avatar,
-      content,
-      timestamp: new Date().toISOString(),
-      status: "read",
-      isStarred: false,
-      threadId: originalMessage.threadId || originalMessage.id,
-      parentId: messageId
-    };
+    const { data, error } = await supabase
+      .from('messages')
+      .insert({
+        channel_id: originalMessage.channel_id,
+        sender_id: user?.id,
+        sender_name: user?.name,
+        sender_avatar: user?.avatar_url,
+        content,
+        status: 'read',
+        parent_id: messageId,
+        thread_id: originalMessage.thread_id || originalMessage.id
+      })
+      .select()
+      .single();
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Could not send reply",
+        variant: "destructive"
+      });
+      return;
+    }
 
     // Update original message status
-    const updatedMessages = messages.map(message => 
-      message.id === messageId ? { ...message, status: "replied" } : message
-    );
+    await supabase
+      .from('messages')
+      .update({ status: 'replied' })
+      .eq('id', messageId);
 
-    // Add the new reply
-    setMessages([...updatedMessages, newMessage]);
+    // Update local state
+    const updatedMessages = [
+      ...messages.map(message => 
+        message.id === messageId ? { ...message, status: 'replied' } : message
+      ),
+      data
+    ];
+    setMessages(updatedMessages);
 
     toast({
       title: "Reply Sent",
@@ -133,8 +217,57 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     });
   };
 
+  // Star or unstar a message
+  const starMessage = async (messageId: string, isStarred: boolean) => {
+    const { error } = await supabase
+      .from('messages')
+      .update({ is_starred: isStarred })
+      .eq('id', messageId);
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Could not update message star status",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const updatedMessages = messages.map(message => 
+      message.id === messageId ? { ...message, is_starred: isStarred } : message
+    );
+    setMessages(updatedMessages);
+  };
+
+  // Archive a message
+  const archiveMessage = async (messageId: string) => {
+    const { error } = await supabase
+      .from('messages')
+      .update({ status: 'archived' })
+      .eq('id', messageId);
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Could not archive message",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const updatedMessages = messages.map(message => 
+      message.id === messageId ? { ...message, status: 'archived' } : message
+    );
+    setMessages(updatedMessages);
+    
+    toast({
+      title: "Message Archived",
+      description: "The message has been moved to your archive."
+    });
+  };
+
   // Update notification settings
-  const updateNotificationSettings = (settings: Partial<NotificationSettings>) => {
+  const updateNotificationSettings = async (settings: Partial<NotificationSettings>) => {
     if (!notificationSettings) return;
     
     const updatedSettings = { ...notificationSettings, ...settings };
@@ -146,108 +279,85 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     });
   };
 
-  // Star or unstar a message
-  const starMessage = (messageId: string, isStarred: boolean) => {
-    const updatedMessages = messages.map(message => 
-      message.id === messageId ? { ...message, isStarred } : message
-    );
-    setMessages(updatedMessages);
-  };
-
-  // Archive a message
-  const archiveMessage = (messageId: string) => {
-    const updatedMessages = messages.map(message => 
-      message.id === messageId ? { ...message, status: "archived" } : message
-    );
-    setMessages(updatedMessages);
-    
-    toast({
-      title: "Message Archived",
-      description: "The message has been moved to your archive."
-    });
-  };
-
-  // Mock login functionality
+  // Login functionality
   const login = async (email: string, password: string): Promise<boolean> => {
     setIsLoading(true);
-    // Mock API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
     
-    // In a real app, we would validate credentials here
-    if (email && password) {
-      setIsAuthenticated(true);
-      setUser(mockUser);
-      setChannels(mockChannelConnections);
-      setMessages(mockMessages);
-      setNotificationSettings(mockNotificationSettings);
-      setIsLoading(false);
-      
-      toast({
-        title: "Welcome Back!",
-        description: `You've successfully signed in as ${mockUser.name}.`
-      });
-      
-      return true;
-    } else {
-      setIsLoading(false);
-      
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) {
       toast({
         title: "Login Failed",
-        description: "Invalid email or password. Please try again.",
+        description: error.message,
         variant: "destructive"
       });
-      
+      setIsLoading(false);
       return false;
     }
+
+    // If successful, the user data is set in the initial data fetching useEffect
+    setIsAuthenticated(true);
+    setIsLoading(false);
+    
+    toast({
+      title: "Welcome Back!",
+      description: `You've successfully signed in.`
+    });
+    
+    return true;
   };
 
-  // Mock signup functionality
+  // Signup functionality
   const signup = async (name: string, email: string, password: string): Promise<boolean> => {
     setIsLoading(true);
-    // Mock API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
     
-    if (name && email && password) {
-      const newUser: UserProfile = {
-        ...mockUser,
-        name,
-        email,
-      };
-      
-      setIsAuthenticated(true);
-      setUser(newUser);
-      setChannels([]);
-      setMessages([]);
-      setNotificationSettings({
-        userId: newUser.id,
-        enablePush: true,
-        enableEmail: true,
-        enableSound: true,
-        mutedChannels: []
-      });
-      setIsLoading(false);
-      
-      toast({
-        title: "Account Created!",
-        description: `Welcome to Channel Nexus, ${name}!`
-      });
-      
-      return true;
-    } else {
-      setIsLoading(false);
-      
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          name
+        }
+      }
+    });
+
+    if (error) {
       toast({
         title: "Registration Failed",
-        description: "Please fill in all required fields.",
+        description: error.message,
         variant: "destructive"
       });
-      
+      setIsLoading(false);
       return false;
     }
+
+    setIsAuthenticated(true);
+    setIsLoading(false);
+    
+    toast({
+      title: "Account Created!",
+      description: `Welcome to Channel Nexus, ${name}!`
+    });
+    
+    return true;
   };
 
   // Logout functionality
-  const logout = () => {
+  const logout = async () => {
+    const { error } = await supabase.auth.signOut();
+    
+    if (error) {
+      toast({
+        title: "Logout Failed",
+        description: error.message,
+        variant: "destructive"
+      });
+      return;
+    }
+
     setUser(null);
     setIsAuthenticated(false);
     setChannels([]);

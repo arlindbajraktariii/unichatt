@@ -9,7 +9,136 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      channel_connections: {
+        Row: {
+          access_token: string | null
+          created_at: string
+          id: string
+          is_connected: boolean | null
+          last_sync: string | null
+          metadata: Json | null
+          name: string
+          refresh_token: string | null
+          type: Database["public"]["Enums"]["channel_type"]
+          user_id: string
+        }
+        Insert: {
+          access_token?: string | null
+          created_at?: string
+          id?: string
+          is_connected?: boolean | null
+          last_sync?: string | null
+          metadata?: Json | null
+          name: string
+          refresh_token?: string | null
+          type: Database["public"]["Enums"]["channel_type"]
+          user_id: string
+        }
+        Update: {
+          access_token?: string | null
+          created_at?: string
+          id?: string
+          is_connected?: boolean | null
+          last_sync?: string | null
+          metadata?: Json | null
+          name?: string
+          refresh_token?: string | null
+          type?: Database["public"]["Enums"]["channel_type"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          channel_id: string
+          content: string
+          created_at: string
+          id: string
+          is_starred: boolean
+          metadata: Json | null
+          parent_id: string | null
+          sender_avatar: string | null
+          sender_id: string | null
+          sender_name: string
+          status: Database["public"]["Enums"]["message_status"]
+          thread_id: string | null
+        }
+        Insert: {
+          channel_id: string
+          content: string
+          created_at?: string
+          id?: string
+          is_starred?: boolean
+          metadata?: Json | null
+          parent_id?: string | null
+          sender_avatar?: string | null
+          sender_id?: string | null
+          sender_name: string
+          status?: Database["public"]["Enums"]["message_status"]
+          thread_id?: string | null
+        }
+        Update: {
+          channel_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          is_starred?: boolean
+          metadata?: Json | null
+          parent_id?: string | null
+          sender_avatar?: string | null
+          sender_id?: string | null
+          sender_name?: string
+          status?: Database["public"]["Enums"]["message_status"]
+          thread_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "channel_connections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string
+          id: string
+          name: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email: string
+          id: string
+          name: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -18,7 +147,14 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      channel_type:
+        | "discord"
+        | "slack"
+        | "teams"
+        | "gmail"
+        | "twitter"
+        | "linkedin"
+      message_status: "unread" | "read" | "archived" | "replied"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -133,6 +269,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      channel_type: [
+        "discord",
+        "slack",
+        "teams",
+        "gmail",
+        "twitter",
+        "linkedin",
+      ],
+      message_status: ["unread", "read", "archived", "replied"],
+    },
   },
 } as const
