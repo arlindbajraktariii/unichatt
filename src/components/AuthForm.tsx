@@ -4,13 +4,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useApp } from "@/context/AppContext";
 import { Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const AuthForm = () => {
-  const { login, signup, isLoading } = useApp();
+  const { login, signup, isLoading, isAuthenticated } = useApp();
   const [activeTab, setActiveTab] = useState("login");
+  const navigate = useNavigate();
   
   // Login form state
   const [loginEmail, setLoginEmail] = useState("");
@@ -26,6 +28,13 @@ const AuthForm = () => {
   const [loginError, setLoginError] = useState("");
   const [registerError, setRegisterError] = useState("");
 
+  // Redirect to dashboard if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated, navigate]);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError("");
@@ -36,7 +45,9 @@ const AuthForm = () => {
     }
     
     const success = await login(loginEmail, loginPassword);
-    if (!success) {
+    if (success) {
+      navigate("/dashboard");
+    } else {
       setLoginError("Invalid email or password");
     }
   };
@@ -56,25 +67,27 @@ const AuthForm = () => {
     }
     
     const success = await signup(registerName, registerEmail, registerPassword);
-    if (!success) {
+    if (success) {
+      navigate("/dashboard");
+    } else {
       setRegisterError("Registration failed. Please try again.");
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-amber-50 to-yellow-100">
       <div className="mx-auto max-w-md w-full px-4">
         <div className="mb-8 text-center">
           <div className="flex justify-center mb-4">
             <img src="/logo.svg" alt="Channel Nexus Logo" className="h-16 w-16" />
           </div>
-          <h1 className="text-3xl font-bold text-nexus-indigo">Channel Nexus</h1>
-          <p className="text-slate-600 mt-2">Unite your communication channels</p>
+          <h1 className="text-3xl font-bold text-amber-500">Channel Nexus</h1>
+          <p className="text-slate-700 mt-2">Unite your communication channels</p>
         </div>
         
-        <Card>
+        <Card className="border-amber-200 shadow-lg">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center">Welcome</CardTitle>
+            <CardTitle className="text-2xl font-bold text-center text-amber-600">Welcome</CardTitle>
             <CardDescription className="text-center">
               Sign in to access your connected channels
             </CardDescription>
@@ -107,7 +120,7 @@ const AuthForm = () => {
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <Label htmlFor="password">Password</Label>
-                        <a href="#" className="text-xs text-nexus-violet hover:underline">
+                        <a href="#" className="text-xs text-amber-600 hover:underline">
                           Forgot password?
                         </a>
                       </div>
@@ -124,7 +137,7 @@ const AuthForm = () => {
                       <div className="text-sm text-red-500">{loginError}</div>
                     )}
                     
-                    <Button type="submit" className="w-full bg-nexus-indigo hover:bg-nexus-violet" disabled={isLoading}>
+                    <Button type="submit" className="w-full bg-amber-400 hover:bg-amber-500 text-black" disabled={isLoading}>
                       {isLoading ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -185,7 +198,7 @@ const AuthForm = () => {
                       <div className="text-sm text-red-500">{registerError}</div>
                     )}
                     
-                    <Button type="submit" className="w-full bg-nexus-indigo hover:bg-nexus-violet" disabled={isLoading}>
+                    <Button type="submit" className="w-full bg-amber-400 hover:bg-amber-500 text-black" disabled={isLoading}>
                       {isLoading ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -203,11 +216,11 @@ const AuthForm = () => {
           <CardFooter className="text-center text-sm text-gray-500 flex justify-center">
             <p>
               By continuing, you agree to our{" "}
-              <a href="#" className="text-nexus-violet hover:underline">
+              <a href="#" className="text-amber-600 hover:underline">
                 Terms of Service
               </a>{" "}
               and{" "}
-              <a href="#" className="text-nexus-violet hover:underline">
+              <a href="#" className="text-amber-600 hover:underline">
                 Privacy Policy
               </a>
             </p>

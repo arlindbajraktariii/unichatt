@@ -102,7 +102,7 @@ const ChannelConnect = ({ onBack }: ChannelConnectProps) => {
           <Label htmlFor="channel-type">Channel Type</Label>
           <Select 
             value={channelType} 
-            onValueChange={setChannelType}
+            onValueChange={(value: ChannelType | "") => setChannelType(value)}
           >
             <SelectTrigger id="channel-type">
               <SelectValue placeholder="Select a channel type" />
@@ -155,7 +155,7 @@ const ChannelConnect = ({ onBack }: ChannelConnectProps) => {
           </Link>
         )}
         
-        <Button onClick={handleConnect} disabled={isConnecting}>
+        <Button onClick={handleConnect} disabled={isConnecting} className="bg-amber-400 hover:bg-amber-500 text-black">
           {isConnecting ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
