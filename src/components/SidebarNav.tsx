@@ -69,7 +69,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
           isActive
         }) => `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`} end>
             {sidebarExpanded ? <>
-                <MessageSquare className="h-5 w-5 mr-3" />
+                <MessageSquare className="h-5 w-5 mr-3 bg-transparent" />
                 <span>Dashboard</span>
               </> : <TooltipProvider>
                 <Tooltip>
