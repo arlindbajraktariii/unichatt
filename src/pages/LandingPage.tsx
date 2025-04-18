@@ -68,7 +68,7 @@ const LandingPage = () => {
       </section>
 
       {/* Features */}
-      <section className="py-24 bg-white">
+      <section className="bg-gray-100 py-[50px]">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4">One Platform, All Channels</h2>
