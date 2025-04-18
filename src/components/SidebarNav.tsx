@@ -23,7 +23,7 @@ interface SidebarNavProps {
   expanded?: boolean;
 }
 
-const SidebarNav: React.FC<SidebarNavProps> = ({ expanded = true }) => {
+const SidebarNav: React.FC<SidebarNavProps> = ({ expanded: isExpanded = true }) => {
   const { 
     user, 
     channels, 
@@ -32,7 +32,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ expanded = true }) => {
     setCurrentChannel, 
     unreadCount 
   } = useApp();
-  const [expanded, setExpanded] = useState(true);
+  const [sidebarExpanded, setSidebarExpanded] = useState(isExpanded);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -60,19 +60,6 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ expanded = true }) => {
 
   const connectedChannels = channels.filter(channel => channel.is_connected);
 
-  const getChannelIcon = (channelType: string) => {
-    const logoMap: Record<string, string> = {
-      slack: '/logos/slack.svg',
-      discord: '/logos/discord.svg',
-      teams: '/logos/teams.svg',
-      gmail: '/logos/gmail.svg',
-      twitter: '/logos/twitter.svg',
-      linkedin: '/logos/linkedin.svg',
-    };
-    
-    return logoMap[channelType] || '/placeholder.svg';
-  };
-
   const getInitials = (name: string) => {
     return name
       .split(' ')
@@ -82,9 +69,9 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ expanded = true }) => {
   };
 
   return (
-    <div className={`flex flex-col h-full bg-sidebar text-sidebar-foreground border-r border-sidebar-border font-colvetica ${expanded ? 'w-64' : 'w-16'}`}>
+    <div className={`flex flex-col h-full bg-sidebar text-sidebar-foreground border-r border-sidebar-border font-colvetica ${sidebarExpanded ? 'w-64' : 'w-16'}`}>
       <div className="p-3 flex items-center justify-between border-b border-sidebar-border">
-        {expanded ? (
+        {sidebarExpanded ? (
           <div className="flex items-center gap-2">
             <img src="/logo.svg" alt="Nexus Logo" className="w-8 h-8" />
             <span className="font-bold text-lg">Nexus</span>
@@ -95,10 +82,10 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ expanded = true }) => {
         <Button 
           variant="ghost" 
           size="icon" 
-          onClick={() => setExpanded(!expanded)}
+          onClick={() => setSidebarExpanded(!sidebarExpanded)}
           className="text-sidebar-foreground hover:bg-sidebar-accent"
         >
-          <ChevronRight className={`h-5 w-5 ${expanded ? 'rotate-180' : ''}`} />
+          <ChevronRight className={`h-5 w-5 ${sidebarExpanded ? 'rotate-180' : ''}`} />
         </Button>
       </div>
 
@@ -111,7 +98,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ expanded = true }) => {
             }
             end
           >
-            {expanded ? (
+            {sidebarExpanded ? (
               <>
                 <MessageSquare className="h-5 w-5 mr-3" />
                 <span>Dashboard</span>
@@ -130,8 +117,8 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ expanded = true }) => {
             )}
           </NavLink>
 
-          <div className={`mt-3 mb-2 ${expanded ? 'flex justify-between items-center' : 'text-center'}`}>
-            {expanded ? (
+          <div className={`mt-3 mb-2 ${sidebarExpanded ? 'flex justify-between items-center' : 'text-center'}`}>
+            {sidebarExpanded ? (
               <>
                 <span className="font-medium text-sm text-sidebar-foreground/70">CHANNELS</span>
                 <Button
@@ -170,7 +157,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ expanded = true }) => {
                 <ChannelItem
                   key={channel.id}
                   channel={channel}
-                  expanded={expanded}
+                  expanded={sidebarExpanded}
                   isActive={currentChannel === channel.id}
                   onClick={() => {
                     setCurrentChannel(channel.id);
@@ -180,15 +167,15 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ expanded = true }) => {
               ))}
             </div>
           ) : (
-            <div className={expanded ? "p-2 text-sm text-sidebar-foreground/60 text-center" : ""}>
-              {expanded && <p>No channels connected yet</p>}
+            <div className={sidebarExpanded ? "p-2 text-sm text-sidebar-foreground/60 text-center" : ""}>
+              {sidebarExpanded && <p>No channels connected yet</p>}
               <Button
                 variant="outline"
-                size={expanded ? "default" : "icon"}
+                size={sidebarExpanded ? "default" : "icon"}
                 onClick={handleAddChannel}
-                className={`mt-2 ${expanded ? 'w-full' : 'mx-auto'} border-sidebar-border text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground`}
+                className={`mt-2 ${sidebarExpanded ? 'w-full' : 'mx-auto'} border-sidebar-border text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground`}
               >
-                {expanded ? (
+                {sidebarExpanded ? (
                   <>
                     <PlusCircle className="h-4 w-4 mr-2" />
                     Connect Channel
@@ -218,7 +205,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ expanded = true }) => {
                 `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`
               }
             >
-              {expanded ? (
+              {sidebarExpanded ? (
                 <>
                   <div className="relative">
                     <Bell className="h-5 w-5 mr-3" />
@@ -257,7 +244,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ expanded = true }) => {
                 `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`
               }
             >
-              {expanded ? (
+              {sidebarExpanded ? (
                 <>
                   <Star className="h-5 w-5 mr-3" />
                   <span>Starred</span>
@@ -282,7 +269,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ expanded = true }) => {
                 `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`
               }
             >
-              {expanded ? (
+              {sidebarExpanded ? (
                 <>
                   <Archive className="h-5 w-5 mr-3" />
                   <span>Archived</span>
@@ -307,7 +294,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ expanded = true }) => {
                 `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`
               }
             >
-              {expanded ? (
+              {sidebarExpanded ? (
                 <>
                   <User className="h-5 w-5 mr-3" />
                   <span>Profile</span>
@@ -332,7 +319,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ expanded = true }) => {
                 `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`
               }
             >
-              {expanded ? (
+              {sidebarExpanded ? (
                 <>
                   <Ticket className="h-5 w-5 mr-3" />
                   <span>Support Tickets</span>
@@ -357,7 +344,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ expanded = true }) => {
                 `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`
               }
             >
-              {expanded ? (
+              {sidebarExpanded ? (
                 <>
                   <svg className="h-5 w-5 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm1 15h-2v-6h2v6zm0-8h-2v-2h2v2z" />
@@ -386,7 +373,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ expanded = true }) => {
                 `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`
               }
             >
-              {expanded ? (
+              {sidebarExpanded ? (
                 <>
                   <Cog className="h-5 w-5 mr-3" />
                   <span>Settings</span>
@@ -411,7 +398,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ expanded = true }) => {
                 `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`
               }
             >
-              {expanded ? (
+              {sidebarExpanded ? (
                 <>
                   <HelpCircle className="h-5 w-5 mr-3" />
                   <span>Help</span>
@@ -434,7 +421,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ expanded = true }) => {
       </ScrollArea>
 
       <div className="p-3 border-t border-sidebar-border mt-auto">
-        {expanded ? (
+        {sidebarExpanded ? (
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <Avatar className="h-8 w-8 mr-2">
