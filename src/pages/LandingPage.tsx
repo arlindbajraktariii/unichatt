@@ -1,16 +1,13 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { MessageSquare, Share2, Users, Zap } from 'lucide-react';
-
 const LandingPage = () => {
-  return (
-    <div className="min-h-screen bg-white text-black">
+  return <div className="min-h-screen bg-white text-black">
       {/* Header */}
       <header className="container mx-auto px-4 py-8">
-        <div className="bg-black rounded-[30px] p-6 flex flex-col md:flex-row justify-between items-center">
+        <div className="rounded-[30px] p-6 flex flex-col md:flex-row justify-between items-center bg-[#eeba0b]">
           <div className="flex items-center">
             <img src="/logo.svg" alt="Nexus Logo" className="h-10 w-10 mr-3" />
             <h1 className="text-2xl font-bold text-white">Nexus</h1>
@@ -135,8 +132,6 @@ const LandingPage = () => {
           </div>
         </div>
       </footer>
-    </div>
-  );
+    </div>;
 };
-
 export default LandingPage;
