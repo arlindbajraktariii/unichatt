@@ -66,7 +66,7 @@ const LandingPage = () => {
       </section>
 
       {/* Features */}
-      <section className="py-[50px] bg-zinc-50">
+      <section className="py-[50px] bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4">One Platform, All Channels</h2>
@@ -88,7 +88,7 @@ const LandingPage = () => {
       </section>
 
       {/* Integrations */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-amber-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4">Connect Your Favorite Platforms</h2>
@@ -107,7 +107,7 @@ const LandingPage = () => {
       </section>
 
       {/* Pricing Preview */}
-      <section className="py-24 bg-gray-100">
+      <section className="py-24 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4">Simple, Transparent Pricing</h2>
@@ -230,7 +230,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   description
 }) => {
   return <Card className="border-0 shadow-md hover:shadow-lg transition-shadow h-full">
-      <CardContent className="p-6">
+      <CardContent className="p-6 bg-amber-50">
         <div className="rounded-full bg-amber-50 w-16 h-16 flex items-center justify-center mb-6">
           {icon}
         </div>
