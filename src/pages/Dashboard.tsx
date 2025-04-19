@@ -1,4 +1,3 @@
-
 import { useApp } from "@/context/AppContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,15 +5,15 @@ import { ArrowRight, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import MessageList from "@/components/MessageList";
 import DashboardStats from "@/components/DashboardStats";
-
 const Dashboard = () => {
-  const { channels, messages, unreadCount } = useApp();
-  
+  const {
+    channels,
+    messages,
+    unreadCount
+  } = useApp();
   const connectedChannels = channels.filter(channel => channel.is_connected);
   const unreadMessages = messages.filter(message => message.status === "unread");
-
-  return (
-    <div className="container mx-auto py-6 max-w-7xl">
+  return <div className="container mx-auto py-6 max-w-7xl bg-white">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
@@ -51,14 +50,9 @@ const Dashboard = () => {
             </Link>
           </CardHeader>
           <CardContent>
-            {messages.length > 0 ? (
-              <div className="max-h-[500px] overflow-y-auto pr-1">
-                <MessageList 
-                  messages={messages.slice(0, 5)} 
-                />
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center h-[200px] text-center text-gray-500">
+            {messages.length > 0 ? <div className="max-h-[500px] overflow-y-auto pr-1">
+                <MessageList messages={messages.slice(0, 5)} />
+              </div> : <div className="flex flex-col items-center justify-center h-[200px] text-center text-gray-500">
                 <p className="text-sm max-w-md">
                   No messages yet. Connect a channel to start receiving messages.
                 </p>
@@ -68,8 +62,7 @@ const Dashboard = () => {
                     Add Your First Channel
                   </Button>
                 </Link>
-              </div>
-            )}
+              </div>}
           </CardContent>
         </Card>
         
@@ -81,19 +74,10 @@ const Dashboard = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {connectedChannels.length > 0 ? (
-              <div className="space-y-4">
-                {connectedChannels.map(channel => (
-                  <div 
-                    key={channel.id}
-                    className="flex items-center p-3 rounded-md border hover:bg-gray-50 transition-colors"
-                  >
+            {connectedChannels.length > 0 ? <div className="space-y-4">
+                {connectedChannels.map(channel => <div key={channel.id} className="flex items-center p-3 rounded-md border hover:bg-gray-50 transition-colors">
                     <div className="flex-shrink-0 mr-3">
-                      <img 
-                        src={channel.avatar} 
-                        alt={channel.name}
-                        className="h-10 w-10" 
-                      />
+                      <img src={channel.avatar} alt={channel.name} className="h-10 w-10" />
                     </div>
                     <div className="flex-grow">
                       <div className="font-medium">{channel.name}</div>
@@ -104,8 +88,7 @@ const Dashboard = () => {
                         <ArrowRight className="h-4 w-4" />
                       </Button>
                     </Link>
-                  </div>
-                ))}
+                  </div>)}
                 
                 <Link to="/add-channel">
                   <Button variant="outline" className="w-full mt-2">
@@ -113,9 +96,7 @@ const Dashboard = () => {
                     Add Channel
                   </Button>
                 </Link>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center h-[200px] text-center text-gray-500">
+              </div> : <div className="flex flex-col items-center justify-center h-[200px] text-center text-gray-500">
                 <p className="text-sm max-w-md">
                   No channels connected yet. Add your first communication channel to get started.
                 </p>
@@ -125,14 +106,12 @@ const Dashboard = () => {
                     Add Channel
                   </Button>
                 </Link>
-              </div>
-            )}
+              </div>}
           </CardContent>
         </Card>
       </div>
       
-      {unreadCount > 0 && (
-        <Card className="mb-6">
+      {unreadCount > 0 && <Card className="mb-6">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <div>
               <CardTitle>Unread Messages</CardTitle>
@@ -153,10 +132,7 @@ const Dashboard = () => {
               <MessageList messages={unreadMessages.slice(0, 3)} filter="unread" />
             </div>
           </CardContent>
-        </Card>
-      )}
-    </div>
-  );
+        </Card>}
+    </div>;
 };
-
 export default Dashboard;
