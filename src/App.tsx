@@ -22,6 +22,7 @@ import LandingPage from "./pages/LandingPage";
 import PricingPage from "./pages/PricingPage";
 import ProfilePage from "./pages/ProfilePage";
 import TicketsPage from "./pages/TicketsPage";
+import SlackCallback from "./pages/SlackCallback";
 
 const queryClient = new QueryClient();
 
@@ -61,6 +62,9 @@ const AuthenticatedApp = () => {
       }>
         <Route index element={<AuthForm />} />
       </Route>
+      
+      {/* Add Slack callback route */}
+      <Route path="/slack/callback" element={<SlackCallback />} />
       
       <Route
         path="/dashboard"

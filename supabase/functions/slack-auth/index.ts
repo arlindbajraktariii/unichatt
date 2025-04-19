@@ -21,12 +21,15 @@ serve(async (req) => {
   if (!code) {
     // If no code, redirect to Slack OAuth
     const authUrl = `https://slack.com/oauth/v2/authorize?client_id=${SLACK_CLIENT_ID}&scope=channels:history,channels:read,chat:write,users:read&redirect_uri=${REDIRECT_URI}`
+    
+    console.log('Redirecting to Slack OAuth with URL:', authUrl)
     return new Response(JSON.stringify({ url: authUrl }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
   }
 
   try {
+    console.log('Received code from Slack, exchanging for access token')
     // Exchange code for access token
     const response = await fetch('https://slack.com/api/oauth.v2.access', {
       method: 'POST',
@@ -42,9 +45,10 @@ serve(async (req) => {
     })
 
     const data = await response.json()
+    console.log('Slack API response:', JSON.stringify(data, null, 2))
 
     if (!data.ok) {
-      throw new Error('Failed to get access token')
+      throw new Error(`Failed to get access token: ${data.error}`)
     }
 
     // Return the access token and other relevant data
@@ -59,8 +63,9 @@ serve(async (req) => {
       }
     )
   } catch (error) {
+    console.error('Error in Slack auth flow:', error)
     return new Response(
-      JSON.stringify({ error: 'Failed to complete OAuth flow' }),
+      JSON.stringify({ error: 'Failed to complete OAuth flow', details: error.message }),
       {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
