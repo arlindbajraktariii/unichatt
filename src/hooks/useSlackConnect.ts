@@ -26,6 +26,8 @@ export const useSlackConnect = () => {
           const { access_token, team_name } = event.data;
           
           // Connect the channel using the context function
+          // The error was here - we were passing 3 arguments but the function expects 2
+          // Now we pass the channel type, name, and metadata as an object
           await connectChannel('slack', team_name, {
             access_token,
             team_name,

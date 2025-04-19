@@ -12,7 +12,7 @@ interface AppContextProps {
   notificationSettings: NotificationSettings | null;
   currentChannel: string | null;
   setCurrentChannel: (channelId: string | null) => void;
-  connectChannel: (channelType: ChannelType, name: string) => void;
+  connectChannel: (channelType: ChannelType, name: string, metadata?: any) => void;
   disconnectChannel: (channelId: string) => void;
   markMessageAsRead: (messageId: string) => void;
   replyToMessage: (messageId: string, content: string) => void;
@@ -132,7 +132,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const unreadCount = messages.filter(message => message.status === "unread").length;
 
   // Connect a new channel
-  const connectChannel = async (channelType: ChannelType, name: string) => {
+  const connectChannel = async (channelType: ChannelType, name: string, metadata?: any) => {
     if (!user) return;
     
     const { data, error } = await supabase
@@ -141,7 +141,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         user_id: user.id,
         type: channelType,
         name,
-        is_connected: true
+        is_connected: true,
+        metadata,
+        access_token: metadata?.access_token
       })
       .select()
       .single();
