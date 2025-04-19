@@ -1,4 +1,3 @@
-
 // Types for the multi-channel communication platform
 
 export type UserProfile = {

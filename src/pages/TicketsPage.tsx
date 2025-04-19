@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,12 +11,13 @@ import { Loader2, Plus, MessageSquare, Clock, CheckCircle2 } from 'lucide-react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { format } from 'date-fns';
 import { Ticket, TicketPriority, TicketStatus } from '@/types';
+import { supabase } from '@/integrations/supabase/client';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 const TicketsPage = () => {
   const { user, isAuthenticated } = useApp();
   const { toast } = useToast();
-  const [loading, setLoading] = useState(false);
-  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const queryClient = useQueryClient();
   const [showNewTicketForm, setShowNewTicketForm] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
@@ -25,62 +25,49 @@ const TicketsPage = () => {
     priority: 'medium' as TicketPriority
   });
 
-  useEffect(() => {
-    if (isAuthenticated && user) {
-      fetchTickets();
-    }
-  }, [isAuthenticated, user]);
+  const { data: tickets = [], isLoading } = useQuery({
+    queryKey: ['tickets'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('tickets')
+        .select('*')
+        .order('created_at', { ascending: false });
+        
+      if (error) throw error;
+      return data as Ticket[];
+    },
+    enabled: isAuthenticated && !!user
+  });
 
-  // For now, let's mock the ticket data since we may not have the actual table yet
-  const fetchTickets = async () => {
-    setLoading(true);
-    try {
-      // Mocked ticket data - this would normally come from Supabase
-      const mockTickets: Ticket[] = [
-        {
-          id: "1",
-          user_id: user?.id || '',
-          title: "Can't connect to Slack",
-          description: "I'm having trouble connecting my Slack account to Nexus.",
-          status: 'open',
-          priority: 'high',
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        },
-        {
-          id: "2",
-          user_id: user?.id || '',
-          title: "Messages not syncing",
-          description: "My messages from Discord aren't showing up in the dashboard.",
-          status: 'in_progress',
-          priority: 'medium',
-          created_at: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
-          updated_at: new Date(Date.now() - 43200000).toISOString(), // 12 hours ago
-        },
-        {
-          id: "3",
-          user_id: user?.id || '',
-          title: "Feature request: Dark mode",
-          description: "Would love to have a dark mode option for the app.",
-          status: 'resolved',
-          priority: 'low',
-          created_at: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
-          updated_at: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
-        }
-      ];
-      
-      setTickets(mockTickets);
-    } catch (error) {
-      console.error('Error fetching tickets:', error);
+  const createTicketMutation = useMutation({
+    mutationFn: async (newTicket: Omit<Ticket, 'id' | 'created_at' | 'updated_at' | 'status'>) => {
+      const { data, error } = await supabase
+        .from('tickets')
+        .insert([newTicket])
+        .select()
+        .single();
+        
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tickets'] });
+      setFormData({ title: '', description: '', priority: 'medium' });
+      setShowNewTicketForm(false);
       toast({
-        title: "Failed to load tickets",
-        description: "There was an error loading your support tickets.",
+        title: "Ticket Created",
+        description: "Your support ticket has been successfully submitted.",
+      });
+    },
+    onError: (error) => {
+      console.error('Error creating ticket:', error);
+      toast({
+        title: "Submission Failed",
+        description: "There was an error submitting your ticket. Please try again.",
         variant: "destructive"
       });
-    } finally {
-      setLoading(false);
     }
-  };
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -106,40 +93,13 @@ const TicketsPage = () => {
       });
       return;
     }
-    
-    setLoading(true);
-    
-    try {
-      // Create a new ticket (mocked for now)
-      const newTicket: Ticket = {
-        id: `mock-${Date.now()}`,
-        user_id: user.id,
-        title: formData.title,
-        description: formData.description,
-        priority: formData.priority,
-        status: 'open',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      };
-      
-      setTickets(prev => [newTicket, ...prev]);
-      setFormData({ title: '', description: '', priority: 'medium' });
-      setShowNewTicketForm(false);
-      
-      toast({
-        title: "Ticket Created",
-        description: "Your support ticket has been successfully submitted.",
-      });
-    } catch (error) {
-      console.error('Error creating ticket:', error);
-      toast({
-        title: "Submission Failed",
-        description: "There was an error submitting your ticket. Please try again.",
-        variant: "destructive"
-      });
-    } finally {
-      setLoading(false);
-    }
+
+    createTicketMutation.mutate({
+      user_id: user.id,
+      title: formData.title,
+      description: formData.description,
+      priority: formData.priority,
+    });
   };
 
   const getStatusBadge = (status: TicketStatus) => {
@@ -254,10 +214,10 @@ const TicketsPage = () => {
                 </Button>
                 <Button 
                   type="submit" 
-                  disabled={loading}
+                  disabled={isLoading}
                   className="bg-amber-400 hover:bg-amber-500 text-black"
                 >
-                  {loading ? (
+                  {isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Submitting...
@@ -297,7 +257,7 @@ const TicketsPage = () => {
   );
 
   function renderTickets(ticketsToRender: Ticket[]) {
-    if (loading && tickets.length === 0) {
+    if (isLoading && tickets.length === 0) {
       return (
         <div className="flex justify-center items-center h-40">
           <Loader2 className="h-8 w-8 animate-spin text-amber-400" />
