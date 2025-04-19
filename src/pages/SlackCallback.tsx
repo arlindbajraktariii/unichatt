@@ -4,11 +4,13 @@ import { useSearchParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 
 const SlackCallback = () => {
   const [searchParams] = useSearchParams();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [errorMessage, setErrorMessage] = useState('');
+  const [details, setDetails] = useState('');
   
   useEffect(() => {
     const code = searchParams.get('code');
@@ -25,18 +27,23 @@ const SlackCallback = () => {
     const completeAuth = async () => {
       if (code) {
         try {
+          console.log('Received code from Slack, calling edge function');
           // Call our edge function with the code
           const { data, error } = await supabase.functions.invoke('slack-auth', {
             body: { code }
           });
           
           if (error) {
-            throw new Error(`Edge function error: ${error.message}`);
+            console.error('Edge function error:', error);
+            throw new Error(`Edge function error: ${error.message || JSON.stringify(error)}`);
           }
           
           if (!data || data.error) {
+            console.error('Data error:', data?.error || 'No data returned');
             throw new Error(data?.error || 'No data returned from Slack');
           }
+          
+          console.log('Received successful response from edge function:', data);
           
           // Send the data back to the opener window
           if (window.opener) {
@@ -53,6 +60,9 @@ const SlackCallback = () => {
           console.error('Error completing Slack auth:', error);
           setStatus('error');
           setErrorMessage(error.message || 'Unknown error occurred');
+          if (error.details) {
+            setDetails(error.details);
+          }
         }
       } else {
         setStatus('error');
@@ -94,11 +104,17 @@ const SlackCallback = () => {
             <svg className="h-16 w-16 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
-            <p className="text-gray-700 mb-2">
-              Sorry, we couldn't connect to Slack.
-            </p>
-            <p className="text-sm text-red-500 bg-red-50 p-2 rounded mb-4">
-              {errorMessage || 'Unknown error occurred'}
+            <Alert variant="destructive" className="mb-4">
+              <AlertTitle>Failed to connect to Slack</AlertTitle>
+              <AlertDescription className="text-sm">
+                {errorMessage || 'Unknown error occurred'}
+                {details && (
+                  <div className="mt-2 text-xs bg-red-50 p-2 rounded">{details}</div>
+                )}
+              </AlertDescription>
+            </Alert>
+            <p className="text-sm text-gray-600 mb-4">
+              Please make sure the Slack Client ID and Secret are properly configured in Supabase secrets.
             </p>
           </div>
         )}

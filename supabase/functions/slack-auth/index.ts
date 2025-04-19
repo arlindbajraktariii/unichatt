@@ -11,6 +11,7 @@ const corsHeaders = {
 }
 
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
@@ -18,7 +19,10 @@ serve(async (req) => {
   const url = new URL(req.url)
   const code = url.searchParams.get('code')
 
-  // Log the current environment variables (without revealing the full secret)
+  console.log('Request received:', req.method, url.pathname)
+  console.log('Code available:', code ? 'Yes' : 'No')
+  
+  // Check if credentials are available
   console.log(`SLACK_CLIENT_ID available: ${SLACK_CLIENT_ID ? 'Yes' : 'No'}`)
   console.log(`SLACK_CLIENT_SECRET available: ${SLACK_CLIENT_SECRET ? 'Yes' : 'No'}`)
   
@@ -37,17 +41,17 @@ serve(async (req) => {
   }
 
   if (!code) {
-    // If no code, redirect to Slack OAuth
+    // If no code, return the auth URL for frontend to open
     const authUrl = `https://slack.com/oauth/v2/authorize?client_id=${SLACK_CLIENT_ID}&scope=channels:history,channels:read,chat:write,users:read&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`
     
-    console.log('Redirecting to Slack OAuth with URL:', authUrl)
+    console.log('Generating Slack OAuth URL:', authUrl)
     return new Response(JSON.stringify({ url: authUrl }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
   }
 
   try {
-    console.log('Received code from Slack, exchanging for access token')
+    console.log('Exchanging code for access token')
     // Exchange code for access token
     const response = await fetch('https://slack.com/api/oauth.v2.access', {
       method: 'POST',
@@ -71,6 +75,7 @@ serve(async (req) => {
     }
 
     // Return the access token and other relevant data
+    console.log('Successfully obtained access token')
     return new Response(
       JSON.stringify({
         access_token: data.access_token,
