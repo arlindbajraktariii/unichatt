@@ -55,8 +55,8 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
   return <div className={`flex flex-col h-full bg-sidebar text-sidebar-foreground border-r border-sidebar-border font-colvetica ${sidebarExpanded ? 'w-64' : 'w-16'}`}>
       <div className="p-3 flex items-center justify-between bg-zinc-900 mx-0 my-0 py-[10px]">
         {sidebarExpanded ? <div className="flex items-center gap-2">
-            <img src="/logo.svg" alt="Nexus Logo" className="w-8 h-8" />
-            <span className="font-bold text-lg">Nexus</span>
+            
+            <span className="font-bold text-lg text-white">Unichat</span>
           </div> : <img src="/logo.svg" alt="Nexus Logo" className="w-8 h-8 mx-auto" />}
         <Button variant="ghost" size="icon" onClick={() => setSidebarExpanded(!sidebarExpanded)} className="text-sidebar-foreground hover:bg-sidebar-accent">
           <ChevronRight className={`h-5 w-5 ${sidebarExpanded ? 'rotate-180' : ''}`} />
