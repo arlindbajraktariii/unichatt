@@ -8,7 +8,7 @@ const DashboardLayout = () => {
   return <div className="flex h-screen overflow-hidden bg-gray-50">
       <SidebarNav expanded={!sidebarCollapsed} />
       
-      <div className="relative flex-1 overflow-auto bg-amber-50">
+      <div className="relative flex-1 overflow-auto bg-white">
         
         
         <main className="flex-1 bg-amber-50">
