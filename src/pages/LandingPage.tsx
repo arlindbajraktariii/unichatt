@@ -9,8 +9,8 @@ const LandingPage = () => {
       <header className="container mx-auto my-[26px] px-[31px] py-[14px] rounded-xl bg-white">
         <nav className="flex justify-between items-center">
           <div className="flex items-center">
-            <img src="/logo.svg" alt="Nexus Logo" className="h-10 w-10 mr-3" />
-            <h1 className="text-2xl font-bold">Nexus</h1>
+            
+            <h1 className="text-2xl font-bold">Unichat</h1>
           </div>
           <div className="hidden md:flex items-center space-x-6">
             <Link to="/" className="text-gray-800 hover:text-amber-500 transition-colors">Home</Link>
@@ -40,7 +40,7 @@ const LandingPage = () => {
               All Your Communications
               <span className="text-amber-500 block mt-2">In One Place</span>
             </h1>
-            <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-10">Connect all your messaging platforms into a single dashboard. Never miss an message again.</p>
+            <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-10">Unichat seamlessly brings together Slack, Teams, Discord, and more — so your team can communicate clearly, move faster, and stay focused.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/auth?signup=true">
                 <Button size="lg" className="bg-amber-400 hover:bg-amber-500 text-black text-lg px-8 shadow-md">
