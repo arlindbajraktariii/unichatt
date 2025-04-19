@@ -18,9 +18,27 @@ serve(async (req) => {
   const url = new URL(req.url)
   const code = url.searchParams.get('code')
 
+  // Log the current environment variables (without revealing the full secret)
+  console.log(`SLACK_CLIENT_ID available: ${SLACK_CLIENT_ID ? 'Yes' : 'No'}`)
+  console.log(`SLACK_CLIENT_SECRET available: ${SLACK_CLIENT_SECRET ? 'Yes' : 'No'}`)
+  
+  if (!SLACK_CLIENT_ID || !SLACK_CLIENT_SECRET) {
+    console.error('Missing Slack credentials - please check your Supabase secrets')
+    return new Response(
+      JSON.stringify({ 
+        error: 'Configuration error', 
+        details: 'Missing Slack credentials. Please set SLACK_CLIENT_ID and SLACK_CLIENT_SECRET in Supabase secrets.' 
+      }),
+      {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
+    )
+  }
+
   if (!code) {
     // If no code, redirect to Slack OAuth
-    const authUrl = `https://slack.com/oauth/v2/authorize?client_id=${SLACK_CLIENT_ID}&scope=channels:history,channels:read,chat:write,users:read&redirect_uri=${REDIRECT_URI}`
+    const authUrl = `https://slack.com/oauth/v2/authorize?client_id=${SLACK_CLIENT_ID}&scope=channels:history,channels:read,chat:write,users:read&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`
     
     console.log('Redirecting to Slack OAuth with URL:', authUrl)
     return new Response(JSON.stringify({ url: authUrl }), {
@@ -37,17 +55,18 @@ serve(async (req) => {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: new URLSearchParams({
-        client_id: SLACK_CLIENT_ID!,
-        client_secret: SLACK_CLIENT_SECRET!,
+        client_id: SLACK_CLIENT_ID,
+        client_secret: SLACK_CLIENT_SECRET,
         code,
         redirect_uri: REDIRECT_URI,
       }),
     })
 
     const data = await response.json()
-    console.log('Slack API response:', JSON.stringify(data, null, 2))
-
+    console.log('Slack API response status:', data.ok ? 'Success' : 'Failed')
+    
     if (!data.ok) {
+      console.error('Error from Slack API:', data.error)
       throw new Error(`Failed to get access token: ${data.error}`)
     }
 
@@ -55,8 +74,8 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({
         access_token: data.access_token,
-        team_name: data.team.name,
-        team_id: data.team.id,
+        team_name: data.team?.name,
+        team_id: data.team?.id,
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
