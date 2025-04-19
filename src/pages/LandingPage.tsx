@@ -58,7 +58,7 @@ const LandingPage = () => {
           
           <div className="mt-12 relative max-w-6xl mx-auto">
             <div className="bg-white rounded-xl shadow-xl overflow-hidden border border-gray-100">
-              <img alt="Nexus Dashboard" className="w-full h-auto object-cover" src="/lovable-uploads/1ac5d5c2-3955-4f76-9fc2-2d3a94a0aefa.png" />
+              <img alt="Nexus Dashboard" className="w-full h-auto object-cover" src="/lovable-uploads/286e3a1e-420c-4527-b66f-c3ea65b3e247.png" />
             </div>
             <div className="absolute -bottom-6 -right-6 -z-10 bg-amber-400 w-full h-full rounded-xl"></div>
           </div>
@@ -154,7 +154,7 @@ const LandingPage = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <div className="flex items-center mb-4">
+              <div className="flex items-center mb-4 bg-transparent">
                 <img src="/logo.svg" alt="Nexus Logo" className="h-8 w-8 mr-2" />
                 <span className="text-xl font-semibold">Nexus</span>
               </div>
@@ -230,7 +230,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   description
 }) => {
   return <Card className="border-0 shadow-md hover:shadow-lg transition-shadow h-full">
-      <CardContent className="p-6 bg-amber-50">
+      <CardContent className="p-6 bg-amber-50 rounded-lg">
         <div className="rounded-full bg-amber-50 w-16 h-16 flex items-center justify-center mb-6">
           {icon}
         </div>
