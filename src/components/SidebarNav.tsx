@@ -64,7 +64,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
       </div>
 
       <ScrollArea className="flex-1 bg-zinc-950">
-        <div className="space-y-1">
+        <div className="space-y-1 bg-zinc-900 py-0 px-[5px] my-0 mx-0 rounded-xl">
           <NavLink to="/dashboard" className={({
           isActive
         }) => `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`} end>
