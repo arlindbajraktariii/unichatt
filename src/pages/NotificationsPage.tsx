@@ -1,63 +1,62 @@
-
 import { useApp } from "@/context/AppContext";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { BellOff, BellRing, Volume2, Mail } from "lucide-react";
-
 const NotificationsPage = () => {
-  const { notificationSettings, updateNotificationSettings, channels } = useApp();
-  
+  const {
+    notificationSettings,
+    updateNotificationSettings,
+    channels
+  } = useApp();
+
   // Initialize state with current settings
   const [enablePush, setEnablePush] = useState(notificationSettings?.enablePush || false);
   const [enableEmail, setEnableEmail] = useState(notificationSettings?.enableEmail || false);
   const [enableSound, setEnableSound] = useState(notificationSettings?.enableSound || false);
   const [mutedChannels, setMutedChannels] = useState<string[]>(notificationSettings?.mutedChannels || []);
-  
+
   // Connected channels
   const connectedChannels = channels.filter(channel => channel.is_connected);
-  
+
   // Handle toggling channel mute
   const toggleChannelMute = (channelId: string) => {
-    const newMutedChannels = mutedChannels.includes(channelId)
-      ? mutedChannels.filter(id => id !== channelId)
-      : [...mutedChannels, channelId];
-    
+    const newMutedChannels = mutedChannels.includes(channelId) ? mutedChannels.filter(id => id !== channelId) : [...mutedChannels, channelId];
     setMutedChannels(newMutedChannels);
-    updateNotificationSettings({ mutedChannels: newMutedChannels });
+    updateNotificationSettings({
+      mutedChannels: newMutedChannels
+    });
   };
-  
+
   // Handle toggle for push notifications
   const handlePushToggle = (checked: boolean) => {
     setEnablePush(checked);
-    updateNotificationSettings({ enablePush: checked });
+    updateNotificationSettings({
+      enablePush: checked
+    });
   };
-  
+
   // Handle toggle for email notifications
   const handleEmailToggle = (checked: boolean) => {
     setEnableEmail(checked);
-    updateNotificationSettings({ enableEmail: checked });
+    updateNotificationSettings({
+      enableEmail: checked
+    });
   };
-  
+
   // Handle toggle for sound notifications
   const handleSoundToggle = (checked: boolean) => {
     setEnableSound(checked);
-    updateNotificationSettings({ enableSound: checked });
+    updateNotificationSettings({
+      enableSound: checked
+    });
   };
-  
   if (!notificationSettings) {
-    return (
-      <div className="container mx-auto py-6 max-w-7xl">
+    return <div className="container mx-auto py-6 max-w-7xl bg-white">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold tracking-tight">Notifications</h1>
         </div>
@@ -68,12 +67,9 @@ const NotificationsPage = () => {
             </div>
           </CardContent>
         </Card>
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="container mx-auto py-6 max-w-7xl">
+  return <div className="container mx-auto py-6 max-w-7xl">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Notifications</h1>
@@ -106,11 +102,7 @@ const NotificationsPage = () => {
                   </p>
                 </div>
               </div>
-              <Switch
-                id="push-notifications"
-                checked={enablePush}
-                onCheckedChange={handlePushToggle}
-              />
+              <Switch id="push-notifications" checked={enablePush} onCheckedChange={handlePushToggle} />
             </div>
             
             <Separator />
@@ -129,11 +121,7 @@ const NotificationsPage = () => {
                   </p>
                 </div>
               </div>
-              <Switch
-                id="email-notifications"
-                checked={enableEmail}
-                onCheckedChange={handleEmailToggle}
-              />
+              <Switch id="email-notifications" checked={enableEmail} onCheckedChange={handleEmailToggle} />
             </div>
             
             <Separator />
@@ -152,11 +140,7 @@ const NotificationsPage = () => {
                   </p>
                 </div>
               </div>
-              <Switch
-                id="sound-notifications"
-                checked={enableSound}
-                onCheckedChange={handleSoundToggle}
-              />
+              <Switch id="sound-notifications" checked={enableSound} onCheckedChange={handleSoundToggle} />
             </div>
           </CardContent>
         </Card>
@@ -169,16 +153,10 @@ const NotificationsPage = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {connectedChannels.length > 0 ? (
-              <div className="space-y-4">
+            {connectedChannels.length > 0 ? <div className="space-y-4">
                 {connectedChannels.map(channel => {
-                  const isMuted = mutedChannels.includes(channel.id);
-                  
-                  return (
-                    <div 
-                      key={channel.id}
-                      className="flex items-center justify-between p-3 rounded-md border hover:bg-gray-50 transition-colors"
-                    >
+              const isMuted = mutedChannels.includes(channel.id);
+              return <div key={channel.id} className="flex items-center justify-between p-3 rounded-md border hover:bg-gray-50 transition-colors">
                       <div className="flex items-center space-x-3">
                         <Avatar>
                           <AvatarImage src={channel.avatar} alt={channel.name} />
@@ -190,29 +168,18 @@ const NotificationsPage = () => {
                         </div>
                       </div>
                       
-                      <Button
-                        variant={isMuted ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => toggleChannelMute(channel.id)}
-                      >
-                        {isMuted ? (
-                          <>
+                      <Button variant={isMuted ? "default" : "outline"} size="sm" onClick={() => toggleChannelMute(channel.id)}>
+                        {isMuted ? <>
                             <BellRing className="h-4 w-4 mr-2" />
                             Unmute
-                          </>
-                        ) : (
-                          <>
+                          </> : <>
                             <BellOff className="h-4 w-4 mr-2" />
                             Mute
-                          </>
-                        )}
+                          </>}
                       </Button>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center p-6 text-center">
+                    </div>;
+            })}
+              </div> : <div className="flex flex-col items-center justify-center p-6 text-center">
                 <BellOff className="h-12 w-12 text-gray-300 mb-3" />
                 <h3 className="text-lg font-medium">No Channels Connected</h3>
                 <p className="text-sm text-gray-500 mt-1 mb-4">
@@ -221,13 +188,10 @@ const NotificationsPage = () => {
                 <Button asChild>
                   <a href="/add-channel">Add a Channel</a>
                 </Button>
-              </div>
-            )}
+              </div>}
           </CardContent>
         </Card>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default NotificationsPage;

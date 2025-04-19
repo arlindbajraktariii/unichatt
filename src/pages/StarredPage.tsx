@@ -1,15 +1,13 @@
-
 import { useApp } from "@/context/AppContext";
 import MessageList from "@/components/MessageList";
-
 const StarredPage = () => {
-  const { messages } = useApp();
-  
+  const {
+    messages
+  } = useApp();
+
   // Filter for starred messages
   const starredMessages = messages.filter(message => message.is_starred);
-
-  return (
-    <div className="container mx-auto py-6 max-w-7xl">
+  return <div className="container mx-auto py-6 max-w-7xl bg-white">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Starred Messages</h1>
@@ -24,8 +22,6 @@ const StarredPage = () => {
           <MessageList messages={starredMessages} filter="starred" />
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default StarredPage;

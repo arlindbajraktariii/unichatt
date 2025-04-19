@@ -1,36 +1,30 @@
-
 import { useParams, Link } from "react-router-dom";
 import { useApp } from "@/context/AppContext";
 import MessageList from "@/components/MessageList";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, BellOff, Settings, Trash } from "lucide-react";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useState } from "react";
-
 const ChannelPage = () => {
-  const { channelId } = useParams<{ channelId: string }>();
-  const { channels, messages, disconnectChannel } = useApp();
+  const {
+    channelId
+  } = useParams<{
+    channelId: string;
+  }>();
+  const {
+    channels,
+    messages,
+    disconnectChannel
+  } = useApp();
   const [showDisconnectDialog, setShowDisconnectDialog] = useState(false);
-  
+
   // Find the channel
   const channel = channels.find(c => c.id === channelId);
-  
+
   // Filter messages for this channel
   const channelMessages = messages.filter(m => m.channel_id === channelId);
-  
   if (!channel) {
-    return (
-      <div className="container mx-auto py-6 max-w-7xl">
+    return <div className="container mx-auto py-6 max-w-7xl bg-white">
         <div className="flex items-center mb-6">
           <Link to="/messages">
             <Button variant="outline" size="icon" className="mr-2">
@@ -46,13 +40,10 @@ const ChannelPage = () => {
             <Button>Go Back to Messages</Button>
           </Link>
         </div>
-      </div>
-    );
+      </div>;
   }
-
   if (!channel.is_connected) {
-    return (
-      <div className="container mx-auto py-6 max-w-7xl">
+    return <div className="container mx-auto py-6 max-w-7xl">
         <div className="flex items-center mb-6">
           <Link to="/messages">
             <Button variant="outline" size="icon" className="mr-2">
@@ -73,17 +64,13 @@ const ChannelPage = () => {
             <Button>Connect a Channel</Button>
           </Link>
         </div>
-      </div>
-    );
+      </div>;
   }
-
   const handleDisconnect = () => {
     disconnectChannel(channelId!);
     setShowDisconnectDialog(false);
   };
-
-  return (
-    <div className="container mx-auto py-6 max-w-7xl">
+  return <div className="container mx-auto py-6 max-w-7xl">
       <div className="flex justify-between items-start md:items-center mb-6 flex-col md:flex-row gap-4">
         <div className="flex items-center">
           <Link to="/messages">
@@ -92,11 +79,7 @@ const ChannelPage = () => {
             </Button>
           </Link>
           <div className="flex items-center">
-            <img 
-              src={channel.avatar} 
-              alt={channel.name}
-              className="h-10 w-10 mr-3" 
-            />
+            <img src={channel.avatar} alt={channel.name} className="h-10 w-10 mr-3" />
             <div>
               <h1 className="text-3xl font-bold tracking-tight">{channel.name}</h1>
               <p className="text-muted-foreground">
@@ -143,25 +126,15 @@ const ChannelPage = () => {
       
       <div className="bg-white rounded-lg border shadow-sm min-h-[500px]">
         <div className="max-h-[calc(100vh-250px)] overflow-y-auto">
-          {channelMessages.length > 0 ? (
-            <MessageList messages={channelMessages} channelId={channelId} />
-          ) : (
-            <div className="flex flex-col items-center justify-center h-[400px] text-center text-gray-500 p-8">
-              <img 
-                src={channel.avatar} 
-                alt={channel.name}
-                className="h-16 w-16 mb-4 opacity-20" 
-              />
+          {channelMessages.length > 0 ? <MessageList messages={channelMessages} channelId={channelId} /> : <div className="flex flex-col items-center justify-center h-[400px] text-center text-gray-500 p-8">
+              <img src={channel.avatar} alt={channel.name} className="h-16 w-16 mb-4 opacity-20" />
               <h3 className="text-lg font-medium">No messages yet</h3>
               <p className="text-sm max-w-md mt-2">
                 You haven't received any messages from this channel yet. Messages will appear here as they come in.
               </p>
-            </div>
-          )}
+            </div>}
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default ChannelPage;
