@@ -23,7 +23,7 @@ const Dashboard = () => {
         </div>
         
         <Link to="/add-channel">
-          <Button>
+          <Button className="bg-nexus-amber">
             <Plus className="mr-2 h-4 w-4" />
             Add Channel
           </Button>
