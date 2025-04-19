@@ -6,7 +6,7 @@ import { MessageSquare, Share2, Users, Zap, ArrowRight, Check } from 'lucide-rea
 const LandingPage = () => {
   return <div className="min-h-screen bg-white text-black font-colvetica">
       {/* Header */}
-      <header className="container mx-auto my-[26px] px-[31px] py-[14px] bg-gray-100 rounded-xl">
+      <header className="container mx-auto my-[26px] px-[31px] py-[14px] rounded-xl bg-zinc-50">
         <nav className="flex justify-between items-center">
           <div className="flex items-center">
             <img src="/logo.svg" alt="Nexus Logo" className="h-10 w-10 mr-3" />
@@ -33,16 +33,14 @@ const LandingPage = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-b from-white to-amber-50">
+      <section className="relative py-20 bg-gradient-to-b from-white to-amber-50 bg-amber-50">
         <div className="container mx-auto px-4 text-center relative z-10">
           <div className="max-w-4xl mx-auto mb-10">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
               All Your Communications
               <span className="text-amber-500 block mt-2">In One Place</span>
             </h1>
-            <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-10">
-              Connect all your messaging platforms into a single dashboard. Never miss an important message again.
-            </p>
+            <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-10">Connect all your messaging platforms into a single dashboard. Never miss an message again.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/auth?signup=true">
                 <Button size="lg" className="bg-amber-400 hover:bg-amber-500 text-black text-lg px-8 shadow-md">
