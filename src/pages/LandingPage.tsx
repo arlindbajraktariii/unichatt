@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { MessageSquare, Share2, Users, Zap, ArrowRight, Check } from 'lucide-react';
 const LandingPage = () => {
-  return <div className="min-h-screen text-black font-colvetica bg-amber-50">
+  return <div className="min-h-screen text-black font-colvetica bg-white">
       {/* Header */}
       <header className="container mx-auto my-[26px] px-[31px] py-[14px] rounded-xl bg-white">
         <nav className="flex justify-between items-center">
