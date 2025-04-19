@@ -4,9 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { MessageSquare, Share2, Users, Zap, ArrowRight, Check } from 'lucide-react';
 const LandingPage = () => {
-  return <div className="min-h-screen bg-white text-black font-colvetica">
+  return <div className="min-h-screen text-black font-colvetica bg-amber-50">
       {/* Header */}
-      <header className="container mx-auto my-[26px] px-[31px] py-[14px] rounded-xl bg-zinc-50">
+      <header className="container mx-auto my-[26px] px-[31px] py-[14px] rounded-xl bg-white">
         <nav className="flex justify-between items-center">
           <div className="flex items-center">
             <img src="/logo.svg" alt="Nexus Logo" className="h-10 w-10 mr-3" />
@@ -33,7 +33,7 @@ const LandingPage = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="relative py-20 bg-white">
+      <section className="relative py-20 bg-amber-50">
         <div className="container mx-auto px-4 text-center relative z-10">
           <div className="max-w-4xl mx-auto mb-10">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
@@ -66,7 +66,7 @@ const LandingPage = () => {
       </section>
 
       {/* Features */}
-      <section className="bg-gray-100 py-[50px]">
+      <section className="py-[50px] bg-zinc-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4">One Platform, All Channels</h2>
