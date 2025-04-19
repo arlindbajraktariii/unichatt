@@ -114,31 +114,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
           <Separator className="my-4 bg-sidebar-border" />
 
           <div className="pt-2 space-y-1 bg-transparent">
-            <NavLink to="/dashboard/notifications" className="">
-              {sidebarExpanded ? <>
-                  <div className="relative">
-                    <Bell className="h-5 w-5 mr-3" />
-                    {unreadCount > 0 && <span className="absolute -top-1 -right-1 bg-amber-400 text-black text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
-                        {unreadCount > 9 ? '9+' : unreadCount}
-                      </span>}
-                  </div>
-                  <span className="text-slate-50">Notifications</span>
-                </> : <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div className="relative mx-auto">
-                        <Bell className="h-5 w-5" />
-                        {unreadCount > 0 && <span className="absolute -top-1 -right-1 bg-amber-400 text-black text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
-                            {unreadCount > 9 ? '9+' : unreadCount}
-                          </span>}
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent side="right">
-                      Notifications
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>}
-            </NavLink>
+            
             
             <NavLink to="/dashboard/starred" className={({
             isActive
