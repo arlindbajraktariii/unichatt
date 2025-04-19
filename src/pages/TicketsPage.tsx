@@ -13,10 +13,14 @@ import { format } from 'date-fns';
 import { Ticket, TicketPriority, TicketStatus } from '@/types';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-
 const TicketsPage = () => {
-  const { user, isAuthenticated } = useApp();
-  const { toast } = useToast();
+  const {
+    user,
+    isAuthenticated
+  } = useApp();
+  const {
+    toast
+  } = useToast();
   const queryClient = useQueryClient();
   const [showNewTicketForm, setShowNewTicketForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -24,42 +28,48 @@ const TicketsPage = () => {
     description: '',
     priority: 'medium' as TicketPriority
   });
-
-  const { data: tickets = [], isLoading } = useQuery({
+  const {
+    data: tickets = [],
+    isLoading
+  } = useQuery({
     queryKey: ['tickets'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('tickets')
-        .select('*')
-        .order('created_at', { ascending: false });
-        
+      const {
+        data,
+        error
+      } = await supabase.from('tickets').select('*').order('created_at', {
+        ascending: false
+      });
       if (error) throw error;
       return data as Ticket[];
     },
     enabled: isAuthenticated && !!user
   });
-
   const createTicketMutation = useMutation({
     mutationFn: async (newTicket: Omit<Ticket, 'id' | 'created_at' | 'updated_at' | 'status'>) => {
-      const { data, error } = await supabase
-        .from('tickets')
-        .insert([newTicket])
-        .select()
-        .single();
-        
+      const {
+        data,
+        error
+      } = await supabase.from('tickets').insert([newTicket]).select().single();
       if (error) throw error;
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tickets'] });
-      setFormData({ title: '', description: '', priority: 'medium' });
+      queryClient.invalidateQueries({
+        queryKey: ['tickets']
+      });
+      setFormData({
+        title: '',
+        description: '',
+        priority: 'medium'
+      });
       setShowNewTicketForm(false);
       toast({
         title: "Ticket Created",
-        description: "Your support ticket has been successfully submitted.",
+        description: "Your support ticket has been successfully submitted."
       });
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Error creating ticket:', error);
       toast({
         title: "Submission Failed",
@@ -68,23 +78,25 @@ const TicketsPage = () => {
       });
     }
   });
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handlePriorityChange = (value: string) => {
-    setFormData(prev => ({ 
-      ...prev, 
-      priority: value as TicketPriority 
+    const {
+      name,
+      value
+    } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
     }));
   };
-
+  const handlePriorityChange = (value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      priority: value as TicketPriority
+    }));
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
-    
     if (!formData.title.trim() || !formData.description.trim()) {
       toast({
         title: "Missing information",
@@ -93,15 +105,13 @@ const TicketsPage = () => {
       });
       return;
     }
-
     createTicketMutation.mutate({
       user_id: user.id,
       title: formData.title,
       description: formData.description,
-      priority: formData.priority,
+      priority: formData.priority
     });
   };
-
   const getStatusBadge = (status: TicketStatus) => {
     switch (status) {
       case 'open':
@@ -114,7 +124,6 @@ const TicketsPage = () => {
         return null;
     }
   };
-
   const getPriorityBadge = (priority: TicketPriority) => {
     switch (priority) {
       case 'low':
@@ -127,31 +136,20 @@ const TicketsPage = () => {
         return null;
     }
   };
-
   if (!isAuthenticated) {
-    return (
-      <div className="flex items-center justify-center h-[70vh]">
+    return <div className="flex items-center justify-center h-[70vh]">
         <p>Please log in to view and create support tickets.</p>
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="container mx-auto py-10 px-4 font-colvetica">
+  return <div className="container mx-auto py-10 px-4 font-colvetica bg-white">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Support Tickets</h1>
-        {!showNewTicketForm && (
-          <Button 
-            onClick={() => setShowNewTicketForm(true)} 
-            className="bg-amber-400 hover:bg-amber-500 text-black"
-          >
+        {!showNewTicketForm && <Button onClick={() => setShowNewTicketForm(true)} className="bg-amber-400 hover:bg-amber-500 text-black">
             <Plus className="mr-2 h-4 w-4" /> New Ticket
-          </Button>
-        )}
+          </Button>}
       </div>
       
-      {showNewTicketForm && (
-        <Card className="mb-8">
+      {showNewTicketForm && <Card className="mb-8">
           <CardHeader>
             <CardTitle>Create New Support Ticket</CardTitle>
             <CardDescription>
@@ -163,35 +161,17 @@ const TicketsPage = () => {
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="title">Ticket Title</Label>
-                  <Input
-                    id="title"
-                    name="title"
-                    placeholder="Brief description of your issue"
-                    value={formData.title}
-                    onChange={handleInputChange}
-                    required
-                  />
+                  <Input id="title" name="title" placeholder="Brief description of your issue" value={formData.title} onChange={handleInputChange} required />
                 </div>
                 
                 <div className="space-y-2">
                   <Label htmlFor="description">Description</Label>
-                  <Textarea
-                    id="description"
-                    name="description"
-                    placeholder="Please provide details about your issue..."
-                    value={formData.description}
-                    onChange={handleInputChange}
-                    rows={5}
-                    required
-                  />
+                  <Textarea id="description" name="description" placeholder="Please provide details about your issue..." value={formData.description} onChange={handleInputChange} rows={5} required />
                 </div>
                 
                 <div className="space-y-2">
                   <Label htmlFor="priority">Priority</Label>
-                  <Select 
-                    onValueChange={handlePriorityChange} 
-                    defaultValue={formData.priority}
-                  >
+                  <Select onValueChange={handlePriorityChange} defaultValue={formData.priority}>
                     <SelectTrigger id="priority">
                       <SelectValue placeholder="Select priority" />
                     </SelectTrigger>
@@ -205,32 +185,19 @@ const TicketsPage = () => {
               </div>
               
               <div className="flex justify-end space-x-2 mt-6">
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={() => setShowNewTicketForm(false)}
-                >
+                <Button type="button" variant="outline" onClick={() => setShowNewTicketForm(false)}>
                   Cancel
                 </Button>
-                <Button 
-                  type="submit" 
-                  disabled={isLoading}
-                  className="bg-amber-400 hover:bg-amber-500 text-black"
-                >
-                  {isLoading ? (
-                    <>
+                <Button type="submit" disabled={isLoading} className="bg-amber-400 hover:bg-amber-500 text-black">
+                  {isLoading ? <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Submitting...
-                    </>
-                  ) : (
-                    'Submit Ticket'
-                  )}
+                    </> : 'Submit Ticket'}
                 </Button>
               </div>
             </form>
           </CardContent>
-        </Card>
-      )}
+        </Card>}
       
       <Tabs defaultValue="all">
         <TabsList className="mb-6">
@@ -253,42 +220,27 @@ const TicketsPage = () => {
           {renderTickets(tickets.filter(ticket => ticket.status === 'resolved'))}
         </TabsContent>
       </Tabs>
-    </div>
-  );
-
+    </div>;
   function renderTickets(ticketsToRender: Ticket[]) {
     if (isLoading && tickets.length === 0) {
-      return (
-        <div className="flex justify-center items-center h-40">
+      return <div className="flex justify-center items-center h-40">
           <Loader2 className="h-8 w-8 animate-spin text-amber-400" />
-        </div>
-      );
+        </div>;
     }
-
     if (ticketsToRender.length === 0) {
-      return (
-        <div className="text-center py-12 bg-gray-50 rounded-lg">
+      return <div className="text-center py-12 bg-gray-50 rounded-lg">
           <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900">No tickets found</h3>
           <p className="mt-2 text-sm text-gray-500">
             {tickets.length === 0 ? "You haven't created any support tickets yet." : "No tickets match the selected filter."}
           </p>
-          {tickets.length === 0 && (
-            <Button 
-              onClick={() => setShowNewTicketForm(true)} 
-              className="mt-4 bg-amber-400 hover:bg-amber-500 text-black"
-            >
+          {tickets.length === 0 && <Button onClick={() => setShowNewTicketForm(true)} className="mt-4 bg-amber-400 hover:bg-amber-500 text-black">
               Create Your First Ticket
-            </Button>
-          )}
-        </div>
-      );
+            </Button>}
+        </div>;
     }
-
-    return (
-      <div className="space-y-4">
-        {ticketsToRender.map(ticket => (
-          <Card key={ticket.id} className="overflow-hidden">
+    return <div className="space-y-4">
+        {ticketsToRender.map(ticket => <Card key={ticket.id} className="overflow-hidden">
             <div className="flex items-center p-4 border-b">
               {ticket.status === 'open' && <MessageSquare className="h-5 w-5 text-blue-500 mr-2" />}
               {ticket.status === 'in_progress' && <Clock className="h-5 w-5 text-yellow-500 mr-2" />}
@@ -305,11 +257,8 @@ const TicketsPage = () => {
                 Created: {format(new Date(ticket.created_at), 'MMM d, yyyy h:mm a')}
               </div>
             </CardContent>
-          </Card>
-        ))}
-      </div>
-    );
+          </Card>)}
+      </div>;
   }
 };
-
 export default TicketsPage;
