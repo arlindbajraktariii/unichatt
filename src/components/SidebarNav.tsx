@@ -69,7 +69,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
 
           <div className={`mt-3 mb-2 ${sidebarExpanded ? 'flex justify-between items-center' : 'text-center'}`}>
             {sidebarExpanded ? <>
-                <span className="font-medium text-sm text-sidebar-foreground/70">CHANNELS</span>
+                <span className="font-medium text-sm text-sidebar-foreground/70 my-0 py-0 px-[10px]">CHANNELS</span>
                 <Button variant="ghost" size="icon" onClick={handleAddChannel} className="h-6 w-6 text-sidebar-foreground hover:bg-sidebar-accent rounded-full">
                   <Plus className="h-4 w-4" />
                 </Button>
