@@ -1,4 +1,3 @@
-
 import { useApp } from "@/context/AppContext";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -22,14 +21,15 @@ import {
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ChannelType } from "@/types";
+import { useSlackConnect } from "@/hooks/useSlackConnect";
 
 const channelOptions = [
   { value: "slack", label: "Slack" },
-  { value: "discord", label: "Discord" },
-  { value: "teams", label: "Microsoft Teams" },
-  { value: "gmail", label: "Gmail" },
-  { value: "twitter", label: "Twitter" },
-  { value: "linkedin", label: "LinkedIn" },
+  { value: "discord", label: "Discord (Coming Soon)" },
+  { value: "teams", label: "Microsoft Teams (Coming Soon)" },
+  { value: "gmail", label: "Gmail (Coming Soon)" },
+  { value: "twitter", label: "Twitter (Coming Soon)" },
+  { value: "linkedin", label: "LinkedIn (Coming Soon)" },
 ];
 
 interface ChannelConnectProps {
@@ -38,17 +38,22 @@ interface ChannelConnectProps {
 
 const ChannelConnect = ({ onBack }: ChannelConnectProps) => {
   const { connectChannel } = useApp();
+  const { connect: connectSlack, isConnecting: isConnectingSlack } = useSlackConnect();
   
   const [channelType, setChannelType] = useState<ChannelType | "">("");
   const [channelName, setChannelName] = useState("");
-  const [isConnecting, setIsConnecting] = useState(false);
   const [error, setError] = useState("");
   
-  const handleConnect = () => {
+  const handleConnect = async () => {
     setError("");
     
     if (!channelType) {
       setError("Please select a channel type");
+      return;
+    }
+    
+    if (channelType === "slack") {
+      await connectSlack();
       return;
     }
     
@@ -57,16 +62,13 @@ const ChannelConnect = ({ onBack }: ChannelConnectProps) => {
       return;
     }
     
-    setIsConnecting(true);
-    
-    // Simulate API connection delay
+    // Simulate API connection delay for non-OAuth channels
     setTimeout(() => {
       connectChannel(channelType as ChannelType, channelName);
       
       // Reset form
       setChannelType("");
       setChannelName("");
-      setIsConnecting(false);
       
       // Go back if provided
       if (onBack) {
@@ -155,8 +157,8 @@ const ChannelConnect = ({ onBack }: ChannelConnectProps) => {
           </Link>
         )}
         
-        <Button onClick={handleConnect} disabled={isConnecting} className="bg-amber-400 hover:bg-amber-500 text-black">
-          {isConnecting ? (
+        <Button onClick={handleConnect} disabled={isConnectingSlack} className="bg-amber-400 hover:bg-amber-500 text-black">
+          {isConnectingSlack ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Connecting...
