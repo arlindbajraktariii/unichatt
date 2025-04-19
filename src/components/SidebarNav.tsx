@@ -64,24 +64,8 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
       </div>
 
       <ScrollArea className="flex-1 bg-zinc-950">
-        <div className="space-y-1 bg-zinc-900 py-0 px-[5px] my-0 mx-0 rounded-xl">
-          <NavLink to="/dashboard" className={({
-          isActive
-        }) => `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`} end>
-            {sidebarExpanded ? <>
-                <MessageSquare className="h-5 w-5 mr-3 bg-transparent" />
-                <span>Dashboard</span>
-              </> : <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <MessageSquare className="h-5 w-5 mx-auto" />
-                  </TooltipTrigger>
-                  <TooltipContent side="right">
-                    Dashboard
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>}
-          </NavLink>
+        <div className="space-y-1 bg-zinc-900 my-0 mx-0 rounded-lg px-[7px] py-[7px]">
+          
 
           <div className={`mt-3 mb-2 ${sidebarExpanded ? 'flex justify-between items-center' : 'text-center'}`}>
             {sidebarExpanded ? <>
@@ -289,7 +273,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
         </div>
       </ScrollArea>
 
-      <div className="p-3 mt-auto bg-zinc-900">
+      <div className="p-3 mt-auto bg-zinc-900 rounded-none">
         {sidebarExpanded ? <div className="flex items-center justify-between">
             <div className="flex items-center">
               <Avatar className="h-8 w-8 mr-2">
