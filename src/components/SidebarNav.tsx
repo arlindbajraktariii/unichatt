@@ -53,7 +53,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
     return name.split(' ').map(part => part[0]).join('').toUpperCase();
   };
   return <div className={`flex flex-col h-full bg-sidebar text-sidebar-foreground border-r border-sidebar-border font-colvetica ${sidebarExpanded ? 'w-64' : 'w-16'}`}>
-      <div className="p-3 flex items-center justify-between mx-0 my-0 py-[10px] bg-[#ef8354]">
+      <div className="p-3 flex items-center justify-between mx-0 my-0 py-[10px] bg-[#212529]">
         {sidebarExpanded ? <div className="flex items-center gap-2">
             
             <span className="font-bold text-lg text-white">Unichat</span>
@@ -70,7 +70,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
           <div className={`mt-3 mb-2 ${sidebarExpanded ? 'flex justify-between items-center' : 'text-center'}`}>
             {sidebarExpanded ? <>
                 <span className="text-sm my-0 py-0 px-[10px] font-medium text-zinc-950">CHANNELS</span>
-                <Button variant="ghost" size="icon" onClick={handleAddChannel} className="h-6 w-6 text-sidebar-foreground rounded-full bg-[#ef8354]">
+                <Button variant="ghost" size="icon" onClick={handleAddChannel} className="h-6 w-6 text-sidebar-foreground rounded-full bg-[#212529]">
                   <Plus className="h-4 w-4" />
                 </Button>
               </> : <TooltipProvider>
@@ -94,7 +94,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
           }} />)}
             </div> : <div className={sidebarExpanded ? "p-2 text-sm text-sidebar-foreground/60 text-center" : ""}>
               {sidebarExpanded && <p className="text-zinc-600">No channels connected yet</p>}
-              <Button variant="outline" size={sidebarExpanded ? "default" : "icon"} onClick={handleAddChannel} className="mx-0 my-[13px] py-px px-[30px] text-slate-50 bg-[#ef8354]">
+              <Button variant="outline" size={sidebarExpanded ? "default" : "icon"} onClick={handleAddChannel} className="mx-0 my-[13px] py-px px-[30px] text-slate-50 bg-[#212529]">
                 {sidebarExpanded ? <>
                     <PlusCircle className="h-4 w-4 mr-2" />
                     Connect Channel
@@ -263,7 +263,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
                 </span>
               </div>
             </div>
-            <Button variant="ghost" size="icon" onClick={handleLogout} className="text-sidebar-foreground hover:text-sidebar-accent-foreground bg-[#ef8354]">
+            <Button variant="ghost" size="icon" onClick={handleLogout} className="text-sidebar-foreground hover:text-sidebar-accent-foreground bg-[#212529]">
               <LogOut className="h-5 w-5" />
             </Button>
           </div> : <div className="flex flex-col items-center space-y-2">
