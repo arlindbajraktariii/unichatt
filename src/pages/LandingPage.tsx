@@ -24,7 +24,7 @@ const LandingPage = () => {
               </Button>
             </Link>
             <Link to="/auth?signup=true">
-              <Button className="bg-amber-400 hover:bg-amber-500 text-black">
+              <Button className="bg-[#ef8354] text-white">
                 Get Started
               </Button>
             </Link>
