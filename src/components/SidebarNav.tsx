@@ -94,7 +94,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
           }} />)}
             </div> : <div className={sidebarExpanded ? "p-2 text-sm text-sidebar-foreground/60 text-center" : ""}>
               {sidebarExpanded && <p className="font-thin text-zinc-950">No channels connected yet</p>}
-              <Button variant="outline" size={sidebarExpanded ? "default" : "icon"} onClick={handleAddChannel} className="mx-0 my-[13px] py-px px-[30px] text-slate-50 bg-nexus-amber">
+              <Button variant="outline" size={sidebarExpanded ? "default" : "icon"} onClick={handleAddChannel} className="mx-0 my-[13px] py-px px-[30px] text-slate-50 bg-black">
                 {sidebarExpanded ? <>
                     <PlusCircle className="h-4 w-4 mr-2" />
                     Connect Channel
