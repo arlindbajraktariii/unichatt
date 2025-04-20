@@ -11,6 +11,8 @@ export const useDiscordConnect = () => {
 
   const connect = async () => {
     setIsConnecting(true);
+    let authWindow: Window | null = null;
+    
     try {
       // Get the auth URL from our edge function
       const { data, error } = await supabase.functions.invoke('discord-auth');
@@ -25,7 +27,7 @@ export const useDiscordConnect = () => {
       }
       
       // Open the Discord OAuth window
-      const authWindow = window.open(data.url, '_blank', 'width=800,height=600');
+      authWindow = window.open(data.url, '_blank', 'width=800,height=600');
       
       if (!authWindow) {
         throw new Error('Could not open authentication window. Please check your popup blocker settings.');
@@ -33,30 +35,41 @@ export const useDiscordConnect = () => {
       
       // Listen for the OAuth callback
       const messageHandler = async (event: MessageEvent) => {
+        // Check that the message is the one we're expecting
         if (event.data?.type === 'DISCORD_OAUTH_CALLBACK') {
-          // Clean up the event listener
-          window.removeEventListener('message', messageHandler);
-          
-          const { access_token, user_name, user_id } = event.data;
-          
-          if (!access_token) {
-            throw new Error('No access token received from Discord');
-          }
-          
-          // Connect the channel using the context function
-          await connectChannel('discord', user_name || 'Discord Server', {
-            access_token,
-            user_id,
-            user_name,
-          });
-          
-          toast({
-            title: 'Success!',
-            description: `Connected to Discord as ${user_name}`,
-          });
-          
-          if (authWindow) {
-            authWindow.close();
+          try {
+            // Clean up the event listener
+            window.removeEventListener('message', messageHandler);
+            setIsConnecting(false);
+            
+            const { access_token, user_name, user_id } = event.data;
+            
+            if (!access_token) {
+              throw new Error('No access token received from Discord');
+            }
+            
+            // Connect the channel using the context function
+            await connectChannel('discord', user_name || 'Discord Server', {
+              access_token,
+              user_id,
+              user_name,
+            });
+            
+            toast({
+              title: 'Success!',
+              description: `Connected to Discord as ${user_name}`,
+            });
+            
+            if (authWindow && !authWindow.closed) {
+              authWindow.close();
+            }
+          } catch (innerError) {
+            console.error('Error processing Discord callback:', innerError);
+            toast({
+              title: 'Connection Error',
+              description: innerError.message || 'Failed to process Discord authentication.',
+              variant: 'destructive',
+            });
           }
         }
       };
@@ -73,18 +86,26 @@ export const useDiscordConnect = () => {
             description: 'The connection to Discord timed out. Please try again.',
             variant: 'destructive',
           });
+          
+          if (authWindow && !authWindow.closed) {
+            authWindow.close();
+          }
         }
       }, 120000);
       
     } catch (error) {
       console.error('Discord connection error:', error);
+      setIsConnecting(false);
+      
       toast({
         title: 'Connection Failed',
         description: error.message || 'Could not connect to Discord. Please try again.',
         variant: 'destructive',
       });
-    } finally {
-      setIsConnecting(false);
+      
+      if (authWindow && !authWindow.closed) {
+        authWindow.close();
+      }
     }
   };
 

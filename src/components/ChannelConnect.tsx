@@ -1,3 +1,4 @@
+
 import { useApp } from "@/context/AppContext";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -10,10 +11,12 @@ import { Link } from "react-router-dom";
 import { ChannelType } from "@/types";
 import { useSlackConnect } from "@/hooks/useSlackConnect";
 import { useDiscordConnect } from "@/hooks/useDiscordConnect";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { InfoIcon } from "lucide-react";
 
 const channelOptions = [
   { value: "slack", label: "Slack" },
-  { value: "discord", label: "Discord (Coming Soon)" },
+  { value: "discord", label: "Discord" },
   { value: "teams", label: "Microsoft Teams (Coming Soon)" },
   { value: "gmail", label: "Gmail (Coming Soon)" },
   { value: "twitter", label: "Twitter (Coming Soon)" },
@@ -68,6 +71,9 @@ const ChannelConnect = ({ onBack }: ChannelConnectProps) => {
     }, 1500);
   };
 
+  const isConnecting = isConnectingSlack || isConnectingDiscord;
+  const showNameField = channelType !== "" && channelType !== "slack" && channelType !== "discord";
+
   return (
     <Card className="max-w-md mx-auto">
       <CardHeader>
@@ -95,7 +101,11 @@ const ChannelConnect = ({ onBack }: ChannelConnectProps) => {
           <Label htmlFor="channel-type">Channel Type</Label>
           <Select 
             value={channelType} 
-            onValueChange={(value: ChannelType | "") => setChannelType(value)}
+            onValueChange={(value: ChannelType | "") => {
+              setChannelType(value);
+              // Reset error when changing type
+              setError("");
+            }}
           >
             <SelectTrigger id="channel-type">
               <SelectValue placeholder="Select a channel type" />
@@ -110,23 +120,38 @@ const ChannelConnect = ({ onBack }: ChannelConnectProps) => {
           </Select>
         </div>
         
-        <div className="space-y-2">
-          <Label htmlFor="channel-name">Connection Name</Label>
-          <Input
-            id="channel-name"
-            placeholder="e.g., Work Slack, Personal Gmail"
-            value={channelName}
-            onChange={(e) => setChannelName(e.target.value)}
-          />
-          <p className="text-xs text-gray-500">
-            Give this connection a memorable name to identify it
-          </p>
-        </div>
+        {showNameField && (
+          <div className="space-y-2">
+            <Label htmlFor="channel-name">Connection Name</Label>
+            <Input
+              id="channel-name"
+              placeholder="e.g., Work Slack, Personal Gmail"
+              value={channelName}
+              onChange={(e) => setChannelName(e.target.value)}
+            />
+            <p className="text-xs text-gray-500">
+              Give this connection a memorable name to identify it
+            </p>
+          </div>
+        )}
         
         {error && (
-          <div className="text-sm text-red-500 p-2 bg-red-50 rounded-md">
-            {error}
-          </div>
+          <Alert variant="destructive" className="mt-4">
+            <InfoIcon className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+        
+        {(channelType === "slack" || channelType === "discord") && (
+          <Alert className="bg-amber-50 text-amber-800 border-amber-200">
+            <InfoIcon className="h-4 w-4" />
+            <AlertTitle>OAuth Authentication</AlertTitle>
+            <AlertDescription>
+              {channelType === "slack" ? "Slack" : "Discord"} requires OAuth authentication. 
+              Clicking connect will open a new window where you can authorize this application.
+            </AlertDescription>
+          </Alert>
         )}
         
         <div className="pt-2">
@@ -150,10 +175,10 @@ const ChannelConnect = ({ onBack }: ChannelConnectProps) => {
         
         <Button 
           onClick={handleConnect} 
-          disabled={isConnectingSlack || isConnectingDiscord} 
+          disabled={isConnecting} 
           className="bg-amber-400 hover:bg-amber-500 text-black"
         >
-          {isConnectingSlack || isConnectingDiscord ? (
+          {isConnecting ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Connecting...
