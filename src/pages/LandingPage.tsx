@@ -231,7 +231,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
 }) => {
   return <Card className="border-0 shadow-md hover:shadow-lg transition-shadow h-full">
       <CardContent className="p-6 rounded-lg bg-zinc-50">
-        <div className="rounded-full bg-amber-50 w-16 h-16 flex items-center justify-center mb-6">
+        <div className=" w-16 h-16 flex items-center justify-center mb-6 bg-[#ef8354]">
           {icon}
         </div>
         <h3 className="text-xl font-bold mb-3">{title}</h3>
