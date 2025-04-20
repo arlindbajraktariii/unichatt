@@ -92,7 +92,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
             setCurrentChannel(channel.id);
             navigate(`/dashboard/channel/${channel.id}`);
           }} />)}
-            </div> : <div className={sidebarExpanded ? "p-2 text-sm text-sidebar-foreground/60 text-center" : ""}>
+            </div> : <div className="bg-gray-100">
               {sidebarExpanded && <p className="text-zinc-700">No channels connected yet</p>}
               <Button variant="outline" size={sidebarExpanded ? "default" : "icon"} onClick={handleAddChannel} className="mx-0 my-[13px] py-px px-[30px] bg-nexus-amber text-zinc-950">
                 {sidebarExpanded ? <>
