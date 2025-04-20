@@ -23,7 +23,7 @@ const Dashboard = () => {
         </div>
         
         <Link to="/add-channel">
-          <Button>
+          <Button className="bg-[#ef8354] rounded-lg">
             <Plus className="mr-2 h-4 w-4" />
             Add Channel
           </Button>
@@ -101,7 +101,7 @@ const Dashboard = () => {
                   No channels connected yet. Add your first communication channel to get started.
                 </p>
                 <Link to="/add-channel" className="mt-4">
-                  <Button>
+                  <Button className="bg-[#ef8354]">
                     <Plus className="mr-2 h-4 w-4" />
                     Add Channel
                   </Button>
