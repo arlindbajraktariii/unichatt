@@ -126,7 +126,7 @@ const LandingPage = () => {
           
           <div className="text-center mt-12">
             <Link to="/pricing">
-              <Button className="bg-[#ef8354] text-white">
+              <Button className="text-white bg-[#212529]">
                 View All Pricing Options
               </Button>
             </Link>
@@ -135,7 +135,7 @@ const LandingPage = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-[#ef8354]">
+      <section className="py-20 bg-[#f8f9fa]">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4 text-black">Ready to streamline your communication?</h2>
           <p className="text-xl text-gray-800 max-w-3xl mx-auto mb-8">
@@ -274,7 +274,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
         </ul>
         
         <Link to="/pricing">
-          <Button className="bg-[#ef8354] text-white">
+          <Button className="text-white bg-[#212529]">
             {ctaText}
           </Button>
         </Link>
