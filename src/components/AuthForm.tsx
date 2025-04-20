@@ -70,12 +70,12 @@ const AuthForm = () => {
     }
   };
   return <div className="flex items-center justify-center min-h-screen bg-white">
-      <div className="mx-auto max-w-md w-full px-4">
+      <div className="mx-auto max-w-md w-full px-4 bg-white">
         <div className="mb-8 text-center">
           <div className="flex justify-center mb-4">
             
           </div>
-          <h1 className="text-3xl font-bold text-amber-500">Channel Nexus</h1>
+          <h1 className="text-3xl font-bold text-[#212529]">Channel Nexus</h1>
           <p className="text-slate-700 mt-2">Unite your communication channels</p>
         </div>
         
@@ -112,7 +112,7 @@ const AuthForm = () => {
                     
                     {loginError && <div className="text-sm text-red-500">{loginError}</div>}
                     
-                    <Button type="submit" className="w-full bg-amber-400 hover:bg-amber-500 text-black" disabled={isLoading}>
+                    <Button type="submit" disabled={isLoading} className="w-full bg-[#212529] text-white">
                       {isLoading ? <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                           Please wait
