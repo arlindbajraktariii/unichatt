@@ -43,13 +43,13 @@ const LandingPage = () => {
             <p className="text-xl max-w-3xl mx-auto mb-10 text-slate-100">Unichat seamlessly brings together Slack, Teams, Discord, and more — so your team can communicate clearly, move faster, and stay focused.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/auth?signup=true">
-                <Button size="lg" className="bg-amber-400 hover:bg-amber-500 text-black text-lg px-8 shadow-md">
+                <Button size="lg" className="text-lg px-8 shadow-md bg-zinc-950 hover:bg-zinc-800 text-white">
                   Start Now
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
               <Link to="/pricing">
-                <Button size="lg" variant="outline" className="border-amber-400 text-gray-800 hover:bg-amber-100 text-lg">
+                <Button size="lg" variant="outline" className=" text-lg bg-white text-black">
                   View Pricing
                 </Button>
               </Link>
