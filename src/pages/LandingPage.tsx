@@ -40,7 +40,7 @@ const LandingPage = () => {
               All Your Communications
               <span className="block mt-2 text-black">In One Place</span>
             </h1>
-            <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-10">Unichat seamlessly brings together Slack, Teams, Discord, and more — so your team can communicate clearly, move faster, and stay focused.</p>
+            <p className="text-xl max-w-3xl mx-auto mb-10 text-slate-100">Unichat seamlessly brings together Slack, Teams, Discord, and more — so your team can communicate clearly, move faster, and stay focused.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/auth?signup=true">
                 <Button size="lg" className="bg-amber-400 hover:bg-amber-500 text-black text-lg px-8 shadow-md">
