@@ -135,7 +135,7 @@ const LandingPage = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-gradient-to-r from-amber-400 to-amber-500 bg-gray-400">
+      <section className="py-20 bg-[#ef8354]">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4 text-black">Ready to streamline your communication?</h2>
           <p className="text-xl text-gray-800 max-w-3xl mx-auto mb-8">
