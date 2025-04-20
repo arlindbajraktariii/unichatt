@@ -24,7 +24,7 @@ const LandingPage = () => {
               </Button>
             </Link>
             <Link to="/auth?signup=true">
-              <Button className="bg-[#ef8354] text-white">
+              <Button className="text-white bg-[#212529]">
                 Get Started
               </Button>
             </Link>
@@ -33,14 +33,14 @@ const LandingPage = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="relative py-20 bg-[#ef8354]">
+      <section className="relative py-20 bg-[#f8f9fa]">
         <div className="container mx-auto px-4 text-center relative z-10">
           <div className="max-w-4xl mx-auto mb-10">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight text-zinc-50">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight text-[#343a40]">
               All Your Communications
               <span className="block mt-2 text-black">In One Place</span>
             </h1>
-            <p className="text-xl max-w-3xl mx-auto mb-10 text-slate-100">Unichat seamlessly brings together Slack, Teams, Discord, and more — so your team can communicate clearly, move faster, and stay focused.</p>
+            <p className="text-xl max-w-3xl mx-auto mb-10 text-zinc-500">Unichat seamlessly brings together Slack, Teams, Discord, and more — so your team can communicate clearly, move faster, and stay focused.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/auth?signup=true">
                 <Button size="lg" className="text-lg px-8 shadow-md bg-zinc-950 hover:bg-zinc-800 text-white">
@@ -60,7 +60,7 @@ const LandingPage = () => {
             <div className="bg-white rounded-xl shadow-xl overflow-hidden border border-gray-100">
               <img alt="Nexus Dashboard" className="w-full h-auto object-cover" src="/lovable-uploads/21e3da7d-1326-4a2c-89a9-c542cb5c884e.jpg" />
             </div>
-            <div className="absolute -bottom-6 -right-6 -z-10 w-full h-full rounded-xl bg-[#ee652a]"></div>
+            <div className="absolute -bottom-6 -right-6 -z-10 w-full h-full rounded-xl bg-[#212529]"></div>
           </div>
         </div>
       </section>
@@ -76,7 +76,7 @@ const LandingPage = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <FeatureCard icon={<MessageSquare className="h-10 w-10 text-amber-400" />} title="Unified Inbox" description="See all your messages from Slack, Discord, Teams, Gmail and more in one unified inbox." />
+            <FeatureCard icon={<MessageSquare className="h-10 w-10 text-amber-400" />} title="Unified Inbox" description="See all your messages from Slack, Discord, Teams, Gmail and more in one unified inbox." className="bg-transparent" />
             
             <FeatureCard icon={<Share2 className="h-10 w-10 text-amber-400" />} title="Cross-Platform Replies" description="Reply to messages from any platform without switching between different apps." />
             
@@ -231,7 +231,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
 }) => {
   return <Card className="border-0 shadow-md hover:shadow-lg transition-shadow h-full">
       <CardContent className="p-6 rounded-lg bg-zinc-50">
-        <div className=" w-16 h-16 flex items-center justify-center mb-6 bg-[#ef8354]">
+        <div className="w-16 h-16 flex items-center justify-center mb-6 bg-[212529] bg-transparent">
           {icon}
         </div>
         <h3 className="text-xl font-bold mb-3">{title}</h3>
