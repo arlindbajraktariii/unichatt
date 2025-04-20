@@ -53,18 +53,18 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
     return name.split(' ').map(part => part[0]).join('').toUpperCase();
   };
   return <div className={`flex flex-col h-full bg-sidebar text-sidebar-foreground border-r border-sidebar-border font-colvetica ${sidebarExpanded ? 'w-64' : 'w-16'}`}>
-      <div className="p-3 flex items-center justify-between bg-zinc-900 mx-0 my-0 py-[10px]">
+      <div className="p-3 flex items-center justify-between mx-0 my-0 py-[10px] bg-zinc-50">
         {sidebarExpanded ? <div className="flex items-center gap-2">
             
-            <span className="font-bold text-lg text-white">Unichat</span>
+            <span className="font-bold text-lg text-zinc-950">Unichat</span>
           </div> : <img src="/logo.svg" alt="Nexus Logo" className="w-8 h-8 mx-auto" />}
-        <Button variant="ghost" size="icon" onClick={() => setSidebarExpanded(!sidebarExpanded)} className="text-sidebar-foreground hover:bg-sidebar-accent">
+        <Button variant="ghost" size="icon" onClick={() => setSidebarExpanded(!sidebarExpanded)} className="text-sidebar-foreground bg-zinc-950 hover:bg-zinc-800">
           <ChevronRight className={`h-5 w-5 ${sidebarExpanded ? 'rotate-180' : ''}`} />
         </Button>
       </div>
 
       <ScrollArea className="flex-1 bg-zinc-50">
-        <div className="space-y-1 rounded-lg py-[3px] px-0 my-[11px] mx-[7px] bg-zinc-950">
+        <div className="space-y-1 rounded-lg py-[3px] px-0 my-[11px] mx-[7px] bg-zinc-50">
           
 
           <div className={`mt-3 mb-2 ${sidebarExpanded ? 'flex justify-between items-center' : 'text-center'}`}>
@@ -249,7 +249,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
         </div>
       </ScrollArea>
 
-      <div className="p-3 mt-auto bg-zinc-900 rounded-none">
+      <div className="p-3 mt-auto rounded-none bg-zinc-50">
         {sidebarExpanded ? <div className="flex items-center justify-between">
             <div className="flex items-center">
               <Avatar className="h-8 w-8 mr-2">
@@ -259,8 +259,8 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
-                <span className="text-sm font-medium">{user?.name || 'User'}</span>
-                <span className="text-xs text-sidebar-foreground/70 truncate max-w-[140px]">
+                <span className="text-sm text-zinc-950 font-extrabold">{user?.name || 'User'}</span>
+                <span className="text-xs truncate max-w-[140px] text-zinc-950">
                   {user?.email || 'user@example.com'}
                 </span>
               </div>
