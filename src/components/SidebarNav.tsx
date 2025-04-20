@@ -64,7 +64,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
       </div>
 
       <ScrollArea className="flex-1 border-none bg-white">
-        <div className="space-y-1 rounded-lg py-[3px] px-0 my-[11px] mx-[7px] bg-zinc-50">
+        <div className="space-y-1 rounded-lg py-[3px] px-0 my-[11px] mx-[7px] bg-white">
           
 
           <div className={`mt-3 mb-2 ${sidebarExpanded ? 'flex justify-between items-center' : 'text-center'}`}>
