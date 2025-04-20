@@ -120,7 +120,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
             isActive
           }) => `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`}>
               {sidebarExpanded ? <>
-                  <Star className="h-5 w-5 mr-3 bg-black" />
+                  
                   <span className="text-zinc-950">Starred</span>
                 </> : <TooltipProvider>
                   <Tooltip>
@@ -138,7 +138,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
             isActive
           }) => `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`}>
               {sidebarExpanded ? <>
-                  <Archive className="h-5 w-5 mr-3" />
+                  
                   <span className="text-zinc-950">Archived</span>
                 </> : <TooltipProvider>
                   <Tooltip>
@@ -156,7 +156,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
             isActive
           }) => `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`}>
               {sidebarExpanded ? <>
-                  <User className="h-5 w-5 mr-3" />
+                  
                   <span className="text-zinc-950">Profile</span>
                 </> : <TooltipProvider>
                   <Tooltip>
@@ -174,7 +174,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
             isActive
           }) => `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`}>
               {sidebarExpanded ? <>
-                  <Ticket className="h-5 w-5 mr-3" />
+                  
                   <span className="text-zinc-950">Support Tickets</span>
                 </> : <TooltipProvider>
                   <Tooltip>
@@ -192,9 +192,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
             isActive
           }) => `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`}>
               {sidebarExpanded ? <>
-                  <svg className="h-5 w-5 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm1 15h-2v-6h2v6zm0-8h-2v-2h2v2z" />
-                  </svg>
+                  
                   <span className="text-zinc-950">Pricing</span>
                 </> : <TooltipProvider>
                   <Tooltip>
@@ -214,7 +212,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
             isActive
           }) => `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`}>
               {sidebarExpanded ? <>
-                  <Cog className="h-5 w-5 mr-3" />
+                  
                   <span className="text-zinc-950">Settings</span>
                 </> : <TooltipProvider>
                   <Tooltip>
@@ -232,7 +230,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
             isActive
           }) => `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`}>
               {sidebarExpanded ? <>
-                  <HelpCircle className="h-5 w-5 mr-3" />
+                  
                   <span className="text-zinc-950">Help</span>
                 </> : <TooltipProvider>
                   <Tooltip>
