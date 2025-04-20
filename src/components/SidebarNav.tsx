@@ -63,7 +63,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
         </Button>
       </div>
 
-      <ScrollArea className="flex-1 bg-zinc-950">
+      <ScrollArea className="h-full bg-zinc-950">
         <div className="space-y-1 rounded-lg py-[3px] px-0 my-[11px] mx-[7px] bg-gray-50">
           
 
