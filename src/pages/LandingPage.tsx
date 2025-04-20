@@ -58,7 +58,7 @@ const LandingPage = () => {
           
           <div className="mt-12 relative max-w-6xl mx-auto">
             <div className="bg-white rounded-xl shadow-xl overflow-hidden border border-gray-100">
-              <img alt="Nexus Dashboard" className="w-full h-auto object-cover" src="/lovable-uploads/21e3da7d-1326-4a2c-89a9-c542cb5c884e.jpg" />
+              <img alt="Nexus Dashboard" className="w-full h-auto object-cover" src="/lovable-uploads/03282157-3561-4167-96a2-e4a8340e66ad.jpg" />
             </div>
             <div className="absolute -bottom-6 -right-6 -z-10 w-full h-full rounded-xl bg-[#212529]"></div>
           </div>
