@@ -274,7 +274,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
         </ul>
         
         <Link to="/pricing">
-          <Button className={`w-full ${popular ? 'bg-amber-400 hover:bg-amber-500 text-black' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'}`}>
+          <Button className="bg-[#ef8354] text-white">
             {ctaText}
           </Button>
         </Link>
