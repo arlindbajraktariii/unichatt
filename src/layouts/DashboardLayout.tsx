@@ -1,45 +1,24 @@
-
 import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import SidebarNav from "@/components/SidebarNav";
 import { Button } from "@/components/ui/button";
-import { ChevronsLeft, ChevronsRight, Shield } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { Shield } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 import { useNavigate } from "react-router-dom";
+import { useAdmin } from "@/hooks/useAdmin";
 
 const DashboardLayout = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
   const { user } = useApp();
   const navigate = useNavigate();
+  const { isAdmin, isLoading, checkAdminStatus } = useAdmin();
   
+  // Use effect is now handled by the useAdmin hook
   useEffect(() => {
-    // Check if current user is admin
-    const checkAdminStatus = async () => {
-      if (!user?.id) return;
-      
-      try {
-        const { data, error } = await supabase
-          .from('admin_users')
-          .select('*')
-          .eq('user_id', user.id)
-          .single();
-        
-        if (error) {
-          console.error("Admin check error:", error);
-          setIsAdmin(false);
-        } else {
-          setIsAdmin(true);
-        }
-      } catch (err) {
-        console.error("Admin check error:", err);
-        setIsAdmin(false);
-      }
-    };
-    
-    checkAdminStatus();
-  }, [user]);
+    if (user?.id) {
+      checkAdminStatus(user.id);
+    }
+  }, [user, checkAdminStatus]);
   
   const goToAdmin = () => {
     navigate('/dashboard/admin');
@@ -49,7 +28,7 @@ const DashboardLayout = () => {
       <SidebarNav expanded={!sidebarCollapsed} />
       
       <div className="relative flex-1 overflow-auto bg-white">
-        {isAdmin && (
+        {isAdmin && !isLoading && (
           <div className="absolute top-4 right-4 z-10">
             <Button 
               onClick={goToAdmin}

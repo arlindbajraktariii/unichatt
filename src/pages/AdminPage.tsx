@@ -1,30 +1,25 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "@/context/AppContext";
 import { supabase } from "@/integrations/supabase/client";
+import { useAdmin } from "@/hooks/useAdmin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ChannelConnection, UserProfile } from "@/types";
 import { Shield, User, Bell, Mail, Database, ArrowLeft, Loader2, Check, X, RefreshCw } from "lucide-react";
-
-interface AdminStats {
-  userCount: number;
-  channelCount: number;
-  messageCount: number;
-}
+import type { UserProfile, ChannelConnection } from "@/types";
+import type { AdminStats } from "@/types/admin";
 
 const AdminPage = () => {
   const { user } = useApp();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [isAdmin, setIsAdmin] = useState(false);
+  const { isAdmin, isLoading: adminCheckLoading, addAdminUser } = useAdmin();
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [channels, setChannels] = useState<ChannelConnection[]>([]);
@@ -34,34 +29,16 @@ const AdminPage = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const checkAdminStatus = async () => {
-      setIsLoading(true);
-      try {
-        const { data, error } = await supabase
-          .from('admin_users')
-          .select('*')
-          .eq('user_id', user?.id)
-          .single();
-        
-        if (error) {
-          console.error("Error checking admin status:", error);
-          setIsAdmin(false);
-        } else {
-          setIsAdmin(true);
-          fetchAdminData();
-        }
-      } catch (err) {
-        console.error("Error checking admin status:", err);
-        setIsAdmin(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (user) {
-      checkAdminStatus();
+    if (user?.id) {
+      checkAdminStatus(user.id);
     }
   }, [user]);
+
+  useEffect(() => {
+    if (isAdmin) {
+      fetchAdminData();
+    }
+  }, [isAdmin]);
 
   const fetchAdminData = async () => {
     try {
@@ -73,13 +50,13 @@ const AdminPage = () => {
       if (usersError) throw usersError;
       setUsers(usersData || []);
 
-      // Fetch channels
+      // Fetch channels with proper type casting
       const { data: channelsData, error: channelsError } = await supabase
         .from('channel_connections')
         .select('*');
       
       if (channelsError) throw channelsError;
-      setChannels(channelsData || []);
+      setChannels(channelsData as ChannelConnection[] || []);
 
       // Fetch stats
       const userCount = usersData?.length || 0;
@@ -104,56 +81,28 @@ const AdminPage = () => {
         description: "Failed to load admin data. Please try again.",
         variant: "destructive"
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const addAdminUser = async () => {
+  const handleAddAdmin = async () => {
+    if (!user?.id) return;
+    
     setIsAddingAdmin(true);
     setError("");
 
     try {
-      // First, check if user exists
-      const { data: userData, error: userError } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('email', newAdminEmail)
-        .single();
+      await addAdminUser(newAdminEmail, user.id);
       
-      if (userError) {
-        setError(`User with email ${newAdminEmail} not found.`);
-        return;
-      }
-
-      // Check if already an admin
-      const { data: existingAdmin, error: checkError } = await supabase
-        .from('admin_users')
-        .select('*')
-        .eq('user_id', userData.id)
-        .single();
-      
-      if (!checkError && existingAdmin) {
-        setError(`User ${newAdminEmail} is already an admin.`);
-        return;
-      }
-
-      // Add as admin
-      const { error: insertError } = await supabase
-        .from('admin_users')
-        .insert({
-          user_id: userData.id,
-          added_by: user?.id
-        });
-      
-      if (insertError) throw insertError;
-
       toast({
         title: "Success",
         description: `${newAdminEmail} has been added as an admin.`,
       });
       setNewAdminEmail("");
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error adding admin:", err);
-      setError("Failed to add admin. Please try again.");
+      setError(err.message || "Failed to add admin. Please try again.");
     } finally {
       setIsAddingAdmin(false);
     }
@@ -376,7 +325,7 @@ const AdminPage = () => {
                       onChange={(e) => setNewAdminEmail(e.target.value)}
                     />
                     <Button 
-                      onClick={addAdminUser} 
+                      onClick={handleAddAdmin} 
                       disabled={isAddingAdmin || !newAdminEmail.includes('@')}
                     >
                       {isAddingAdmin ? (
