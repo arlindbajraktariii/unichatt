@@ -88,7 +88,7 @@ const LandingPage = () => {
       </section>
 
       {/* Integrations */}
-      <section className="py-20 bg-amber-50">
+      <section className="py-20 bg-orange-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4">Connect Your Favorite Platforms</h2>
@@ -98,7 +98,7 @@ const LandingPage = () => {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 max-w-6xl mx-auto">
-            {['slack', 'discord', 'teams', 'gmail', 'twitter', 'linkedin'].map(platform => <div key={platform} className="flex flex-col items-center rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow bg-nexus-amber">
+            {['slack', 'discord', 'teams', 'gmail', 'twitter', 'linkedin'].map(platform => <div key={platform} className="flex flex-col items-center rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow bg-[#ef8354]">
                 <img src={`/logos/${platform}.svg`} alt={`${platform} logo`} className="h-12 w-12 mb-4" />
                 <span className="text-center capitalize font-medium">{platform}</span>
               </div>)}
@@ -255,8 +255,8 @@ const PricingCard: React.FC<PricingCardProps> = ({
   ctaText,
   popular = false
 }) => {
-  return <div className={`rounded-xl overflow-hidden bg-white transition-all ${popular ? 'border-2 border-amber-400 shadow-xl scale-105' : 'border border-gray-200 shadow-lg'}`}>
-      {popular && <div className="bg-amber-400 text-center py-2 text-black font-medium">
+  return <div className="bg-zinc-50">
+      {popular && <div className="text-center py-2 text-black font-medium bg-[#ef8354]">
           Most Popular
         </div>}
       <div className="p-6">
