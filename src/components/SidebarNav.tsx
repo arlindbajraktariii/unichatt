@@ -58,7 +58,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
             
             <span className="font-bold text-lg text-white">Unichat</span>
           </div> : <img src="/logo.svg" alt="Nexus Logo" className="w-8 h-8 mx-auto" />}
-        <Button variant="ghost" size="icon" onClick={() => setSidebarExpanded(!sidebarExpanded)} className="text-sidebar-foreground hover:bg-sidebar-accent">
+        <Button variant="ghost" size="icon" onClick={() => setSidebarExpanded(!sidebarExpanded)} className="text-sidebar-foreground">
           <ChevronRight className={`h-5 w-5 ${sidebarExpanded ? 'rotate-180' : ''}`} />
         </Button>
       </div>
