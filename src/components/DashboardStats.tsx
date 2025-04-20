@@ -72,11 +72,11 @@ const DashboardStats = () => {
   ];
   return <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2 bg-gray-100">
+        <CardHeader className="flex flex-row items-center justify-between pb-2 bg-white">
           <CardTitle className="text-sm font-medium">Total Messages</CardTitle>
           <Inbox className="h-4 w-4 text-gray-500" />
         </CardHeader>
-        <CardContent className="bg-gray-100">
+        <CardContent className="bg-white">
           <div className="text-2xl font-bold">{totalMessages}</div>
           <p className="text-xs text-muted-foreground mt-1">
             From {channels.filter(c => c.is_connected).length} connected channels
@@ -85,11 +85,11 @@ const DashboardStats = () => {
       </Card>
       
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2 bg-gray-100">
+        <CardHeader className="flex flex-row items-center justify-between pb-2 bg-white">
           <CardTitle className="text-sm font-medium">Unread Messages</CardTitle>
           <BellDot className="h-4 w-4 text-red-500" />
         </CardHeader>
-        <CardContent className="bg-gray-100">
+        <CardContent className="bg-white">
           <div className="text-2xl font-bold">{unreadMessages}</div>
           <p className="text-xs text-muted-foreground mt-1">
             {unreadMessages === 0 ? "You're all caught up!" : `${Math.round(unreadMessages / totalMessages * 100)}% of your inbox`}
@@ -98,11 +98,11 @@ const DashboardStats = () => {
       </Card>
       
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2 bg-gray-100">
+        <CardHeader className="flex flex-row items-center justify-between pb-2 bg-white">
           <CardTitle className="text-sm font-medium">Starred Messages</CardTitle>
           <MessageSquare className="h-4 w-4 text-yellow-500" />
         </CardHeader>
-        <CardContent className="bg-gray-100">
+        <CardContent className="bg-white">
           <div className="text-2xl font-bold">{starredMessages}</div>
           <p className="text-xs text-muted-foreground mt-1">
             Important messages you've saved
@@ -111,11 +111,11 @@ const DashboardStats = () => {
       </Card>
       
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2 bg-gray-100">
+        <CardHeader className="flex flex-row items-center justify-between pb-2 bg-white">
           <CardTitle className="text-sm font-medium">Archived Messages</CardTitle>
           <Archive className="h-4 w-4 text-gray-500" />
         </CardHeader>
-        <CardContent className="bg-gray-100">
+        <CardContent className="bg-white">
           <div className="text-2xl font-bold">{archivedMessages}</div>
           <p className="text-xs text-muted-foreground mt-1">
             Messages you've processed
@@ -124,11 +124,11 @@ const DashboardStats = () => {
       </Card>
       
       <Card className="col-span-1 md:col-span-2">
-        <CardHeader className="bg-gray-100">
+        <CardHeader className="bg-white">
           <CardTitle>Message Activity</CardTitle>
           <CardDescription>Messages received per day</CardDescription>
         </CardHeader>
-        <CardContent className="h-[200px] bg-gray-100">
+        <CardContent className="h-[200px] bg-white">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={activityData} margin={{
             top: 5,
@@ -156,11 +156,11 @@ const DashboardStats = () => {
       </Card>
       
       <Card className="col-span-1 md:col-span-2 bg-gray-100">
-        <CardHeader>
+        <CardHeader className="bg-white">
           <CardTitle>Channel Distribution</CardTitle>
           <CardDescription>Messages by platform</CardDescription>
         </CardHeader>
-        <CardContent className="h-[200px]">
+        <CardContent className="h-[200px] bg-white">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={channelDistributionData} margin={{
             top: 5,
