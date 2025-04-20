@@ -15,7 +15,11 @@ export const useDiscordConnect = () => {
     
     try {
       // Get the auth URL from our edge function
-      const { data, error } = await supabase.functions.invoke('discord-auth');
+      const { data, error } = await supabase.functions.invoke('discord-auth', {
+        headers: {
+          Authorization: `Bearer ${supabase.auth.getSession().then(({ data }) => data.session?.access_token)}`,
+        }
+      });
       
       if (error) {
         console.error('Error invoking Discord auth function:', error);

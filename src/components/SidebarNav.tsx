@@ -9,9 +9,11 @@ import { useApp } from '../context/AppContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ChannelConnection } from '@/types';
 import { useToast } from '@/hooks/use-toast';
+
 interface SidebarNavProps {
   expanded?: boolean;
 }
+
 const SidebarNav: React.FC<SidebarNavProps> = ({
   expanded: isExpanded = true
 }) => {
@@ -28,9 +30,11 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
   const {
     toast
   } = useToast();
+
   const handleAddChannel = () => {
     navigate('/dashboard/add-channel');
   };
+
   const handleLogout = async () => {
     try {
       await logout();
@@ -48,10 +52,13 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
       });
     }
   };
+
   const connectedChannels = channels.filter(channel => channel.is_connected);
+
   const getInitials = (name: string) => {
     return name.split(' ').map(part => part[0]).join('').toUpperCase();
   };
+
   return <div className={`flex flex-col h-full bg-sidebar text-sidebar-foreground border-r border-sidebar-border font-colvetica ${sidebarExpanded ? 'w-64' : 'w-16'}`}>
       <div className="p-3 flex items-center justify-between bg-zinc-900 mx-0 my-0 py-[10px]">
         {sidebarExpanded ? <div className="flex items-center gap-2">
@@ -245,6 +252,28 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
                   </Tooltip>
                 </TooltipProvider>}
             </NavLink>
+
+            <NavLink to="/dashboard/admin" className={({
+            isActive
+          }) => `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`}>
+              {sidebarExpanded ? <>
+                  <svg className="h-5 w-5 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm1 15h-2v-6h2v6zm0-8h-2v-2h2v2z" />
+                  </svg>
+                  <span>Admin</span>
+                </> : <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <svg className="h-5 w-5 mx-auto" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm1 15h-2v-6h2v6zm0-8h-2v-2h2v2z" />
+                      </svg>
+                    </TooltipTrigger>
+                    <TooltipContent side="right">
+                      Admin
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>}
+            </NavLink>
           </div>
         </div>
       </ScrollArea>
@@ -291,12 +320,14 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
       </div>
     </div>;
 };
+
 interface ChannelItemProps {
   channel: ChannelConnection;
   expanded: boolean;
   isActive: boolean;
   onClick: () => void;
 }
+
 const ChannelItem: React.FC<ChannelItemProps> = ({
   channel,
   expanded,
@@ -324,7 +355,6 @@ const ChannelItem: React.FC<ChannelItemProps> = ({
     </button>;
 };
 
-// Helper function
 const getChannelIcon = (channelType: string) => {
   const logoMap: Record<string, string> = {
     slack: '/logos/slack.svg',
@@ -336,4 +366,5 @@ const getChannelIcon = (channelType: string) => {
   };
   return logoMap[channelType] || '/placeholder.svg';
 };
+
 export default SidebarNav;

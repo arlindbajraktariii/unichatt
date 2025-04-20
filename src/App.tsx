@@ -23,6 +23,7 @@ import PricingPage from "./pages/PricingPage";
 import ProfilePage from "./pages/ProfilePage";
 import TicketsPage from "./pages/TicketsPage";
 import SlackCallback from "./pages/SlackCallback";
+import AdminPage from "./pages/AdminPage";
 
 const queryClient = new QueryClient();
 
@@ -85,6 +86,7 @@ const AuthenticatedApp = () => {
         <Route path="help" element={<HelpPage />} />
         <Route path="profile" element={<ProfilePage />} />
         <Route path="tickets" element={<TicketsPage />} />
+        <Route path="admin" element={<AdminPage />} />
       </Route>
       
       <Route path="*" element={<NotFound />} />
