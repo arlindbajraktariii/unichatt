@@ -53,23 +53,23 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
     return name.split(' ').map(part => part[0]).join('').toUpperCase();
   };
   return <div className={`flex flex-col h-full bg-sidebar text-sidebar-foreground border-r border-sidebar-border font-colvetica ${sidebarExpanded ? 'w-64' : 'w-16'}`}>
-      <div className="p-3 flex items-center justify-between mx-0 my-0 py-[10px] bg-zinc-950">
+      <div className="p-3 flex items-center justify-between mx-0 my-0 py-[10px] bg-gray-100">
         {sidebarExpanded ? <div className="flex items-center gap-2">
             
-            <span className="font-bold text-lg text-white">Unichat</span>
+            <span className="text-lg font-bold text-black">Unichat</span>
           </div> : <img src="/logo.svg" alt="Nexus Logo" className="w-8 h-8 mx-auto" />}
-        <Button variant="ghost" size="icon" onClick={() => setSidebarExpanded(!sidebarExpanded)} className="text-sidebar-foreground hover:bg-sidebar-accent">
+        <Button variant="ghost" size="icon" onClick={() => setSidebarExpanded(!sidebarExpanded)} className="text-sidebar-foreground bg-zinc-950 hover:bg-zinc-800">
           <ChevronRight className={`h-5 w-5 ${sidebarExpanded ? 'rotate-180' : ''}`} />
         </Button>
       </div>
 
       <ScrollArea className="flex-1 bg-zinc-950">
-        <div className="space-y-1 rounded-lg py-[3px] px-0 my-[11px] mx-[7px] bg-neutral-900">
+        <div className="space-y-1 rounded-lg py-[3px] px-0 my-[11px] mx-[7px] bg-gray-50">
           
 
           <div className={`mt-3 mb-2 ${sidebarExpanded ? 'flex justify-between items-center' : 'text-center'}`}>
             {sidebarExpanded ? <>
-                <span className="font-medium text-sm text-sidebar-foreground/70 my-0 py-0 px-[10px]">CHANNELS</span>
+                <span className="font-medium text-sm my-0 py-0 px-[10px] text-zinc-950">CHANNELS</span>
                 <Button variant="ghost" size="icon" onClick={handleAddChannel} className="h-6 w-6 rounded-full bg-transparent text-left text-zinc-950">
                   <Plus className="h-4 w-4 bg-amber-50 " />
                 </Button>
@@ -93,8 +93,8 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
             navigate(`/dashboard/channel/${channel.id}`);
           }} />)}
             </div> : <div className={sidebarExpanded ? "p-2 text-sm text-sidebar-foreground/60 text-center" : ""}>
-              {sidebarExpanded && <p>No channels connected yet</p>}
-              <Button variant="outline" size={sidebarExpanded ? "default" : "icon"} onClick={handleAddChannel} className="mx-0 my-[13px] py-px px-[30px] bg-transparent text-slate-50">
+              {sidebarExpanded && <p className="font-thin text-zinc-950">No channels connected yet</p>}
+              <Button variant="outline" size={sidebarExpanded ? "default" : "icon"} onClick={handleAddChannel} className="mx-0 my-[13px] py-px px-[30px] text-slate-50 bg-nexus-amber">
                 {sidebarExpanded ? <>
                     <PlusCircle className="h-4 w-4 mr-2" />
                     Connect Channel
@@ -113,15 +113,15 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
 
           
 
-          <div className="pt-2 space-y-1 bg-transparent">
+          <div className="pt-2 space-y-1 bg-gray-100">
             
             
             <NavLink to="/dashboard/starred" className={({
             isActive
           }) => `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`}>
               {sidebarExpanded ? <>
-                  <Star className="h-5 w-5 mr-3" />
-                  <span>Starred</span>
+                  <Star className="h-5 w-5 mr-3 bg-black" />
+                  <span className="text-zinc-950">Starred</span>
                 </> : <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -139,7 +139,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
           }) => `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`}>
               {sidebarExpanded ? <>
                   <Archive className="h-5 w-5 mr-3" />
-                  <span>Archived</span>
+                  <span className="text-zinc-950">Archived</span>
                 </> : <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -157,7 +157,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
           }) => `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`}>
               {sidebarExpanded ? <>
                   <User className="h-5 w-5 mr-3" />
-                  <span>Profile</span>
+                  <span className="text-zinc-950">Profile</span>
                 </> : <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -175,7 +175,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
           }) => `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`}>
               {sidebarExpanded ? <>
                   <Ticket className="h-5 w-5 mr-3" />
-                  <span>Support Tickets</span>
+                  <span className="text-zinc-950">Support Tickets</span>
                 </> : <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -195,7 +195,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
                   <svg className="h-5 w-5 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm1 15h-2v-6h2v6zm0-8h-2v-2h2v2z" />
                   </svg>
-                  <span>Pricing</span>
+                  <span className="text-zinc-950">Pricing</span>
                 </> : <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -215,7 +215,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
           }) => `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`}>
               {sidebarExpanded ? <>
                   <Cog className="h-5 w-5 mr-3" />
-                  <span>Settings</span>
+                  <span className="text-zinc-950">Settings</span>
                 </> : <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -233,7 +233,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
           }) => `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`}>
               {sidebarExpanded ? <>
                   <HelpCircle className="h-5 w-5 mr-3" />
-                  <span>Help</span>
+                  <span className="text-zinc-950">Help</span>
                 </> : <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -249,7 +249,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
         </div>
       </ScrollArea>
 
-      <div className="p-3 mt-auto rounded-none bg-zinc-950">
+      <div className="p-3 mt-auto rounded-none bg-zinc-50">
         {sidebarExpanded ? <div className="flex items-center justify-between">
             <div className="flex items-center">
               <Avatar className="h-8 w-8 mr-2">
@@ -259,13 +259,13 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
-                <span className="text-sm font-medium">{user?.name || 'User'}</span>
-                <span className="text-xs text-sidebar-foreground/70 truncate max-w-[140px]">
+                <span className="text-sm font-medium text-zinc-950">{user?.name || 'User'}</span>
+                <span className="text-xs truncate max-w-[140px] text-zinc-950">
                   {user?.email || 'user@example.com'}
                 </span>
               </div>
             </div>
-            <Button variant="ghost" size="icon" onClick={handleLogout} className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
+            <Button variant="ghost" size="icon" onClick={handleLogout} className="hover:bg-sidebar-accent hover:text-sidebar-accent-foreground text-black">
               <LogOut className="h-5 w-5" />
             </Button>
           </div> : <div className="flex flex-col items-center space-y-2">
