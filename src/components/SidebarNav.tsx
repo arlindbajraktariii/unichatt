@@ -249,7 +249,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
         </div>
       </ScrollArea>
 
-      <div className="p-3 mt-auto rounded-none bg-[2D3142] bg-[#2d3142]">
+      <div className="p-3 mt-auto rounded-none bg-[2D3142] bg-white">
         {sidebarExpanded ? <div className="flex items-center justify-between">
             <div className="flex items-center">
               <Avatar className="h-8 w-8 mr-2">
@@ -259,13 +259,13 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
-                <span className="text-sm font-medium">{user?.name || 'User'}</span>
-                <span className="text-xs text-sidebar-foreground/70 truncate max-w-[140px]">
+                <span className="text-sm font-medium text-zinc-950">{user?.name || 'User'}</span>
+                <span className="text-xs truncate max-w-[140px] font-normal text-zinc-950">
                   {user?.email || 'user@example.com'}
                 </span>
               </div>
             </div>
-            <Button variant="ghost" size="icon" onClick={handleLogout} className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
+            <Button variant="ghost" size="icon" onClick={handleLogout} className="text-sidebar-foreground hover:text-sidebar-accent-foreground bg-[#ef8354]">
               <LogOut className="h-5 w-5" />
             </Button>
           </div> : <div className="flex flex-col items-center space-y-2">
