@@ -88,7 +88,7 @@ const LandingPage = () => {
       </section>
 
       {/* Integrations */}
-      <section className="py-20 bg-orange-50">
+      <section className="py-20 bg-[#e9ecef]">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4">Connect Your Favorite Platforms</h2>
@@ -98,7 +98,7 @@ const LandingPage = () => {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 max-w-6xl mx-auto">
-            {['slack', 'discord', 'teams', 'gmail', 'twitter', 'linkedin'].map(platform => <div key={platform} className="flex flex-col items-center rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow bg-[#ef8354]">
+            {['slack', 'discord', 'teams', 'gmail', 'twitter', 'linkedin'].map(platform => <div key={platform} className="flex flex-col items-center rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow bg-[#f8f9fa]">
                 <img src={`/logos/${platform}.svg`} alt={`${platform} logo`} className="h-12 w-12 mb-4" />
                 <span className="text-center capitalize font-medium">{platform}</span>
               </div>)}
@@ -256,7 +256,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
   popular = false
 }) => {
   return <div className="bg-zinc-50">
-      {popular && <div className="text-center py-2 text-black font-medium bg-[#ef8354]">
+      {popular && <div className="text-center py-2 text-white font-medium bg-[#212529]">
           Most Popular
         </div>}
       <div className="p-6">
