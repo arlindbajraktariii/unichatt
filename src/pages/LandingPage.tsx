@@ -126,7 +126,7 @@ const LandingPage = () => {
           
           <div className="text-center mt-12">
             <Link to="/pricing">
-              <Button className="bg-amber-400 hover:bg-amber-500 text-black">
+              <Button className="bg-[#ef8354] text-white">
                 View All Pricing Options
               </Button>
             </Link>
