@@ -33,12 +33,12 @@ const LandingPage = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="relative py-20 bg-amber-50">
+      <section className="relative py-20 bg-[#ef8354]">
         <div className="container mx-auto px-4 text-center relative z-10">
           <div className="max-w-4xl mx-auto mb-10">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight text-zinc-50">
               All Your Communications
-              <span className="text-amber-500 block mt-2">In One Place</span>
+              <span className="block mt-2 text-black">In One Place</span>
             </h1>
             <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-10">Unichat seamlessly brings together Slack, Teams, Discord, and more — so your team can communicate clearly, move faster, and stay focused.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
