@@ -69,8 +69,8 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
 
           <div className={`mt-3 mb-2 ${sidebarExpanded ? 'flex justify-between items-center' : 'text-center'}`}>
             {sidebarExpanded ? <>
-                <span className="font-medium text-sm text-sidebar-foreground/70 my-0 py-0 px-[10px]">CHANNELS</span>
-                <Button variant="ghost" size="icon" onClick={handleAddChannel} className="h-6 w-6 text-sidebar-foreground hover:bg-sidebar-accent rounded-full">
+                <span className="font-medium text-sm my-0 py-0 px-[10px] text-zinc-950">CHANNELS</span>
+                <Button variant="ghost" size="icon" onClick={handleAddChannel} className="h-6 w-6 text-sidebar-foreground bg-zinc-950 hover:bg-zinc-800 rounded-none px-0 my-0 mx-[12px]">
                   <Plus className="h-4 w-4" />
                 </Button>
               </> : <TooltipProvider>
@@ -93,8 +93,8 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
             navigate(`/dashboard/channel/${channel.id}`);
           }} />)}
             </div> : <div className={sidebarExpanded ? "p-2 text-sm text-sidebar-foreground/60 text-center" : ""}>
-              {sidebarExpanded && <p>No channels connected yet</p>}
-              <Button variant="outline" size={sidebarExpanded ? "default" : "icon"} onClick={handleAddChannel} className="mx-0 my-[13px] py-px px-[30px] bg-transparent text-slate-50">
+              {sidebarExpanded && <p className="text-zinc-700">No channels connected yet</p>}
+              <Button variant="outline" size={sidebarExpanded ? "default" : "icon"} onClick={handleAddChannel} className="mx-0 my-[13px] py-px px-[30px] bg-nexus-amber text-zinc-950">
                 {sidebarExpanded ? <>
                     <PlusCircle className="h-4 w-4 mr-2" />
                     Connect Channel
@@ -113,15 +113,15 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
 
           
 
-          <div className="pt-2 space-y-1 bg-transparent">
+          <div className="pt-2 space-y-1 bg-transparent py-0 px-[13px] rounded-3xl">
             
             
             <NavLink to="/dashboard/starred" className={({
             isActive
           }) => `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`}>
               {sidebarExpanded ? <>
-                  <Star className="h-5 w-5 mr-3" />
-                  <span>Starred</span>
+                  
+                  <span className="text-zinc-950 font-medium">Starred</span>
                 </> : <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -138,8 +138,8 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
             isActive
           }) => `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`}>
               {sidebarExpanded ? <>
-                  <Archive className="h-5 w-5 mr-3" />
-                  <span>Archived</span>
+                  
+                  <span className="text-zinc-950 font-normal">Archived</span>
                 </> : <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -156,8 +156,8 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
             isActive
           }) => `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`}>
               {sidebarExpanded ? <>
-                  <User className="h-5 w-5 mr-3" />
-                  <span>Profile</span>
+                  
+                  <span className="text-zinc-950 font-normal">Profile</span>
                 </> : <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -174,8 +174,8 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
             isActive
           }) => `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`}>
               {sidebarExpanded ? <>
-                  <Ticket className="h-5 w-5 mr-3" />
-                  <span>Support Tickets</span>
+                  
+                  <span className="text-zinc-950 font-normal">Support Tickets</span>
                 </> : <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -192,10 +192,8 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
             isActive
           }) => `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`}>
               {sidebarExpanded ? <>
-                  <svg className="h-5 w-5 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm1 15h-2v-6h2v6zm0-8h-2v-2h2v2z" />
-                  </svg>
-                  <span>Pricing</span>
+                  
+                  <span className="text-zinc-950 font-normal">Pricing</span>
                 </> : <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -214,8 +212,8 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
             isActive
           }) => `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`}>
               {sidebarExpanded ? <>
-                  <Cog className="h-5 w-5 mr-3" />
-                  <span>Settings</span>
+                  
+                  <span className="text-zinc-950 font-normal">Settings</span>
                 </> : <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -232,8 +230,8 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
             isActive
           }) => `flex items-center p-2 rounded-md transition-colors ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'hover:bg-sidebar-accent/50'}`}>
               {sidebarExpanded ? <>
-                  <HelpCircle className="h-5 w-5 mr-3" />
-                  <span>Help</span>
+                  
+                  <span className="text-zinc-950 font-normal">Help</span>
                 </> : <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
