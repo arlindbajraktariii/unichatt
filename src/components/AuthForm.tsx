@@ -81,7 +81,7 @@ const AuthForm = () => {
         
         <Card className="border-amber-200 shadow-lg">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center text-amber-600">Welcome</CardTitle>
+            <CardTitle className="text-2xl font-bold text-center text-[#212529]">Welcome</CardTitle>
             <CardDescription className="text-center">
               Sign in to access your connected channels
             </CardDescription>
@@ -103,7 +103,7 @@ const AuthForm = () => {
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <Label htmlFor="password">Password</Label>
-                        <a href="#" className="text-xs text-amber-600 hover:underline">
+                        <a href="#" className="text-xs text-black">
                           Forgot password?
                         </a>
                       </div>
