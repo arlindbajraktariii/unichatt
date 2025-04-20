@@ -53,7 +53,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
     return name.split(' ').map(part => part[0]).join('').toUpperCase();
   };
   return <div className={`flex flex-col h-full bg-sidebar text-sidebar-foreground border-r border-sidebar-border font-colvetica ${sidebarExpanded ? 'w-64' : 'w-16'}`}>
-      <div className="p-3 flex items-center justify-between bg-zinc-900 mx-0 my-0 py-[10px]">
+      <div className="p-3 flex items-center justify-between mx-0 my-0 py-[10px] bg-zinc-950">
         {sidebarExpanded ? <div className="flex items-center gap-2">
             
             <span className="font-bold text-lg text-white">Unichat</span>
@@ -64,13 +64,13 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
       </div>
 
       <ScrollArea className="flex-1 bg-zinc-950">
-        <div className="space-y-1 rounded-lg py-[3px] px-0 my-[11px] mx-[7px] bg-zinc-950">
+        <div className="space-y-1 rounded-lg py-[3px] px-0 my-[11px] mx-[7px] bg-neutral-900">
           
 
           <div className={`mt-3 mb-2 ${sidebarExpanded ? 'flex justify-between items-center' : 'text-center'}`}>
             {sidebarExpanded ? <>
                 <span className="font-medium text-sm text-sidebar-foreground/70 my-0 py-0 px-[10px]">CHANNELS</span>
-                <Button variant="ghost" size="icon" onClick={handleAddChannel} className="h-6 w-6 text-sidebar-foreground hover:bg-sidebar-accent rounded-full">
+                <Button variant="ghost" size="icon" onClick={handleAddChannel} className="h-6 w-6 rounded-full bg-transparent text-left text-zinc-950">
                   <Plus className="h-4 w-4 bg-amber-50 " />
                 </Button>
               </> : <TooltipProvider>
@@ -249,7 +249,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
         </div>
       </ScrollArea>
 
-      <div className="p-3 mt-auto bg-zinc-900 rounded-none">
+      <div className="p-3 mt-auto rounded-none bg-zinc-950">
         {sidebarExpanded ? <div className="flex items-center justify-between">
             <div className="flex items-center">
               <Avatar className="h-8 w-8 mr-2">

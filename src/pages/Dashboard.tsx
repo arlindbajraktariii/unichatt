@@ -23,7 +23,7 @@ const Dashboard = () => {
         </div>
         
         <Link to="/add-channel">
-          <Button className="bg-nexus-amber">
+          <Button>
             <Plus className="mr-2 h-4 w-4" />
             Add Channel
           </Button>
@@ -34,7 +34,7 @@ const Dashboard = () => {
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         <Card className="col-span-1 lg:col-span-2">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
+          <CardHeader className="flex flex-row items-center justify-between pb-2 bg-gray-100">
             <div>
               <CardTitle>Recent Messages</CardTitle>
               <CardDescription>
@@ -49,7 +49,7 @@ const Dashboard = () => {
               </Button>
             </Link>
           </CardHeader>
-          <CardContent>
+          <CardContent className="bg-gray-100">
             {messages.length > 0 ? <div className="max-h-[500px] overflow-y-auto pr-1">
                 <MessageList messages={messages.slice(0, 5)} />
               </div> : <div className="flex flex-col items-center justify-center h-[200px] text-center text-gray-500">
@@ -67,13 +67,13 @@ const Dashboard = () => {
         </Card>
         
         <Card>
-          <CardHeader>
+          <CardHeader className="bg-gray-100">
             <CardTitle>Your Channels</CardTitle>
             <CardDescription>
               Connected communication platforms
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="bg-gray-100">
             {connectedChannels.length > 0 ? <div className="space-y-4">
                 {connectedChannels.map(channel => <div key={channel.id} className="flex items-center p-3 rounded-md border hover:bg-gray-50 transition-colors">
                     <div className="flex-shrink-0 mr-3">
