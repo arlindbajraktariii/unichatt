@@ -25,6 +25,8 @@ export const useDiscordConnect = () => {
       if (!data || !data.url) {
         throw new Error('No authentication URL returned from server');
       }
+
+      console.log('Opening Discord auth window with URL:', data.url);
       
       // Open the Discord OAuth window
       authWindow = window.open(data.url, '_blank', 'width=800,height=600');
@@ -35,6 +37,8 @@ export const useDiscordConnect = () => {
       
       // Listen for the OAuth callback
       const messageHandler = async (event: MessageEvent) => {
+        console.log('Received message from popup:', event.data);
+        
         // Check that the message is the one we're expecting
         if (event.data?.type === 'DISCORD_OAUTH_CALLBACK') {
           try {
@@ -47,6 +51,8 @@ export const useDiscordConnect = () => {
             if (!access_token) {
               throw new Error('No access token received from Discord');
             }
+            
+            console.log('Discord connection successful:', { user_id, user_name });
             
             // Connect the channel using the context function
             await connectChannel('discord', user_name || 'Discord Server', {
@@ -70,6 +76,21 @@ export const useDiscordConnect = () => {
               description: innerError.message || 'Failed to process Discord authentication.',
               variant: 'destructive',
             });
+          }
+        } else if (event.data?.type === 'DISCORD_OAUTH_ERROR') {
+          // Handle error messages from the popup
+          window.removeEventListener('message', messageHandler);
+          setIsConnecting(false);
+          
+          console.error('Discord OAuth error:', event.data.error);
+          toast({
+            title: 'Discord Connection Failed',
+            description: event.data.error || 'Authentication with Discord failed. Please try again.',
+            variant: 'destructive',
+          });
+          
+          if (authWindow && !authWindow.closed) {
+            authWindow.close();
           }
         }
       };

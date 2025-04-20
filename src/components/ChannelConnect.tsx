@@ -50,7 +50,12 @@ const ChannelConnect = ({ onBack }: ChannelConnectProps) => {
     }
 
     if (channelType === "discord") {
-      await connectDiscord();
+      try {
+        await connectDiscord();
+      } catch (err) {
+        console.error("Discord connection error in handleConnect:", err);
+        setError(err.message || "Failed to connect to Discord. Please try again.");
+      }
       return;
     }
     
@@ -150,6 +155,7 @@ const ChannelConnect = ({ onBack }: ChannelConnectProps) => {
             <AlertDescription>
               {channelType === "slack" ? "Slack" : "Discord"} requires OAuth authentication. 
               Clicking connect will open a new window where you can authorize this application.
+              Make sure your browser doesn't block the popup window.
             </AlertDescription>
           </Alert>
         )}
