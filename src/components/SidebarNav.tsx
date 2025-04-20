@@ -53,7 +53,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
     return name.split(' ').map(part => part[0]).join('').toUpperCase();
   };
   return <div className={`flex flex-col h-full bg-sidebar text-sidebar-foreground border-r border-sidebar-border font-colvetica ${sidebarExpanded ? 'w-64' : 'w-16'}`}>
-      <div className="p-3 flex items-center justify-between mx-0 my-0 py-[10px] bg-zinc-50">
+      <div className="p-3 flex items-center justify-between mx-0 my-0 py-[10px] bg-white">
         {sidebarExpanded ? <div className="flex items-center gap-2">
             
             <span className="font-bold text-lg text-zinc-950">Unichat</span>
