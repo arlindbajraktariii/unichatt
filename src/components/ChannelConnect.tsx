@@ -3,25 +3,13 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardFooter, 
-  CardHeader, 
-  CardTitle 
-} from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ChannelType } from "@/types";
 import { useSlackConnect } from "@/hooks/useSlackConnect";
+import { useDiscordConnect } from "@/hooks/useDiscordConnect";
 
 const channelOptions = [
   { value: "slack", label: "Slack" },
@@ -39,6 +27,7 @@ interface ChannelConnectProps {
 const ChannelConnect = ({ onBack }: ChannelConnectProps) => {
   const { connectChannel } = useApp();
   const { connect: connectSlack, isConnecting: isConnectingSlack } = useSlackConnect();
+  const { connect: connectDiscord, isConnecting: isConnectingDiscord } = useDiscordConnect();
   
   const [channelType, setChannelType] = useState<ChannelType | "">("");
   const [channelName, setChannelName] = useState("");
@@ -56,21 +45,23 @@ const ChannelConnect = ({ onBack }: ChannelConnectProps) => {
       await connectSlack();
       return;
     }
+
+    if (channelType === "discord") {
+      await connectDiscord();
+      return;
+    }
     
     if (!channelName) {
       setError("Please enter a name for this connection");
       return;
     }
     
-    // Simulate API connection delay for non-OAuth channels
     setTimeout(() => {
       connectChannel(channelType as ChannelType, channelName);
       
-      // Reset form
       setChannelType("");
       setChannelName("");
       
-      // Go back if provided
       if (onBack) {
         onBack();
       }
@@ -140,7 +131,7 @@ const ChannelConnect = ({ onBack }: ChannelConnectProps) => {
         
         <div className="pt-2">
           <p className="text-sm text-gray-500 mb-4">
-            <strong>Note:</strong> In this demo, connections are simulated. In a production version, you would be redirected to authenticate with the selected service.
+            <strong>Note:</strong> In this demo, some connections are simulated. Discord and Slack use real OAuth authentication.
           </p>
         </div>
       </CardContent>
@@ -157,8 +148,12 @@ const ChannelConnect = ({ onBack }: ChannelConnectProps) => {
           </Link>
         )}
         
-        <Button onClick={handleConnect} disabled={isConnectingSlack} className="bg-amber-400 hover:bg-amber-500 text-black">
-          {isConnectingSlack ? (
+        <Button 
+          onClick={handleConnect} 
+          disabled={isConnectingSlack || isConnectingDiscord} 
+          className="bg-amber-400 hover:bg-amber-500 text-black"
+        >
+          {isConnectingSlack || isConnectingDiscord ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Connecting...
