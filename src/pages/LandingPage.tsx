@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { MessageSquare, Share2, Users, Zap, ArrowRight, Check } from 'lucide-react';
-
 const LandingPage = () => {
   return <div className="min-h-screen text-black font-colvetica bg-white">
       {/* Header */}
@@ -156,8 +155,8 @@ const LandingPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center mb-4 bg-transparent">
-                <img src="/logo.svg" alt="Nexus Logo" className="h-8 w-8 mr-2" />
-                <span className="text-xl font-semibold">Nexus</span>
+                
+                <span className="text-xl font-semibold">Unichat</span>
               </div>
               <p className="text-gray-400 mb-4">
                 All your communications in one place
@@ -220,14 +219,12 @@ const LandingPage = () => {
       </footer>
     </div>;
 };
-
 interface FeatureCardProps {
   icon: React.ReactNode;
   title: string;
   description: string;
   className?: string;
 }
-
 const FeatureCard: React.FC<FeatureCardProps> = ({
   icon,
   title,
@@ -244,7 +241,6 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
       </CardContent>
     </Card>;
 };
-
 interface PricingCardProps {
   title: string;
   price: string;
@@ -253,7 +249,6 @@ interface PricingCardProps {
   ctaText: string;
   popular?: boolean;
 }
-
 const PricingCard: React.FC<PricingCardProps> = ({
   title,
   price,
@@ -288,5 +283,4 @@ const PricingCard: React.FC<PricingCardProps> = ({
       </div>
     </div>;
 };
-
 export default LandingPage;
