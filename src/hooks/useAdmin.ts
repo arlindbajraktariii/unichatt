@@ -107,9 +107,13 @@ export const useAdmin = () => {
 
   const updateTicketStatus = async (ticketId: string, status: string) => {
     try {
+      // Convert Date object to ISO string for Supabase
       const { error } = await supabase
         .from('tickets')
-        .update({ status, updated_at: new Date() })
+        .update({ 
+          status, 
+          updated_at: new Date().toISOString() 
+        })
         .eq('id', ticketId);
 
       if (error) throw error;

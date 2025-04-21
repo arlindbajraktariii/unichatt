@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { setupInitialAdmin } from "./utils/setupInitialAdmin";
 import { Toaster } from "@/components/ui/toaster";
@@ -89,16 +90,8 @@ const AuthenticatedApp = () => {
         <Route path="profile" element={<ProfilePage />} />
         <Route path="tickets" element={<TicketsPage />} />
         <Route path="admin" element={<AdminPage />} />
+        <Route path="subscription" element={<SubscriptionPage />} />
       </Route>
-      
-      <Route
-        path="/dashboard/subscription"
-        element={
-          <DashboardLayout>
-            <SubscriptionPage />
-          </DashboardLayout>
-        }
-      />
       
       <Route path="*" element={<NotFound />} />
     </Routes>
