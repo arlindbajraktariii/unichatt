@@ -6,82 +6,82 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 0%;
+    --foreground: 240 10% 3.9%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 0%;
+    --card-foreground: 240 10% 3.9%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 0%;
+    --popover-foreground: 240 10% 3.9%;
 
-    --primary: 43 89% 49%;
-    --primary-foreground: 0 0% 0%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
 
-    --secondary: 43 89% 96%;
-    --secondary-foreground: 43 89% 30%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
 
-    --muted: 43 9% 96%;
-    --muted-foreground: 43 3.8% 46.1%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
 
-    --accent: 43 89% 96%;
-    --accent-foreground: 43 89% 30%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 43 31.8% 91.4%;
-    --input: 43 31.8% 91.4%;
-    --ring: 43 89% 49%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 0%;
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 0 0% 100%;
-    --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent: 43 89% 49%;
-    --sidebar-accent-foreground: 0 0% 0%;
-    --sidebar-border: 43 89% 49%;
-    --sidebar-ring: 43 89% 49%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 0%;
+    --sidebar-primary: 0 0% 0%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 5.9% 10%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 240 5.9% 90%;
+    --sidebar-ring: 240 5.9% 10%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 43 89% 49%;
-    --primary-foreground: 0 0% 0%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
 
-    --secondary: 43 59% 20%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
 
-    --accent: 43 59% 20%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 43 89% 49%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
     
-    --sidebar-background: 0 0% 10%;
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 0 0% 100%;
-    --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent: 43 89% 49%;
-    --sidebar-accent-foreground: 0 0% 0%;
-    --sidebar-border: 43 59% 30%;
-    --sidebar-ring: 43 89% 49%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 0%;
+    --sidebar-primary: 0 0% 0%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 5.9% 10%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 240 4.9% 83.9%;
   }
 }
 
@@ -114,44 +114,61 @@
   background: #a8a8a8;
 }
 
-/* Amber theme colors */
+/* Main theme colors */
+.bg-nexus-primary {
+  @apply bg-[#09090b];
+}
+
+.text-nexus-primary {
+  @apply text-[#09090b];
+}
+
+.hover\:bg-nexus-primary-hover:hover {
+  @apply hover:bg-[#1a1a1f];
+}
+
+.border-nexus-primary {
+  @apply border-[#09090b];
+}
+
+/* Amber theme colors - keeping for backward compatibility */
 .bg-nexus-amber {
-  @apply bg-amber-400;
+  @apply bg-[#09090b];
 }
 
 .text-nexus-amber {
-  @apply text-amber-400;
+  @apply text-[#09090b];
 }
 
 .hover\:bg-nexus-amber-hover:hover {
-  @apply hover:bg-amber-500;
+  @apply hover:bg-[#1a1a1f];
 }
 
 .border-nexus-amber {
-  @apply border-amber-400;
+  @apply border-[#09090b];
 }
 
 /* Keep the original color classes for backward compatibility */
 .bg-nexus-indigo {
-  @apply bg-amber-400;
+  @apply bg-[#09090b];
 }
 
 .bg-nexus-violet {
-  @apply bg-amber-500;
+  @apply bg-[#1a1a1f];
 }
 
 .text-nexus-indigo {
-  @apply text-amber-400;
+  @apply text-[#09090b];
 }
 
 .text-nexus-violet {
-  @apply text-amber-500;
+  @apply text-[#1a1a1f];
 }
 
 .hover\:bg-nexus-indigo:hover {
-  @apply hover:bg-amber-400;
+  @apply hover:bg-[#09090b];
 }
 
 .hover\:bg-nexus-violet:hover {
-  @apply hover:bg-amber-500;
+  @apply hover:bg-[#1a1a1f];
 }

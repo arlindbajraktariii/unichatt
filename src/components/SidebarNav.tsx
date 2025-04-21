@@ -59,7 +59,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
 
   return (
     <div className={`flex flex-col h-full bg-white text-slate-700 border-r border-slate-200 font-colvetica ${sidebarExpanded ? 'w-64' : 'w-16'}`}>
-      <div className="p-3 flex items-center justify-between mx-0 my-0 py-[10px] bg-amber-500 text-white">
+      <div className="p-3 flex items-center justify-between mx-0 my-0 py-[10px] bg-white text-[#000]">
         {sidebarExpanded ? (
           <div className="flex items-center gap-2">
             <span className="font-bold text-lg">Unichat</span>
@@ -67,7 +67,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
         ) : (
           <img src="/logo.svg" alt="Unichat Logo" className="w-8 h-8 mx-auto" />
         )}
-        <Button variant="ghost" size="icon" onClick={() => setSidebarExpanded(!sidebarExpanded)} className="text-white hover:bg-amber-600">
+        <Button variant="ghost" size="icon" onClick={() => setSidebarExpanded(!sidebarExpanded)} className="text-[#000] hover:bg-slate-100">
           <ChevronRight className={`h-5 w-5 ${sidebarExpanded ? 'rotate-180' : ''}`} />
         </Button>
       </div>
@@ -120,18 +120,18 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
                 variant="outline" 
                 size={sidebarExpanded ? "default" : "icon"} 
                 onClick={handleAddChannel} 
-                className="mx-auto my-2 border-amber-300 bg-white text-slate-700 hover:bg-amber-50"
+                className="mx-auto my-2 border-[#09090b] bg-white text-slate-700 hover:bg-slate-50"
               >
                 {sidebarExpanded ? (
                   <>
-                    <PlusCircle className="h-4 w-4 mr-2 text-amber-500" />
+                    <PlusCircle className="h-4 w-4 mr-2 text-[#09090b]" />
                     Connect Channel
                   </>
                 ) : (
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <PlusCircle className="h-4 w-4 text-amber-500" />
+                        <PlusCircle className="h-4 w-4 text-[#09090b]" />
                       </TooltipTrigger>
                       <TooltipContent side="right">
                         Connect Channel
@@ -204,7 +204,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
             <div className="flex items-center">
               <Avatar className="h-8 w-8 mr-2">
                 <AvatarImage src={user?.avatar_url} />
-                <AvatarFallback className="bg-amber-100 text-amber-800">
+                <AvatarFallback className="bg-[#09090b]/10 text-[#09090b]">
                   {user ? getInitials(user.name) : 'U'}
                 </AvatarFallback>
               </Avatar>
@@ -223,7 +223,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
           <div className="flex flex-col items-center space-y-2">
             <Avatar className="h-8 w-8">
               <AvatarImage src={user?.avatar_url} />
-              <AvatarFallback className="bg-amber-100 text-amber-800">
+              <AvatarFallback className="bg-[#09090b]/10 text-[#09090b]">
                 {user ? getInitials(user.name) : 'U'}
               </AvatarFallback>
             </Avatar>
@@ -254,7 +254,7 @@ const NavMenuItem = ({
   expanded 
 }: { 
   to: string; 
-  icon: React.FC<any> | (() => JSX.Element); 
+  icon: React.FC<any>; 
   label: string; 
   expanded: boolean 
 }) => {
@@ -263,7 +263,7 @@ const NavMenuItem = ({
       to={to} 
       className={({ isActive }) => `
         flex items-center p-2 rounded-md transition-colors
-        ${isActive ? 'bg-amber-50 text-amber-700' : 'hover:bg-slate-100'}
+        ${isActive ? 'bg-[#09090b]/5 text-[#09090b]' : 'hover:bg-slate-100'}
       `}
     >
       {expanded ? (
@@ -305,7 +305,7 @@ const ChannelItem: React.FC<ChannelItemProps> = ({
       onClick={onClick} 
       className={`
         w-full flex items-center p-2 rounded-md transition-colors
-        ${isActive ? 'bg-amber-50 text-amber-700' : 'hover:bg-slate-100'}
+        ${isActive ? 'bg-[#09090b]/5 text-[#09090b]' : 'hover:bg-slate-100'}
       `}
     >
       {expanded ? (

@@ -12,8 +12,13 @@ export const useSlackConnect = () => {
   const connect = async () => {
     setIsConnecting(true);
     try {
-      // Get the auth URL from our edge function
-      const { data, error } = await supabase.functions.invoke('slack-auth');
+      // Get the auth URL from our edge function with proper auth headers
+      const { data: authData } = await supabase.auth.getSession();
+      const authToken = authData?.session?.access_token;
+      
+      const { data, error } = await supabase.functions.invoke('slack-auth', {
+        headers: authToken ? { Authorization: `Bearer ${authToken}` } : undefined
+      });
       
       if (error) {
         console.error('Error invoking Slack auth function:', error);
