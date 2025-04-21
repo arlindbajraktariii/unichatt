@@ -1,17 +1,20 @@
+
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { MessageSquare, Plus, Bell, Star, Archive, Settings, HelpCircle, LogOut, PlusCircle, ChevronRight, User, Ticket, Info } from 'lucide-react';
+import { MessageSquare, Plus, Bell, Star, Archive, Settings, HelpCircle, LogOut, PlusCircle, ChevronRight, User, Ticket, CreditCard } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useApp } from '../context/AppContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ChannelConnection } from '@/types';
 import { useToast } from '@/hooks/use-toast';
+
 interface SidebarNavProps {
   expanded?: boolean;
 }
+
 const SidebarNav: React.FC<SidebarNavProps> = ({
   expanded: isExpanded = true
 }) => {
@@ -28,9 +31,11 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
   const {
     toast
   } = useToast();
+
   const handleAddChannel = () => {
     navigate('/dashboard/add-channel');
   };
+
   const handleLogout = async () => {
     try {
       await logout();
@@ -48,12 +53,15 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
       });
     }
   };
+
   const connectedChannels = channels.filter(channel => channel.is_connected);
   const getInitials = (name: string) => {
     return name.split(' ').map(part => part[0]).join('').toUpperCase();
   };
-  return <div className={`flex flex-col h-full bg-white text-slate-700 border-r border-slate-200 font-colvetica ${sidebarExpanded ? 'w-64' : 'w-16'}`}>
-      <div className="p-3 flex items-center justify-between mx-0 my-0 text-[#000] bg-gray-100 py-[9px] px-[15px]">
+
+  return (
+    <div className={`flex flex-col h-full bg-white text-slate-700 border-r border-slate-200 font-colvetica ${sidebarExpanded ? 'w-64' : 'w-16'}`}>
+      <div className="p-3 flex items-center justify-between mx-0 my-0 text-[#000] bg-white py-[9px] px-[15px]">
         {sidebarExpanded ? <div className="flex items-center gap-2">
             <span className="font-bold text-lg">Unichat</span>
           </div> : <img src="/logo.svg" alt="Unichat Logo" className="w-8 h-8 mx-auto" />}
@@ -86,9 +94,9 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
 
           {connectedChannels.length > 0 ? <div className="space-y-1">
               {connectedChannels.map(channel => <ChannelItem key={channel.id} channel={channel} expanded={sidebarExpanded} isActive={currentChannel === channel.id} onClick={() => {
-            setCurrentChannel(channel.id);
-            navigate(`/dashboard/channel/${channel.id}`);
-          }} />)}
+                setCurrentChannel(channel.id);
+                navigate(`/dashboard/channel/${channel.id}`);
+              }} />)}
             </div> : <div className={sidebarExpanded ? "p-2 text-sm text-slate-500 text-center" : ""}>
               {sidebarExpanded && <p>No channels connected yet</p>}
               <Button variant="outline" size={sidebarExpanded ? "default" : "icon"} onClick={handleAddChannel} className="mx-auto my-2 border-[#09090b] bg-white text-slate-700 hover:bg-slate-50">
@@ -119,7 +127,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
 
             <NavMenuItem to="/dashboard/tickets" icon={Ticket} label="Support Tickets" expanded={sidebarExpanded} />
             
-            <NavMenuItem to="/pricing" icon={Info} label="Pricing" expanded={sidebarExpanded} />
+            <NavMenuItem to="/dashboard/subscription" icon={CreditCard} label="Subscription" expanded={sidebarExpanded} />
             
             <NavMenuItem to="/dashboard/settings" icon={Settings} label="Settings" expanded={sidebarExpanded} />
             
@@ -168,7 +176,8 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
             </TooltipProvider>
           </div>}
       </div>
-    </div>;
+    </div>
+  );
 };
 
 // Helper component for navigation menu items
@@ -204,12 +213,14 @@ const NavMenuItem = ({
         </TooltipProvider>}
     </NavLink>;
 };
+
 interface ChannelItemProps {
   channel: ChannelConnection;
   expanded: boolean;
   isActive: boolean;
   onClick: () => void;
 }
+
 const ChannelItem: React.FC<ChannelItemProps> = ({
   channel,
   expanded,
@@ -252,4 +263,5 @@ const getChannelIcon = (channelType: string) => {
   };
   return logoMap[channelType] || '/placeholder.svg';
 };
+
 export default SidebarNav;

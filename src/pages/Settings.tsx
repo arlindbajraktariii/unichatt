@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
@@ -36,25 +36,137 @@ const Settings = () => {
     sessionTimeout: "30"
   });
 
+  useEffect(() => {
+    if (user?.id) {
+      loadUserSettings();
+    }
+  }, [user]);
+
+  const loadUserSettings = async () => {
+    setLoading(true);
+    try {
+      // This would actually fetch from a user_settings table in a real app
+      // For now, we'll simulate loading from localStorage for the demo
+      const savedNotificationSettings = localStorage.getItem('notification_settings');
+      const savedDisplaySettings = localStorage.getItem('display_settings');
+      const savedSecuritySettings = localStorage.getItem('security_settings');
+
+      if (savedNotificationSettings) {
+        setNotificationSettings(JSON.parse(savedNotificationSettings));
+      }
+
+      if (savedDisplaySettings) {
+        setDisplaySettings(JSON.parse(savedDisplaySettings));
+        // Apply dark theme if it was saved
+        if (JSON.parse(savedDisplaySettings).darkTheme) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      }
+
+      if (savedSecuritySettings) {
+        setSecuritySettings(JSON.parse(savedSecuritySettings));
+      }
+    } catch (error) {
+      console.error('Error loading settings:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleNotificationChange = (key: string, value: boolean) => {
-    setNotificationSettings(prev => ({
-      ...prev,
-      [key]: value
-    }));
+    setNotificationSettings(prev => {
+      const updated = { ...prev, [key]: value };
+      
+      // Special handling for desktop notifications
+      if (key === 'desktopNotifications' && value) {
+        requestNotificationPermission();
+      }
+      
+      // Special handling for sound alerts
+      if (key === 'soundAlerts') {
+        // Play a test sound when enabled
+        if (value) {
+          const audio = new Audio('/notification-sound.mp3');
+          audio.volume = 0.5;
+          audio.play().catch(e => console.error('Error playing sound:', e));
+        }
+      }
+      
+      // Save to localStorage for demo purposes
+      localStorage.setItem('notification_settings', JSON.stringify(updated));
+      return updated;
+    });
+  };
+
+  const requestNotificationPermission = async () => {
+    if (!("Notification" in window)) {
+      toast({
+        title: "Notifications Not Supported",
+        description: "This browser does not support desktop notifications",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    if (Notification.permission === "granted") {
+      showTestNotification();
+    } else if (Notification.permission !== "denied") {
+      const permission = await Notification.requestPermission();
+      if (permission === "granted") {
+        showTestNotification();
+      }
+    }
+  };
+
+  const showTestNotification = () => {
+    const notification = new Notification("Notifications Enabled", {
+      body: "You will now receive desktop notifications",
+      icon: "/logo.svg"
+    });
+    
+    notification.onclick = () => {
+      window.focus();
+      notification.close();
+    };
   };
 
   const handleDisplayChange = (key: string, value: boolean) => {
-    setDisplaySettings(prev => ({
-      ...prev,
-      [key]: value
-    }));
+    setDisplaySettings(prev => {
+      const updated = { ...prev, [key]: value };
+      
+      // Apply dark theme immediately
+      if (key === 'darkTheme') {
+        if (value) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      }
+      
+      // Apply compact mode immediately
+      if (key === 'compactMode') {
+        if (value) {
+          document.documentElement.classList.add('compact');
+        } else {
+          document.documentElement.classList.remove('compact');
+        }
+      }
+      
+      // Save to localStorage for demo purposes
+      localStorage.setItem('display_settings', JSON.stringify(updated));
+      return updated;
+    });
   };
 
   const handleSecurityChange = (key: string, value: any) => {
-    setSecuritySettings(prev => ({
-      ...prev,
-      [key]: value
-    }));
+    setSecuritySettings(prev => {
+      const updated = { ...prev, [key]: value };
+      // Save to localStorage for demo purposes
+      localStorage.setItem('security_settings', JSON.stringify(updated));
+      return updated;
+    });
   };
 
   const saveSettings = async (type: 'notification' | 'display' | 'security') => {
@@ -71,20 +183,8 @@ const Settings = () => {
     
     try {
       // In a real app, you would save these settings to the database
-      // For now, we'll simulate an API call
+      // For now, we'll just display a success message since we're already saving to localStorage
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Example of how you might save to Supabase
-      // const { error } = await supabase
-      //   .from('user_settings')
-      //   .upsert({
-      //     user_id: user.id,
-      //     settings_type: type,
-      //     settings_data: type === 'notification' ? notificationSettings : 
-      //                    type === 'display' ? displaySettings : securitySettings
-      //   });
-      
-      // if (error) throw error;
       
       toast({
         title: "Settings Saved",
@@ -188,7 +288,7 @@ const Settings = () => {
               <Button
                 onClick={() => saveSettings('notification')}
                 disabled={loading || !user}
-                className="bg-amber-400 hover:bg-amber-500 text-black"
+                className="bg-[#09090b] hover:bg-[#09090b]/90 text-white"
               >
                 {loading ? (
                   <>
@@ -210,14 +310,14 @@ const Settings = () => {
             <Separator className="my-4" />
             
             <div className="space-y-4">
-              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+              <div className="bg-[#09090b]/5 border border-[#09090b]/20 rounded-lg p-4">
                 <p className="font-medium">You don't have an active subscription</p>
                 <p className="text-sm text-muted-foreground mt-1">
                   Choose a subscription plan to access premium features.
                 </p>
                 <Button
-                  onClick={() => navigate('/pricing')}
-                  className="mt-3 bg-amber-400 hover:bg-amber-500 text-black"
+                  onClick={() => navigate('/dashboard/subscription')}
+                  className="mt-3 bg-[#09090b] hover:bg-[#09090b]/90 text-white"
                 >
                   View Plans
                 </Button>
@@ -351,7 +451,7 @@ const Settings = () => {
               <Button
                 onClick={() => saveSettings('notification')}
                 disabled={loading}
-                className="bg-amber-400 hover:bg-amber-500 text-black mt-4"
+                className="bg-[#09090b] hover:bg-[#09090b]/90 text-white mt-4"
               >
                 {loading ? (
                   <>
@@ -434,7 +534,7 @@ const Settings = () => {
               <Button
                 onClick={() => saveSettings('display')}
                 disabled={loading}
-                className="bg-amber-400 hover:bg-amber-500 text-black mt-4"
+                className="bg-[#09090b] hover:bg-[#09090b]/90 text-white mt-4"
               >
                 {loading ? (
                   <>
@@ -514,7 +614,7 @@ const Settings = () => {
                 <Button
                   onClick={() => saveSettings('security')}
                   disabled={loading}
-                  className="bg-amber-400 hover:bg-amber-500 text-black"
+                  className="bg-[#09090b] hover:bg-[#09090b]/90 text-white"
                 >
                   {loading ? (
                     <>

@@ -16,6 +16,7 @@ export const useAdmin = () => {
     }
 
     try {
+      // First check if user exists in admin_users table
       const { data, error } = await supabase
         .from('admin_users')
         .select('id')
@@ -23,8 +24,31 @@ export const useAdmin = () => {
         .single();
 
       if (error) {
-        console.error("Admin check error:", error);
-        setIsAdmin(false);
+        // If not found, check by email
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('email')
+          .eq('id', userId)
+          .single();
+          
+        if (profileData?.email === 'arlindbajraktari966@gmail.com') {
+          // If email matches, add as admin
+          const { error: insertError } = await supabase
+            .from('admin_users')
+            .insert({
+              user_id: userId,
+              added_by: userId
+            });
+            
+          if (!insertError) {
+            setIsAdmin(true);
+          } else {
+            console.error("Error adding admin:", insertError);
+            setIsAdmin(false);
+          }
+        } else {
+          setIsAdmin(false);
+        }
       } else {
         setIsAdmin(true);
       }
@@ -66,10 +90,42 @@ export const useAdmin = () => {
     }
   };
 
+  const removeAdminUser = async (userId: string) => {
+    try {
+      const { error } = await supabase
+        .from('admin_users')
+        .delete()
+        .eq('user_id', userId);
+
+      if (error) throw error;
+      return true;
+    } catch (error) {
+      console.error('Error removing admin:', error);
+      throw error;
+    }
+  };
+
+  const updateTicketStatus = async (ticketId: string, status: string) => {
+    try {
+      const { error } = await supabase
+        .from('tickets')
+        .update({ status, updated_at: new Date() })
+        .eq('id', ticketId);
+
+      if (error) throw error;
+      return true;
+    } catch (error) {
+      console.error('Error updating ticket:', error);
+      throw error;
+    }
+  };
+
   return {
     isAdmin,
     isLoading,
     checkAdminStatus,
-    addAdminUser
+    addAdminUser,
+    removeAdminUser,
+    updateTicketStatus
   };
 };
