@@ -4,7 +4,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { MessageSquare, Plus, Bell, Star, Archive, Settings, HelpCircle, LogOut, PlusCircle, ChevronRight, User, Ticket } from 'lucide-react';
+import { MessageSquare, Plus, Bell, Star, Archive, Settings, HelpCircle, LogOut, PlusCircle, ChevronRight, User, Ticket, Info } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useApp } from '../context/AppContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -176,11 +176,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({
             
             <NavMenuItem 
               to="/pricing" 
-              icon={() => (
-                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm1 15h-2v-6h2v6zm0-8h-2v-2h2v2z" />
-                </svg>
-              )}
+              icon={Info} 
               label="Pricing" 
               expanded={sidebarExpanded} 
             />
@@ -272,14 +268,14 @@ const NavMenuItem = ({
     >
       {expanded ? (
         <>
-          {typeof Icon === 'function' ? <Icon className="h-5 w-5 mr-3 text-slate-500" /> : <Icon className="h-5 w-5 mr-3 text-slate-500" />}
+          <Icon className="h-5 w-5 mr-3 text-slate-500" />
           <span>{label}</span>
         </>
       ) : (
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              {typeof Icon === 'function' ? <Icon className="h-5 w-5 mx-auto text-slate-500" /> : <Icon className="h-5 w-5 mx-auto text-slate-500" />}
+              <Icon className="h-5 w-5 mx-auto text-slate-500" />
             </TooltipTrigger>
             <TooltipContent side="right">
               {label}

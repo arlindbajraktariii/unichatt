@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { MessageSquare, Share2, Users, Zap, ArrowRight, Check } from 'lucide-react';
+
 const LandingPage = () => {
   return <div className="min-h-screen text-black font-colvetica bg-white">
       {/* Header */}
@@ -219,17 +220,21 @@ const LandingPage = () => {
       </footer>
     </div>;
 };
+
 interface FeatureCardProps {
   icon: React.ReactNode;
   title: string;
   description: string;
+  className?: string;
 }
+
 const FeatureCard: React.FC<FeatureCardProps> = ({
   icon,
   title,
-  description
+  description,
+  className
 }) => {
-  return <Card className="border-0 shadow-md hover:shadow-lg transition-shadow h-full">
+  return <Card className={`border-0 shadow-md hover:shadow-lg transition-shadow h-full ${className || ''}`}>
       <CardContent className="p-6 rounded-lg bg-zinc-50">
         <div className="w-16 h-16 flex items-center justify-center mb-6 bg-[212529] bg-transparent">
           {icon}
@@ -239,6 +244,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
       </CardContent>
     </Card>;
 };
+
 interface PricingCardProps {
   title: string;
   price: string;
@@ -247,6 +253,7 @@ interface PricingCardProps {
   ctaText: string;
   popular?: boolean;
 }
+
 const PricingCard: React.FC<PricingCardProps> = ({
   title,
   price,
@@ -281,4 +288,5 @@ const PricingCard: React.FC<PricingCardProps> = ({
       </div>
     </div>;
 };
+
 export default LandingPage;
