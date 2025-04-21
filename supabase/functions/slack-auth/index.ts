@@ -74,26 +74,81 @@ serve(async (req) => {
       throw new Error(`Failed to get access token: ${data.error}`)
     }
 
-    // Return the access token and other relevant data
-    console.log('Successfully obtained access token')
-    return new Response(
-      JSON.stringify({
-        access_token: data.access_token,
-        team_name: data.team?.name,
-        team_id: data.team?.id,
-      }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      }
-    )
+    // Return HTML with script to pass data back to opener window
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Slack Authentication Complete</title>
+          <style>
+            body { font-family: sans-serif; text-align: center; padding: 40px; }
+            .success { color: #4CAF50; }
+            .loading { margin: 20px 0; }
+          </style>
+        </head>
+        <body>
+          <h2 class="success">Authentication Successful!</h2>
+          <p>You can close this window now.</p>
+          <div class="loading">Completing connection...</div>
+          
+          <script>
+            // Send message to parent window
+            window.opener.postMessage({
+              type: 'SLACK_OAUTH_CALLBACK',
+              access_token: '${data.access_token}',
+              team_name: '${data.team?.name || "Slack Workspace"}',
+              team_id: '${data.team?.id || ""}'
+            }, '*');
+            
+            // Close window after short delay
+            setTimeout(() => {
+              window.close();
+            }, 1000);
+          </script>
+        </body>
+      </html>
+    `;
+
+    return new Response(html, {
+      headers: { ...corsHeaders, 'Content-Type': 'text/html' },
+    });
   } catch (error) {
     console.error('Error in Slack auth flow:', error)
-    return new Response(
-      JSON.stringify({ error: 'Failed to complete OAuth flow', details: error.message }),
-      {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      }
-    )
+    
+    // Return error HTML
+    const errorHtml = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Slack Authentication Failed</title>
+          <style>
+            body { font-family: sans-serif; text-align: center; padding: 40px; }
+            .error { color: #F44336; }
+          </style>
+        </head>
+        <body>
+          <h2 class="error">Authentication Failed</h2>
+          <p>${error.message || 'There was an error connecting to Slack.'}</p>
+          
+          <script>
+            // Send error message to parent window
+            window.opener.postMessage({
+              type: 'SLACK_OAUTH_ERROR',
+              error: '${error.message || 'There was an error connecting to Slack.'}'
+            }, '*');
+            
+            // Close window after short delay
+            setTimeout(() => {
+              window.close();
+            }, 5000);
+          </script>
+        </body>
+      </html>
+    `;
+    
+    return new Response(errorHtml, {
+      status: 400,
+      headers: { ...corsHeaders, 'Content-Type': 'text/html' },
+    });
   }
 })

@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "@/context/AppContext";
@@ -19,7 +20,7 @@ const AdminPage = () => {
   const { user } = useApp();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { isAdmin, isLoading: adminCheckLoading, addAdminUser } = useAdmin();
+  const { isAdmin, isLoading: adminCheckLoading, addAdminUser, checkAdminStatus } = useAdmin();
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [channels, setChannels] = useState<ChannelConnection[]>([]);
@@ -32,7 +33,7 @@ const AdminPage = () => {
     if (user?.id) {
       checkAdminStatus(user.id);
     }
-  }, [user]);
+  }, [user, checkAdminStatus]);
 
   useEffect(() => {
     if (isAdmin) {
