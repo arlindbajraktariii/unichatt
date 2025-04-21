@@ -19,16 +19,11 @@ serve(async (req) => {
     return new Response('ok', { headers: corsHeaders })
   }
 
-  const url = new URL(req.url)
-  const code = url.searchParams.get('code')
-
-  console.log('Request received:', req.method, url.pathname)
-  console.log('Code available:', code ? 'Yes' : 'No')
+  // Log the authorization header for debugging
+  const authHeader = req.headers.get('authorization')
+  console.log('Authorization header present:', authHeader ? 'Yes' : 'No')
   
-  // Check if credentials are available
-  console.log(`SLACK_CLIENT_ID available: ${SLACK_CLIENT_ID ? 'Yes' : 'No'}`)
-  console.log(`SLACK_CLIENT_SECRET available: ${SLACK_CLIENT_SECRET ? 'Yes' : 'No'}`)
-  
+  // Check client credentials
   if (!SLACK_CLIENT_ID || !SLACK_CLIENT_SECRET) {
     console.error('Missing Slack credentials - please check your Supabase secrets')
     return new Response(
@@ -42,6 +37,12 @@ serve(async (req) => {
       }
     )
   }
+
+  const url = new URL(req.url)
+  const code = url.searchParams.get('code')
+
+  console.log('Request received:', req.method, url.pathname)
+  console.log('Code available:', code ? 'Yes' : 'No')
 
   if (!code) {
     // If no code, return the auth URL for frontend to open

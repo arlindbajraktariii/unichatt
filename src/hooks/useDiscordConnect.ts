@@ -14,10 +14,15 @@ export const useDiscordConnect = () => {
     try {
       // Get the auth URL from our edge function with proper auth headers
       const { data: authData } = await supabase.auth.getSession();
-      const authToken = authData?.session?.access_token;
+      
+      if (!authData?.session?.access_token) {
+        throw new Error('You must be logged in to connect Discord');
+      }
       
       const { data, error } = await supabase.functions.invoke('discord-auth', {
-        headers: authToken ? { Authorization: `Bearer ${authToken}` } : undefined
+        headers: {
+          Authorization: `Bearer ${authData.session.access_token}`
+        }
       });
       
       if (error) {

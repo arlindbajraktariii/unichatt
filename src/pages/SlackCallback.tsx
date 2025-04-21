@@ -28,9 +28,16 @@ const SlackCallback = () => {
       if (code) {
         try {
           console.log('Received code from Slack, calling edge function');
-          // Call our edge function with the code
+          
+          // Get the session for auth header
+          const { data: authData } = await supabase.auth.getSession();
+          
+          // Call our edge function with the code and proper auth headers
           const { data, error } = await supabase.functions.invoke('slack-auth', {
-            body: { code }
+            body: { code },
+            headers: authData?.session?.access_token
+              ? { Authorization: `Bearer ${authData.session.access_token}` }
+              : undefined
           });
           
           if (error) {
